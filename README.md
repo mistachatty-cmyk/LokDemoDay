@@ -24,6 +24,8 @@ npm run build
 
 For an existing clone, run `git submodule update --init --recursive` before building. The build writes the deployable site to `dist/`. Serve `dist/` with a static web server; opening the HTML file directly will not resolve game URLs.
 
+The full build currently runs on Linux, including GitHub Actions and Vercel. Kinetic Souls' upstream workspace uses a shell preinstall step and excludes the Windows native Rollup package, so a native Windows build needs those upstream settings adjusted first.
+
 ## Updating the games
 
 Keep gameplay changes in the game repositories. Dependabot checks the submodules weekly and opens a PR when their `main` branches advance. The PR runs the full build and gets a Vercel preview. Test both games and the page takeover in that preview, then merge to update production.
