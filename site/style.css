@@ -1,0 +1,90 @@
+@import url('https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700;800;900&family=DM+Sans:wght@400;500;600;700&display=swap');
+
+:root{font-family:'DM Sans',Arial,sans-serif;color:#f7f6f4;background:#0a0c13;font-synthesis:none}
+*{box-sizing:border-box}
+html{min-width:320px;scroll-behavior:smooth}
+body{margin:0;min-height:100vh;overflow-x:hidden;background:radial-gradient(circle at 50% 6%,#192034 0,#0a0c13 49%)}
+body::before{content:'';position:fixed;inset:0;pointer-events:none;opacity:.23;background-image:linear-gradient(#ffffff09 1px,transparent 1px),linear-gradient(90deg,#ffffff09 1px,transparent 1px);background-size:42px 42px;mask-image:linear-gradient(to bottom,#000,transparent 75%)}
+button,a{font:inherit}
+button{cursor:pointer}
+a{color:inherit;text-decoration:none}
+[hidden]{display:none!important}
+button:focus-visible,a:focus-visible{outline:3px solid #f3d978;outline-offset:4px}
+.ambient{position:absolute;border-radius:50%;pointer-events:none;filter:blur(65px)}
+.ambient-one{width:460px;height:460px;top:70px;left:-260px;background:#77332e44}
+.ambient-two{width:430px;height:430px;top:220px;right:-250px;background:#5342a344}
+.site-wrap{position:relative;z-index:1;max-width:1480px;margin:auto;padding:0 5.5%}
+.site-header{height:100px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid #ffffff24}
+.brand{display:inline-flex;align-items:center;gap:19px;white-space:nowrap}
+.brand-mark{font-family:'Barlow Condensed',Impact,sans-serif;font-size:40px;font-weight:900;font-style:italic;letter-spacing:-.09em;line-height:1}
+.brand-mark span{color:#ef654e}
+.brand-divider{width:1px;height:27px;background:#ffffff3a}
+.brand-sub{font-family:'Barlow Condensed',Impact,sans-serif;font-size:20px;font-weight:700;letter-spacing:.24em}
+.header-status,.eyebrow,.hero-hint,.card-topline,.game-meta,.play-button,.outline-button,.site-footer,.toolbar-button,.live-pill,.player-bottom{font-family:'Barlow Condensed',Impact,sans-serif;font-weight:700;letter-spacing:.14em}
+.header-status{display:flex;align-items:center;gap:11px;color:#d7dacd;font-size:14px}
+.status-dot{width:7px;height:7px;border-radius:50%;display:inline-block;flex:none;background:#abed97;box-shadow:0 0 13px #8aff9a}
+.hero{text-align:center;padding:74px 0 53px}
+.eyebrow{display:flex;align-items:center;justify-content:center;gap:15px;color:#ecaa90;font-size:14px}
+.eyebrow-line{width:28px;height:1px;background:#bd6d58}
+.hero h1{font-family:'Barlow Condensed',Impact,sans-serif;font-weight:900;font-size:clamp(65px,9vw,134px);line-height:.82;letter-spacing:-.038em;text-transform:uppercase;margin:30px auto 26px}
+.hero h1 em{font-style:normal;color:#f36d52}
+.hero p{font-size:17px;color:#b5b8c5;margin:0 auto;line-height:1.7}
+.hero-hint{margin-top:46px;color:#878b9e;font-size:13px}
+.scroll-icon{display:block;font-family:Arial,sans-serif;font-size:25px;line-height:1;margin-bottom:8px;color:#f47b5a}
+.game-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:20px}
+.game-card{min-width:0;overflow:hidden;position:relative;border:1px solid #ffffff24;background:#111521;transition:transform .25s,border-color .25s,box-shadow .25s}
+.game-card:hover{transform:translateY(-4px);border-color:#ffffff55;box-shadow:0 22px 50px #0005}
+.survivor-card{--accent:#ef6f51;--accent-soft:#ef6f5122}
+.kinetic-card{--accent:#b9a2ff;--accent-soft:#a787ff22}
+.card-topline{height:51px;padding:0 28px;display:flex;justify-content:space-between;align-items:center;color:#d2d4da;font-size:13px;border-bottom:1px solid #ffffff1c}
+.card-status{font-size:11px;color:var(--accent);padding:5px 8px;border:1px solid currentColor}
+.card-art{height:220px;position:relative;overflow:hidden;border-bottom:1px solid #ffffff1c}
+.survivor-art{background:radial-gradient(circle at 50% 55%,#bd493969,#6b241f5e 36%,transparent 66%),linear-gradient(135deg,#211621,#10141e)}
+.survivor-art::before,.survivor-art::after{content:'';position:absolute;inset:-100%;background:repeating-radial-gradient(circle at center,transparent 0,transparent 35px,#f67b5940 37px,#f67b5900 38px);transform:scaleX(1.5)}
+.survivor-art::after{inset:0;background:linear-gradient(90deg,transparent 49.8%,#ffb89965 50%,transparent 50.2%),linear-gradient(transparent 49.8%,#ffb89965 50%,transparent 50.2%);transform:none}
+.art-cross{position:absolute;z-index:2;left:50%;top:50%;transform:translate(-50%,-50%);font-size:72px;color:#ffd5a8;text-shadow:0 0 35px #ff7958,0 0 65px #e94e3d}
+.art-grid{position:absolute;inset:0;background:repeating-linear-gradient(90deg,transparent 0,transparent 65px,#ffffff0c 66px),repeating-linear-gradient(0deg,transparent 0,transparent 65px,#ffffff0c 66px)}
+.art-orbit{position:absolute;width:17px;height:17px;border:2px solid #ffcfa9;transform:rotate(45deg);box-shadow:0 0 25px #f26448}
+.orbit-a{top:35px;left:26%}.orbit-b{bottom:37px;right:25%;width:10px;height:10px}
+.kinetic-art{background:radial-gradient(circle at 50% 60%,#7661b777,transparent 56%),linear-gradient(135deg,#171629,#11131f)}
+.kinetic-art::before{content:'';position:absolute;inset:-45%;background:repeating-conic-gradient(from 0deg at 50% 55%,#d4c4ff17 0deg,#d4c4ff17 1deg,transparent 1deg,transparent 14deg)}
+.kinetic-core{position:absolute;left:50%;top:51%;height:135px;width:135px;transform:translate(-50%,-50%) rotate(45deg);border:3px solid #e5dcff;box-shadow:0 0 27px #ac90ff,inset 0 0 37px #bbaaffaa}
+.kinetic-core::before{content:'';position:absolute;inset:19px;border:1px solid #d8c6ff;box-shadow:0 0 28px #ac90ff}
+.kinetic-line{position:absolute;height:2px;width:40%;background:linear-gradient(90deg,transparent,#ded4ff,transparent);box-shadow:0 0 16px #b99bff}
+.line-a{top:41%;left:0;transform:rotate(-16deg)}.line-b{top:62%;right:0;transform:rotate(-16deg)}.line-c{top:15%;right:6%;width:25%;transform:rotate(20deg)}
+.card-content{padding:25px 28px 29px}
+.game-meta{font-size:13px;color:var(--accent)}
+.card-content h2,.takeover h2{font-family:'Barlow Condensed',Impact,sans-serif;font-weight:900;text-transform:uppercase;letter-spacing:-.018em}
+.card-content h2{font-size:clamp(48px,5.3vw,72px);line-height:1;margin:8px 0 8px}
+.card-content h2 span{color:var(--accent)}
+.card-content p{color:#aeb2c1;font-size:15px;line-height:1.6;margin:0 0 25px;min-height:48px}
+.play-button{width:100%;border:1px solid var(--accent);padding:14px 17px;background:var(--accent);color:#14131b;font-size:16px;display:flex;justify-content:space-between;align-items:center;transition:background .2s,transform .2s}
+.play-button:hover{background:#fff;transform:translateY(-2px)}
+.play-button span:last-child{font-family:Arial,sans-serif;font-size:20px;font-weight:400}
+.takeover{margin:28px 0 75px;padding:26px 30px;display:flex;justify-content:space-between;align-items:center;gap:30px;border:1px solid #ffffff26;background:linear-gradient(95deg,#1a1d2a,#111520)}
+.takeover h2{font-size:39px;margin:5px 0 0;line-height:1}
+.takeover p{color:#aeb2c1;margin:7px 0 0;font-size:14px}
+.outline-button{flex:none;color:#f2f1ef;background:transparent;border:1px solid #f2785e;padding:14px 18px;font-size:15px;display:flex;gap:22px;align-items:center;justify-content:space-between}
+.outline-button:hover{background:#f2785e;color:#16131b}
+.home-message{color:#f3ba8d;min-height:20px;margin:-55px 0 45px}
+.site-footer{border-top:1px solid #ffffff24;padding:23px 0 31px;display:flex;justify-content:space-between;font-size:12px;color:#8f93a3}
+.player-view{padding:24px 0 46px}
+.player-toolbar{display:grid;grid-template-columns:1fr auto 1fr;align-items:center;gap:15px;margin-bottom:17px}
+.toolbar-button{color:#dadddf;background:#171a25;border:1px solid #ffffff30;padding:10px 14px;font-size:14px;white-space:nowrap}
+.toolbar-button:hover{border-color:#f2785e;color:#fff}
+.player-toolbar>#back-button{justify-self:start}
+.player-actions{justify-self:end;display:flex;gap:8px}
+.player-identity{text-align:center;min-width:0}
+.live-pill{display:inline-flex;align-items:center;gap:8px;font-size:11px;color:#b8c1b4}
+.live-pill .status-dot{height:6px;width:6px}
+.player-identity h1{font-family:'Barlow Condensed',Impact,sans-serif;font-size:36px;text-transform:uppercase;line-height:1;margin:4px 0 0;white-space:nowrap}
+.player-shell{position:relative;width:100%;height:min(75vh,800px);min-height:480px;border:1px solid #ffffff35;background:#080a10;box-shadow:0 25px 80px #0009;overflow:hidden}
+.player-shell iframe{height:100%;width:100%;border:0;display:block;background:#080a10}
+.loading{position:absolute;inset:0;z-index:2;display:grid;place-items:center;background:#0c0e17;color:#f07c61;font-family:'Barlow Condensed',Impact,sans-serif;letter-spacing:.2em;font-size:20px}
+.player-bottom{display:flex;justify-content:space-between;color:#8f93a3;font-size:12px;padding-top:14px}
+body[data-view='survivor-616'] .site-header,body[data-view='kinetic-souls'] .site-header{height:72px}
+body[data-view='survivor-616'] .brand-mark,body[data-view='kinetic-souls'] .brand-mark{font-size:31px}
+body[data-view='survivor-616'] .brand-sub,body[data-view='kinetic-souls'] .brand-sub{font-size:16px}
+@media(max-width:760px){.site-wrap{padding:0 5%}.site-header{height:73px}.brand{gap:12px}.brand-mark{font-size:31px}.brand-divider{height:23px}.brand-sub{font-size:15px}.header-status{font-size:11px}.hero{padding:56px 0 43px}.hero h1{font-size:clamp(58px,13vw,95px)}.hero p{font-size:15px;max-width:350px}.hero-hint{margin-top:35px}.game-grid{grid-template-columns:1fr}.card-art{height:180px}.card-content h2{font-size:62px}.card-content p{min-height:0}.takeover{align-items:stretch;flex-direction:column;margin-bottom:55px}.outline-button{width:100%}.player-toolbar{grid-template-columns:1fr 1fr}.player-identity{grid-row:1;grid-column:1/-1}.player-toolbar>#back-button{grid-row:2;grid-column:1}.player-actions{grid-row:2;grid-column:2}.toolbar-button{font-size:12px;padding:9px 10px}.player-shell{min-height:390px;height:75vh}.player-bottom{font-size:10px}}
+@media(max-width:440px){.header-status{display:none}.player-actions .toolbar-button span{display:none}.player-shell{min-height:320px}.site-footer{font-size:10px}}
+@media(prefers-reduced-motion:reduce){*,*::before,*::after{scroll-behavior:auto!important;transition:none!important;animation:none!important}}

@@ -1,0 +1,19 @@
+{
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "installCommand": "npm ci",
+  "buildCommand": "npm run build",
+  "outputDirectory": "dist",
+  "rewrites": [
+    { "source": "/games/survivor-616", "destination": "/games/survivor-616/index.html" },
+    { "source": "/games/kinetic-souls", "destination": "/games/kinetic-souls/index.html" }
+  ],
+  "headers": [
+    {
+      "source": "/demoday.js",
+      "headers": [
+        { "key": "Access-Control-Allow-Origin", "value": "*" },
+        { "key": "Cache-Control", "value": "public, max-age=300, stale-while-revalidate=86400" }
+      ]
+    }
+  ]
+}

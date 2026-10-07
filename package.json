@@ -1,0 +1,11 @@
+{
+  "name": "lok-demo-day",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "build": "node scripts/build.mjs"
+  },
+  "devDependencies": {
+    "pnpm": "10.34.6"
+  }
+}

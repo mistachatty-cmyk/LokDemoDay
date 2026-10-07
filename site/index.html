@@ -1,0 +1,79 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#0a0c13" />
+    <meta name="description" content="Play Survivor 616 and Kinetic Souls at LOK Demo Day." />
+    <title>LOK Demo Day — Pick a game</title>
+    <link rel="stylesheet" href="/style.css" />
+    <script type="module" src="/app.js"></script>
+  </head>
+  <body data-view="home">
+    <div class="ambient ambient-one" aria-hidden="true"></div>
+    <div class="ambient ambient-two" aria-hidden="true"></div>
+    <div class="site-wrap">
+      <header class="site-header">
+        <a class="brand" href="/" aria-label="LOK Demo Day home">
+          <span class="brand-mark">L<span>O</span>K</span>
+          <span class="brand-divider"></span>
+          <span class="brand-sub">DEMO DAY</span>
+        </a>
+        <span class="header-status"><span class="status-dot"></span> PLAYABLE NOW</span>
+      </header>
+
+      <main>
+        <section id="home" class="home-view" aria-labelledby="hero-title">
+          <div class="hero">
+            <div class="eyebrow"><span class="eyebrow-line"></span> THE ARCADE IS OPEN <span class="eyebrow-line"></span></div>
+            <h1 id="hero-title">Two worlds.<br /><em>Your next move.</em></h1>
+            <p>Jump into a game, switch whenever you want, and find your favorite run.</p>
+            <div class="hero-hint"><span class="scroll-icon" aria-hidden="true">↓</span> CHOOSE YOUR GAME</div>
+          </div>
+
+          <div class="game-grid" aria-label="Choose a game">
+            <article class="game-card survivor-card">
+              <div class="card-topline"><span>01 / SURVIVAL</span><span class="card-status">LIVE DEMO</span></div>
+              <div class="card-art survivor-art" aria-hidden="true"><span class="art-cross">✦</span><span class="art-grid"></span><span class="art-orbit orbit-a"></span><span class="art-orbit orbit-b"></span></div>
+              <div class="card-content">
+                <div class="game-meta">SURVIVE THE SIGNAL</div>
+                <h2>Survivor <span>616</span></h2>
+                <p>Build your run, face the swarm, and stay alive one wave longer.</p>
+                <button type="button" class="play-button" data-game="survivor-616"><span>PLAY SURVIVOR 616</span><span aria-hidden="true">↗</span></button>
+              </div>
+            </article>
+
+            <article class="game-card kinetic-card">
+              <div class="card-topline"><span>02 / ARENA</span><span class="card-status">LIVE DEMO</span></div>
+              <div class="card-art kinetic-art" aria-hidden="true"><span class="kinetic-core"></span><span class="kinetic-line line-a"></span><span class="kinetic-line line-b"></span><span class="kinetic-line line-c"></span></div>
+              <div class="card-content">
+                <div class="game-meta">MOTION IS EVERYTHING</div>
+                <h2>Kinetic <span>Souls</span></h2>
+                <p>Enter the arena and turn momentum into your advantage.</p>
+                <button type="button" class="play-button" data-game="kinetic-souls"><span>PLAY KINETIC SOULS</span><span aria-hidden="true">↗</span></button>
+              </div>
+            </article>
+          </div>
+
+          <section class="takeover" aria-labelledby="takeover-title">
+            <div><div class="game-meta">ONE MORE WAY TO PLAY</div><h2 id="takeover-title">Take over this page.</h2><p>Try Survivor 616's Demo Day page takeover right here.</p></div>
+            <button id="takeover-button" type="button" class="outline-button">START PAGE TAKEOVER <span aria-hidden="true">↗</span></button>
+          </section>
+          <p id="home-message" class="home-message" role="status" aria-live="polite"></p>
+        </section>
+
+        <section id="player" class="player-view" aria-labelledby="player-title" hidden>
+          <div class="player-toolbar">
+            <button id="back-button" type="button" class="toolbar-button">← <span>ALL GAMES</span></button>
+            <div class="player-identity"><span class="live-pill"><span class="status-dot"></span> NOW PLAYING</span><h1 id="player-title">Game</h1></div>
+            <div class="player-actions"><button id="restart-button" type="button" class="toolbar-button">↻ <span>RESTART</span></button><a id="new-tab-link" class="toolbar-button" href="/" target="_blank" rel="noopener noreferrer">↗ <span>NEW TAB</span></a></div>
+          </div>
+          <div class="player-shell"><div id="loading" class="loading" role="status">LOADING GAME…</div><iframe id="game-frame" title="Selected game" allow="autoplay; fullscreen" allowfullscreen></iframe></div>
+          <div class="player-bottom"><span id="player-status" role="status" aria-live="polite">Loading game…</span><span>SWITCH GAMES ANYTIME</span></div>
+        </section>
+      </main>
+
+      <footer class="site-footer"><span>LOK DEMO DAY</span><span>BUILT FOR THE NEXT RUN</span></footer>
+    </div>
+  </body>
+</html>

@@ -1,0 +1,10 @@
+[submodule "games/survivor-616"]
+	path = games/survivor-616
+	url = https://github.com/mistachatty-cmyk/Loksurvivor.git
+	branch = main
+	shallow = true
+[submodule "games/kinetic-souls"]
+	path = games/kinetic-souls
+	url = https://github.com/mistachatty-cmyk/Kinetic-Souls.git
+	branch = main
+	shallow = true
