@@ -6,6 +6,6 @@
     "build": "node scripts/build.mjs"
   },
   "devDependencies": {
-    "pnpm": "10.34.6"
+    "pnpm": "12.9.1"
   }
 }
