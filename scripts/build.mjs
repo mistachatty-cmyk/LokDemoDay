@@ -79,4 +79,5 @@ for (const item of ['index.html', 'style.css', 'app.js', 'demoday.js',
   if (!existsSync(resolve(dist, item))) throw new Error(`Missing deploy output: ${item}`);
 }
 
+await import('./verify-output.mjs');
 console.log('\nDemo Day build is ready in dist/.');

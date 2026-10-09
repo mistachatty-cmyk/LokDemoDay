@@ -33,6 +33,7 @@ function showGame(id, updateHistory = true) {
   document.body.dataset.view = id;
   playerTitle.textContent = game.title;
   playerStatus.textContent = 'Loading game…';
+  loading.textContent = 'LOADING GAME…';
   loading.hidden = false;
   frame.title = `${game.title} playable demo`;
   frame.src = game.path;
@@ -48,12 +49,25 @@ document.querySelectorAll('[data-game]').forEach((button) => {
 document.getElementById('back-button').addEventListener('click', () => showGame(null));
 document.getElementById('restart-button').addEventListener('click', () => {
   if (!currentGame) return;
+  loading.textContent = 'RESTARTING GAME…';
   loading.hidden = false;
   playerStatus.textContent = 'Restarting game…';
   frame.src = `${games[currentGame].path}?restart=${Date.now()}`;
 });
 frame.addEventListener('load', () => {
   if (!currentGame) return;
+  let loadedGame = false;
+  try {
+    loadedGame = frame.contentWindow.location.pathname === games[currentGame].path
+      && Boolean(frame.contentDocument?.getElementById('root'));
+  } catch {
+    // Browser error pages and external navigations cannot be inspected.
+  }
+  if (!loadedGame) {
+    loading.textContent = 'GAME COULD NOT LOAD — TRY RESTART';
+    playerStatus.textContent = 'Game could not load. Try Restart or New Tab.';
+    return;
+  }
   loading.hidden = true;
   playerStatus.textContent = 'Game ready';
 });

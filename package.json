@@ -3,7 +3,8 @@
   "version": "1.0.0",
   "private": true,
   "scripts": {
-    "build": "node scripts/build.mjs"
+    "build": "node scripts/build.mjs",
+    "verify:output": "node scripts/verify-output.mjs"
   },
   "devDependencies": {
     "pnpm": "10.34.6"
