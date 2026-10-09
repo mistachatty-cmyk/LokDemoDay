@@ -11,6 +11,7 @@ const playerTitle = document.getElementById('player-title');
 const playerStatus = document.getElementById('player-status');
 const newTabLink = document.getElementById('new-tab-link');
 const homeMessage = document.getElementById('home-message');
+const gameTip = document.getElementById('game-tip');
 let currentGame = null;
 
 function showGame(id, updateHistory = true) {
@@ -21,6 +22,7 @@ function showGame(id, updateHistory = true) {
     player.hidden = true;
     document.body.dataset.view = 'home';
     document.title = 'LOK Demo Day — Pick a game';
+    gameTip.hidden = true;
     frame.src = 'about:blank'; // Unmount the previous game, including its sound and loop.
     if (updateHistory) history.pushState(null, '', '/');
     return;
@@ -32,6 +34,10 @@ function showGame(id, updateHistory = true) {
   player.hidden = false;
   document.body.dataset.view = id;
   playerTitle.textContent = game.title;
+  gameTip.hidden = id !== 'kinetic-souls';
+  if (id === 'kinetic-souls') {
+    gameTip.textContent = 'SOLO PLAY: Choose “vs Bot,” then Start Game. A spawns P1 · Q toggles auto-spawn · P pauses. On touch, enable Mobile Controls inside the game.';
+  }
   playerStatus.textContent = 'Loading game…';
   loading.textContent = 'LOADING GAME…';
   loading.hidden = false;

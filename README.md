@@ -29,7 +29,7 @@ The full build currently runs on Linux, including GitHub Actions and Vercel. Kin
 
 ## Updating the games
 
-Keep gameplay changes in the game repositories. Dependabot checks the submodules weekly and opens a PR when their `main` branches advance. The PR runs the full build and gets a Vercel preview. Test both games and the page takeover in that preview, then merge to update production.
+Keep gameplay changes in the game repositories. Dependabot checks the submodules daily and opens a PR when their `main` branches advance. The PR runs the full build and gets a Vercel preview after the Vercel project is connected. Test both games and the page takeover in that preview, then merge to update production.
 
 To update a game immediately:
 
