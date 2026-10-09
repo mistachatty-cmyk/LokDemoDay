@@ -13,7 +13,7 @@ Survivor 616 is available at `/games/survivor-616/`, Kinetic Souls at `/games/ki
 
 ## Local build
 
-Use Node.js 22 or newer and clone with the submodules:
+Use Node.js 22 and clone with the submodules:
 
 ```sh
 git clone --recurse-submodules https://github.com/mistachatty-cmyk/LokDemoDay.git
