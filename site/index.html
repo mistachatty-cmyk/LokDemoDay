@@ -20,7 +20,10 @@
           <span class="brand-divider"></span>
           <span class="brand-sub">DEMO DAY</span>
         </a>
-        <span class="header-status"><span class="status-dot"></span> PLAYABLE NOW</span>
+        <div class="header-actions">
+          <span class="header-status"><span class="status-dot"></span> PLAYABLE NOW</span>
+          <button id="settings-button" class="settings-button" type="button" aria-label="Settings and game menu" aria-haspopup="dialog" aria-controls="game-menu" aria-expanded="false">⚙ <span>SETTINGS</span></button>
+        </div>
       </header>
 
       <main>
@@ -77,5 +80,28 @@
 
       <footer class="site-footer"><span>LOK DEMO DAY</span><span>BUILT FOR THE NEXT RUN</span></footer>
     </div>
+
+    <dialog id="game-menu" class="game-menu" aria-labelledby="game-menu-title" aria-describedby="game-menu-description">
+      <div class="game-menu-head">
+        <div>
+          <span class="game-menu-kicker">LOK DEMO DAY / GAME SELECT</span>
+          <h2 id="game-menu-title">Choose your game.</h2>
+          <p id="game-menu-description">Jump in now. You can switch games here at any time.</p>
+        </div>
+        <button id="close-game-menu" class="game-menu-close" type="button" aria-label="Close game menu">×</button>
+      </div>
+      <div class="game-menu-choices" aria-label="Available games">
+        <button type="button" class="game-menu-choice choice-survivor" data-game="survivor-616">
+          <span class="game-menu-number">01 / SURVIVAL</span><strong>SURVIVOR <span>616</span></strong>
+          <span class="game-menu-desc">Build a run. Outlast the swarm.</span><span class="game-menu-action">PLAY GAME ↗</span>
+        </button>
+        <button type="button" class="game-menu-choice choice-kinetic" data-game="kinetic-souls">
+          <span class="game-menu-number">02 / ARENA</span><strong>KINETIC <span>SOULS</span></strong>
+          <span class="game-menu-desc">Choose your match. Shape the arena.</span><span class="game-menu-action">PLAY GAME ↗</span>
+        </button>
+      </div>
+      <p id="game-menu-current" class="game-menu-current"></p>
+      <button id="browse-demo-day" class="game-menu-browse" type="button">Browse Demo Day instead</button>
+    </dialog>
   </body>
 </html>

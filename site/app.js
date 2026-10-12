@@ -12,7 +12,35 @@ const playerStatus = document.getElementById('player-status');
 const newTabLink = document.getElementById('new-tab-link');
 const homeMessage = document.getElementById('home-message');
 const gameTip = document.getElementById('game-tip');
+const gameMenu = document.getElementById('game-menu');
+const settingsButton = document.getElementById('settings-button');
+const menuTitle = document.getElementById('game-menu-title');
+const menuDescription = document.getElementById('game-menu-description');
+const menuCurrent = document.getElementById('game-menu-current');
+const browseButton = document.getElementById('browse-demo-day');
 let currentGame = null;
+
+function openGameMenu() {
+  menuTitle.textContent = currentGame ? 'Switch games.' : 'Choose your game.';
+  menuDescription.textContent = currentGame
+    ? 'Choose another game to play. Switching ends your current run.'
+    : 'Jump in now. You can switch games here at any time.';
+  menuCurrent.hidden = !currentGame;
+  menuCurrent.textContent = currentGame ? `NOW PLAYING: ${games[currentGame].title.toUpperCase()}` : '';
+  browseButton.hidden = Boolean(currentGame);
+  gameMenu.querySelectorAll('[data-game]').forEach((button) => {
+    const selected = button.dataset.game === currentGame;
+    button.dataset.active = String(selected);
+    if (selected) button.setAttribute('aria-current', 'true');
+    else button.removeAttribute('aria-current');
+    button.querySelector('.game-menu-action').textContent = selected
+      ? 'CONTINUE GAME ↗'
+      : currentGame ? 'SWITCH TO GAME ↗' : 'PLAY GAME ↗';
+  });
+  if (!gameMenu.open) gameMenu.showModal();
+  settingsButton.setAttribute('aria-expanded', 'true');
+  gameMenu.querySelector('[data-game]').focus();
+}
 
 function showGame(id, updateHistory = true) {
   const game = games[id];
@@ -25,9 +53,11 @@ function showGame(id, updateHistory = true) {
     gameTip.hidden = true;
     frame.src = 'about:blank'; // Unmount the previous game, including its sound and loop.
     if (updateHistory) history.pushState(null, '', '/');
+    openGameMenu();
     return;
   }
 
+  if (gameMenu.open) gameMenu.close();
   window.Survivor616DemoDay?.stop(true);
   currentGame = id;
   home.hidden = true;
@@ -50,8 +80,21 @@ function showGame(id, updateHistory = true) {
 }
 
 document.querySelectorAll('[data-game]').forEach((button) => {
-  button.addEventListener('click', () => showGame(button.dataset.game));
+  button.addEventListener('click', () => {
+    if (button.dataset.game === currentGame) {
+      gameMenu.close();
+      return;
+    }
+    showGame(button.dataset.game);
+  });
 });
+settingsButton.addEventListener('click', openGameMenu);
+document.getElementById('close-game-menu').addEventListener('click', () => gameMenu.close());
+browseButton.addEventListener('click', () => gameMenu.close());
+gameMenu.addEventListener('click', (event) => {
+  if (event.target === gameMenu) gameMenu.close();
+});
+gameMenu.addEventListener('close', () => settingsButton.setAttribute('aria-expanded', 'false'));
 document.getElementById('back-button').addEventListener('click', () => showGame(null));
 document.getElementById('restart-button').addEventListener('click', () => {
   if (!currentGame) return;
