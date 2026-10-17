@@ -19,6 +19,7 @@
 .studio-controls input[type=range]{width:min(240px,40vw);accent-color:#bda8ff}
 .studio-controls input[type=checkbox]{accent-color:#bda8ff}
 .studio-status{min-height:24px;color:#e3cfff;font-size:14px}
+.studio-disclosure{max-width:780px;color:#aeb2bd;font-size:12px;line-height:1.5}
 .studio-links{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:10px;margin-top:20px}
 .studio-links label{display:flex;align-items:center;gap:12px;color:#f4f2f5;font-family:'Barlow Condensed',Impact,sans-serif;font-size:15px;font-weight:700;white-space:nowrap}
 .studio-links input{width:100%;min-width:0;padding:10px;border:1px solid #ffffff42;background:#10121c;color:#fff;font-family:system-ui,sans-serif;font-size:14px}

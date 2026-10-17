@@ -12,6 +12,7 @@ const BADGES = [
   { id: 'first-clear', title: 'First Clear', test: (p) => p.runs >= 1 },
   { id: 'five-clears', title: 'Wrecking Crew', test: (p) => p.runs >= 5 },
   { id: 'rift-fragment', title: 'Rift Fragment', test: (p) => p.runs >= 3 },
+  { id: 'house-pinata', title: 'House Piñata', test: (p) => p.pinatas >= 1 },
 ];
 
 function loadProgress() {
@@ -22,8 +23,9 @@ function loadProgress() {
       breaks: Math.max(0, Math.min(1000000, Number(raw.breaks) || 0)),
       best: Math.max(0, Math.min(100, Number(raw.best) || 0)),
       xp: Math.max(0, Math.min(10000000, Number(raw.xp) || 0)),
+      pinatas: Math.max(0, Math.min(100000, Number(raw.pinatas) || 0)),
     };
-  } catch { return { runs: 0, breaks: 0, best: 0, xp: 0 }; }
+  } catch { return { runs: 0, breaks: 0, best: 0, xp: 0, pinatas: 0 }; }
 }
 const progress = loadProgress();
 function saveProgress() {
@@ -47,6 +49,10 @@ let runId = crypto.randomUUID();
 let dragging = null;
 let pointerDown = false;
 let lastTime = 0;
+let sponsorState = null;
+let sponsorRun = false;
+let housePromoCap = { day: '', count: 0 };
+let sceneReward = 100;
 const COLS = 12;
 const ROWS = 7;
 
@@ -82,8 +88,30 @@ function starterMap(kind) {
   return offscreen;
 }
 
-function resetScene(source, message) {
+function housePromoMap() {
+  const offscreen = document.createElement('canvas');
+  offscreen.width = canvas.width;
+  offscreen.height = canvas.height;
+  const c = offscreen.getContext('2d');
+  c.fillStyle = '#14152d';
+  c.fillRect(0, 0, offscreen.width, offscreen.height);
+  c.fillStyle = '#7858a8';
+  for (let x = -200; x < 1200; x += 80) { c.save(); c.translate(x, 0); c.rotate(0.28); c.fillRect(0, -100, 24, 800); c.restore(); }
+  c.fillStyle = '#eee6ff';
+  c.font = 'bold 34px system-ui';
+  c.fillText('LOK / HOUSE PROMO', 260, 180);
+  c.font = 'bold 88px Impact, sans-serif';
+  c.fillText('BREAK THE ROUTINE', 76, 300);
+  c.font = '28px system-ui';
+  c.fillText('Demo Day • Play, smash, rebuild', 278, 362);
+  return offscreen;
+}
+
+function resetScene(source, message, isSponsor = false) {
   if (media instanceof HTMLVideoElement) media.pause();
+  sponsorState = null;
+  sponsorRun = isSponsor;
+  sceneReward = 100;
   media = source;
   tiles = [];
   const w = canvas.width / COLS;
@@ -95,6 +123,7 @@ function resetScene(source, message) {
   runId = crypto.randomUUID();
   running = true;
   playButton.textContent = 'PAUSE';
+  playButton.disabled = false;
   if (media instanceof HTMLVideoElement) { media.muted = mute.checked; void media.play().catch(() => { status.textContent = 'Press Play to start your video.'; }); }
   status.textContent = message;
 }
@@ -123,20 +152,64 @@ function destroyAt(x, y) {
     finished = true;
     progress.runs++;
     progress.xp += 100;
-    status.textContent = `Scene cleared — ${percent}% broken. +100 XP. Rebuild to create another run.`;
+    let bonus = 0;
+    if (sponsorRun) {
+      progress.pinatas++;
+      const day = new Date().toISOString().slice(0, 10);
+      let cap = housePromoCap;
+      try {
+        const saved = JSON.parse(localStorage.getItem('lok:demoday:house-promo-cap:v1') || 'null');
+        if (saved?.day === day && Number.isInteger(saved.count)) cap = { day, count: Math.max(cap.day === day ? cap.count : 0, saved.count) };
+      } catch { /* Use this session's cap. */ }
+      if (cap.day !== day) cap = { day, count: 0 };
+      if (cap.count < 3) {
+        bonus = 50;
+        cap.count++;
+        housePromoCap = cap;
+        try { localStorage.setItem('lok:demoday:house-promo-cap:v1', JSON.stringify(cap)); } catch { /* Storage may be blocked. */ }
+        progress.xp += bonus;
+      }
+    }
+    sceneReward = 100 + bonus;
+    status.textContent = `Scene cleared — ${percent}% broken. +${sceneReward} XP${sponsorRun ? ' · House Piñata earned' : ''}. Rebuild to create another run.`;
     if (window.parent !== window) {
-      const payload = { type: 'lok:demoday:run', version: 1, runId, gameKey: 'studio', score: percent, xp: 100, completedAt: new Date().toISOString() };
+      const payload = { type: 'lok:demoday:run', version: 1, runId, gameKey: 'studio', score: percent, xp: 100 + bonus, completedAt: new Date().toISOString() };
       for (const origin of ['https://gsix.online', 'http://localhost:3000']) window.parent.postMessage(payload, origin);
     }
-  } else status.textContent = `${percent}% broken. Drag while paused to rearrange the pieces.`;
+  } else if (finished) status.textContent = `Scene cleared — ${percent}% broken. +${sceneReward} XP${sponsorRun ? ' · House Piñata earned' : ''}. Rebuild to create another run.`;
+  else status.textContent = `${percent}% broken. Drag while paused to rearrange the pieces.`;
   saveProgress();
 }
 
 function draw(timestamp) {
   const delta = Math.min(2, (timestamp - lastTime) / 16.67 || 1);
+  const elapsed = Math.max(0, Math.min(100, timestamp - lastTime || 0));
   lastTime = timestamp;
+  if (document.hidden) { requestAnimationFrame(draw); return; }
   ctx.fillStyle = '#0a0c14';
   ctx.fillRect(0, 0, canvas.width, canvas.height);
+  if (sponsorState) {
+    sponsorState.elapsed += elapsed;
+    const left = Math.max(0, Math.ceil((5000 - sponsorState.elapsed) / 1000));
+    if (left === 0) resetScene(housePromoMap(), 'House promo complete. The separate piñata is ready to destroy.', true);
+    else {
+      const seconds = sponsorState.elapsed / 1000;
+      const x = 330 + Math.sin(seconds * 2.2) * 240;
+      const y = 190 + Math.cos(seconds * 2.7) * 120;
+      ctx.fillStyle = '#4d356f';
+      ctx.fillRect(x, y, 300, 160);
+      ctx.strokeStyle = '#d8c9ff';
+      ctx.lineWidth = 4;
+      ctx.strokeRect(x, y, 300, 160);
+      ctx.fillStyle = '#fff';
+      ctx.font = 'bold 24px system-ui';
+      ctx.fillText('LOK HOUSE PROMO', x + 32, y + 64);
+      ctx.font = '18px system-ui';
+      ctx.fillText(`Display: ${left}s · Untouchable`, x + 32, y + 108);
+      requestAnimationFrame(draw);
+      return;
+    }
+  }
   if (media) {
     const sourceWidth = media instanceof HTMLVideoElement ? media.videoWidth : media.width;
     const sourceHeight = media instanceof HTMLVideoElement ? media.videoHeight : media.height;
@@ -167,6 +240,7 @@ function position(event) {
   return { x: (event.clientX - rect.left) * canvas.width / rect.width, y: (event.clientY - rect.top) * canvas.height / rect.height };
 }
 canvas.addEventListener('pointerdown', (event) => {
+  if (sponsorState) return;
   canvas.setPointerCapture(event.pointerId);
   pointerDown = true;
   const point = position(event);
@@ -183,6 +257,7 @@ canvas.addEventListener('pointerup', () => { pointerDown = false; dragging = nul
 canvas.addEventListener('pointercancel', () => { pointerDown = false; dragging = null; });
 
 function togglePlay() {
+  if (sponsorState) return;
   running = !running;
   playButton.textContent = running ? 'PAUSE' : 'PLAY';
   if (media instanceof HTMLVideoElement) {
@@ -238,12 +313,25 @@ timeline.addEventListener('input', () => {
 mute.addEventListener('change', () => { if (media instanceof HTMLVideoElement) media.muted = mute.checked; });
 
 document.querySelectorAll('[data-studio-map]').forEach((button) => button.addEventListener('click', () => {
+  sponsorState = null;
   if (mediaUrl) { URL.revokeObjectURL(mediaUrl); mediaUrl = null; }
   timeline.disabled = true;
   timeline.value = '0';
   resetScene(starterMap(button.dataset.studioMap), `${button.textContent} loaded. Click or drag to break it.`);
 }));
+document.getElementById('studio-pinata').addEventListener('click', () => {
+  if (media instanceof HTMLVideoElement) media.pause();
+  media = null;
+  tiles = [];
+  finished = false;
+  running = false;
+  sponsorRun = false;
+  playButton.disabled = true;
+  sponsorState = { elapsed: 0 };
+  status.textContent = 'House promotion is displaying. It cannot be clicked or destroyed until the separate piñata appears.';
+});
 document.getElementById('studio-file').addEventListener('change', (event) => {
+  sponsorState = null;
   const file = event.target.files?.[0];
   if (!file) return;
   if (!/^(image\/(png|jpeg|webp|gif)|video\/(mp4|webm))$/.test(file.type) || file.size > 100 * 1024 * 1024) {
