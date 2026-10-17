@@ -205,6 +205,33 @@ document.getElementById('studio-export').addEventListener('click', () => {
   link.href = canvas.toDataURL('image/png');
   link.click();
 });
+document.getElementById('studio-record').addEventListener('click', () => {
+  if (!media) return;
+  if (!window.MediaRecorder || !canvas.captureStream) { status.textContent = 'This browser cannot record canvas clips. Export an image instead.'; return; }
+  const mimeType = ['video/webm;codecs=vp9', 'video/webm;codecs=vp8', 'video/webm'].find((type) => MediaRecorder.isTypeSupported(type));
+  if (!mimeType) { status.textContent = 'This browser cannot record WebM clips. Export an image instead.'; return; }
+  const recordButton = document.getElementById('studio-record');
+  const stream = canvas.captureStream(30);
+  const recorder = new MediaRecorder(stream, { mimeType });
+  const chunks = [];
+  recorder.ondataavailable = (event) => { if (event.data.size) chunks.push(event.data); };
+  recorder.onstop = () => {
+    stream.getTracks().forEach((track) => track.stop());
+    recordButton.disabled = false;
+    const url = URL.createObjectURL(new Blob(chunks, { type: mimeType }));
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = `lok-demo-day-${Date.now()}.webm`;
+    link.click();
+    setTimeout(() => URL.revokeObjectURL(url), 60000);
+    status.textContent = 'Clip saved to your downloads.';
+  };
+  recorder.onerror = () => { stream.getTracks().forEach((track) => track.stop()); recordButton.disabled = false; status.textContent = 'Recording failed. Export an image instead.'; };
+  recordButton.disabled = true;
+  status.textContent = 'Recording eight seconds of your sandbox…';
+  recorder.start();
+  setTimeout(() => { if (recorder.state !== 'inactive') recorder.stop(); }, 8000);
+});
 timeline.addEventListener('input', () => {
   if (media instanceof HTMLVideoElement && Number.isFinite(media.duration)) media.currentTime = Number(timeline.value) / 1000 * media.duration;
 });
