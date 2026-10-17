@@ -18,6 +18,8 @@ const menuTitle = document.getElementById('game-menu-title');
 const menuDescription = document.getElementById('game-menu-description');
 const menuCurrent = document.getElementById('game-menu-current');
 const browseButton = document.getElementById('browse-demo-day');
+const embedded = new URLSearchParams(location.search).get('embed') === '1';
+document.body.dataset.embed = String(embedded);
 let currentGame = null;
 
 function openGameMenu() {
@@ -52,8 +54,8 @@ function showGame(id, updateHistory = true) {
     document.title = 'LOK Demo Day — Pick a game';
     gameTip.hidden = true;
     frame.src = 'about:blank'; // Unmount the previous game, including its sound and loop.
-    if (updateHistory) history.pushState(null, '', '/');
-    openGameMenu();
+    if (updateHistory) history.pushState(null, '', embedded ? '/?embed=1' : '/');
+    if (!['#studio', '#progress'].includes(location.hash)) openGameMenu();
     return;
   }
 
@@ -75,7 +77,7 @@ function showGame(id, updateHistory = true) {
   frame.src = game.path;
   newTabLink.href = game.path;
   document.title = `Play ${game.title} — LOK Demo Day`;
-  if (updateHistory) history.pushState({ game: id }, '', `/?game=${encodeURIComponent(id)}`);
+  if (updateHistory) history.pushState({ game: id }, '', `/?game=${encodeURIComponent(id)}${embedded ? '&embed=1' : ''}`);
   window.scrollTo(0, 0);
 }
 

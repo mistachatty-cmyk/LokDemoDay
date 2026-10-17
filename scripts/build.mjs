@@ -74,7 +74,7 @@ writeFileSync(resolve(dist, 'build.json'), JSON.stringify({
   kineticSouls: kinetic.revision,
 }, null, 2));
 
-for (const item of ['index.html', 'style.css', 'app.js', 'demoday.js',
+for (const item of ['index.html', 'style.css', 'app.js', 'studio.css', 'studio.js', 'demoday.js',
   'games/survivor-616/index.html', 'games/kinetic-souls/index.html']) {
   if (!existsSync(resolve(dist, item))) throw new Error(`Missing deploy output: ${item}`);
 }

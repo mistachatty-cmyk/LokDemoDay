@@ -11,6 +11,7 @@ The playable Demo Day site for [Survivor 616](https://github.com/mistachatty-cmy
 
 Survivor 616 is available at `/games/survivor-616/`, Kinetic Souls at `/games/kinetic-souls/`, and Survivor's page takeover bundle at `/demoday.js`. The landing page loads each game inside its own frame so switching games stops the previous game's loop and sound.
 The game selection menu opens when the landing page loads. Players can also open it from **Settings** while a game is running; selecting another game replaces the current run.
+The Destruction Studio at `/#studio` includes starter maps and local image/video shattering. The `?embed=1` view hides the site chrome for use inside GSix Hub. Studio files stay in the browser; no file contents are uploaded. Guest studio progress is stored on the current device.
 
 ## Local build
 

@@ -8,6 +8,7 @@
     <title>LOK Demo Day — Pick a game</title>
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <link rel="stylesheet" href="/style.css" />
+    <link rel="stylesheet" href="/studio.css" />
     <script type="module" src="/app.js"></script>
   </head>
   <body data-view="home">
@@ -25,6 +26,13 @@
           <button id="settings-button" class="settings-button" type="button" aria-label="Settings and game menu" aria-haspopup="dialog" aria-controls="game-menu" aria-expanded="false">⚙ <span>SETTINGS</span></button>
         </div>
       </header>
+
+      <nav class="mode-nav" aria-label="Demo Day modes">
+        <button type="button" data-game="survivor-616">Survivor 616</button>
+        <button type="button" data-game="kinetic-souls">Kinetic Souls</button>
+        <a href="/#studio">Destruction Studio</a>
+        <a href="/#progress">Progress</a>
+      </nav>
 
       <main>
         <section id="home" class="home-view" aria-labelledby="hero-title">
@@ -58,6 +66,22 @@
               </div>
             </article>
           </div>
+
+          <section id="studio" class="studio-section" aria-labelledby="studio-title">
+            <div class="studio-heading"><div><span class="game-meta">MAKE A LEVEL OUT OF ANYTHING YOU OWN</span><h2 id="studio-title">Destruction Studio</h2><p>Bring an image or video, smash a starter scene, or try a link. Your files stay on this device.</p></div><span class="studio-label">CREATIVE SANDBOX</span></div>
+            <div class="studio-sources" role="group" aria-label="Choose a source">
+              <button type="button" data-studio-map="neon">Neon city</button><button type="button" data-studio-map="paper">Paper world</button>
+              <label class="studio-upload">Upload image or video<input id="studio-file" type="file" accept="image/png,image/jpeg,image/webp,image/gif,video/mp4,video/webm" /></label>
+            </div>
+            <div class="studio-stage"><canvas id="studio-canvas" width="960" height="540" aria-label="Destructible studio canvas"></canvas><div class="studio-stage-help">CLICK OR DRAG TO BREAK • SPACE TO PAUSE</div></div>
+            <div class="studio-controls"><button id="studio-play" type="button">PAUSE</button><button id="studio-rebuild" type="button">REBUILD</button><button id="studio-export" type="button">EXPORT IMAGE</button><label>Timeline <input id="studio-timeline" type="range" min="0" max="1000" value="0" disabled /></label><label><input id="studio-mute" type="checkbox" checked /> Mute</label></div>
+            <p id="studio-status" class="studio-status" role="status" aria-live="polite">Choose a starter scene or upload media to begin.</p>
+            <div class="studio-links"><label>Website URL <input id="studio-url" type="url" placeholder="https://example.com" /></label><button id="studio-open-url" type="button">TRY PAGE OVERLAY ↗</button><label>YouTube URL <input id="studio-youtube" type="url" placeholder="https://youtube.com/watch?v=…" /></label><button id="studio-open-youtube" type="button">OPEN PLAYER</button></div>
+            <p class="studio-note">Website play opens the page in a new tab; use the Demo Day bookmarklet there. Some sites block outside scripts. YouTube plays in its own player with controls; video shattering is for files you upload.</p>
+            <div id="studio-youtube-player" class="studio-youtube-player" hidden></div>
+          </section>
+
+          <section id="progress" class="progress-section" aria-labelledby="progress-title"><div><span class="game-meta">YOUR DEMO DAY RECORD</span><h2 id="progress-title">Progress</h2><p>Guest progress is saved on this device.</p></div><div id="progress-summary" class="progress-summary"></div><div id="progress-badges" class="progress-badges"></div></section>
 
           <section class="takeover" aria-labelledby="takeover-title">
             <div><div class="game-meta">ONE MORE WAY TO PLAY</div><h2 id="takeover-title">Take over this page.</h2><p>Try Survivor 616's Demo Day page takeover right here.</p></div>
@@ -103,5 +127,6 @@
       <p id="game-menu-current" class="game-menu-current"></p>
       <button id="browse-demo-day" class="game-menu-browse" type="button">Browse Demo Day instead</button>
     </dialog>
+    <script type="module" src="/studio.js"></script>
   </body>
 </html>
