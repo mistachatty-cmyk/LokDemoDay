@@ -140,7 +140,7 @@ function draw(timestamp) {
   if (media) {
     const sourceWidth = media instanceof HTMLVideoElement ? media.videoWidth : media.width;
     const sourceHeight = media instanceof HTMLVideoElement ? media.videoHeight : media.height;
-    if (sourceWidth && sourceHeight) for (const tile of tiles) {
+    if (sourceWidth && sourceHeight && (!(media instanceof HTMLVideoElement) || media.readyState >= HTMLMediaElement.HAVE_CURRENT_DATA)) for (const tile of tiles) {
       if (running && tile.broken && tile !== dragging) {
         tile.x += tile.vx * delta;
         tile.y += tile.vy * delta;
