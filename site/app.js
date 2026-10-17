@@ -1,3 +1,5 @@
+import { BRIDGE_VERSION, validBridgeEvent } from './bridge-protocol.mjs';
+
 const games = {
   'survivor-616': { title: 'Survivor 616', path: '/games/survivor-616/' },
   'kinetic-souls': { title: 'Kinetic Souls', path: '/games/kinetic-souls/' },
@@ -21,6 +23,81 @@ const browseButton = document.getElementById('browse-demo-day');
 const embedded = new URLSearchParams(location.search).get('embed') === '1';
 document.body.dataset.embed = String(embedded);
 let currentGame = null;
+let activeRunId = null;
+let runStarted = false;
+let runCompleted = false;
+const reportedPickups = new Set();
+let inventory = [];
+
+function postToHub(payload) {
+  if (window.parent === window) return;
+  for (const origin of ['https://gsix.online', 'http://localhost:3000']) {
+    window.parent.postMessage(payload, origin);
+  }
+}
+
+window.addEventListener('message', (event) => {
+  if (event.source === window.parent && event.source !== window &&
+      ['https://gsix.online', 'http://localhost:3000'].includes(event.origin)) {
+    const data = event.data;
+    if (data?.type === 'lok:demoday:inventory' && data.version === BRIDGE_VERSION &&
+        Array.isArray(data.items) && data.items.length <= 1 &&
+        data.items.every((item) => item === 'rift-fragment')) {
+      inventory = [...data.items];
+      sendBridgeInventory();
+    }
+    return;
+  }
+  if (event.origin !== location.origin || event.source !== frame.contentWindow ||
+      !validBridgeEvent(event.data, currentGame, activeRunId)) return;
+  const data = event.data;
+  if (data.event === 'start') {
+    runStarted = true;
+    return;
+  }
+  if (!runStarted || runCompleted) return;
+  if (data.event === 'abort') {
+    beginBridgeRun();
+    sendBridgeInit();
+    playerStatus.textContent = 'Run ended';
+    return;
+  }
+  if (data.event === 'pickup') {
+    if (reportedPickups.has(data.pickupId)) return;
+    reportedPickups.add(data.pickupId);
+    postToHub({ type: 'lok:demoday:pickup', version: BRIDGE_VERSION,
+      runId: activeRunId, gameKey: currentGame, itemKey: data.itemKey, pickupId: data.pickupId });
+    return;
+  }
+  if (data.event === 'complete') {
+    runCompleted = true;
+    postToHub({ type: 'lok:demoday:run', version: BRIDGE_VERSION,
+      runId: activeRunId, gameKey: currentGame, score: data.score,
+      xp: data.xp, completedAt: data.completedAt });
+    playerStatus.textContent = `Run complete · ${data.score.toLocaleString()} points`;
+    beginBridgeRun();
+    sendBridgeInit();
+  }
+});
+
+function beginBridgeRun() {
+  activeRunId = crypto.randomUUID();
+  runStarted = false;
+  runCompleted = false;
+  reportedPickups.clear();
+}
+
+function sendBridgeInit() {
+  if (!currentGame || !activeRunId || !frame.contentWindow) return;
+  frame.contentWindow.postMessage({ type: 'lok:demoday:init', version: BRIDGE_VERSION,
+    gameId: currentGame, runId: activeRunId, items: inventory }, location.origin);
+}
+
+function sendBridgeInventory() {
+  if (!currentGame || !frame.contentWindow) return;
+  frame.contentWindow.postMessage({ type: 'lok:demoday:inventory', version: BRIDGE_VERSION,
+    gameId: currentGame, items: inventory }, location.origin);
+}
 
 function openGameMenu() {
   menuTitle.textContent = currentGame ? 'Switch games.' : 'Choose your game.';
@@ -48,6 +125,7 @@ function showGame(id, updateHistory = true) {
   const game = games[id];
   if (!game) {
     currentGame = null;
+    activeRunId = null;
     home.hidden = false;
     player.hidden = true;
     document.body.dataset.view = 'home';
@@ -62,6 +140,7 @@ function showGame(id, updateHistory = true) {
   if (gameMenu.open) gameMenu.close();
   window.Survivor616DemoDay?.stop(true);
   currentGame = id;
+  beginBridgeRun();
   home.hidden = true;
   player.hidden = false;
   document.body.dataset.view = id;
@@ -100,6 +179,7 @@ gameMenu.addEventListener('close', () => settingsButton.setAttribute('aria-expan
 document.getElementById('back-button').addEventListener('click', () => showGame(null));
 document.getElementById('restart-button').addEventListener('click', () => {
   if (!currentGame) return;
+  beginBridgeRun();
   loading.textContent = 'RESTARTING GAME…';
   loading.hidden = false;
   playerStatus.textContent = 'Restarting game…';
@@ -121,6 +201,7 @@ frame.addEventListener('load', () => {
   }
   loading.hidden = true;
   playerStatus.textContent = 'Game ready';
+  sendBridgeInit();
 });
 window.addEventListener('popstate', () => {
   showGame(new URLSearchParams(location.search).get('game'), false);
