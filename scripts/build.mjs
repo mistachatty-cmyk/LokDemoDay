@@ -105,7 +105,7 @@ writeFileSync(resolve(dist, 'build.json'), JSON.stringify({
   kineticOfficial: revision(officialRoot, 'kinetic-official'),
 }, null, 2));
 
-for (const item of ['index.html', 'style.css', 'app.js', 'bridge-protocol.mjs', 'studio.css', 'studio.js', 'studio-projects.mjs', 'page-chooser.js', 'page-media.js', 'demoday.js', 'kinetic-page.js', 'kinetic-official-page.js',
+for (const item of ['index.html', 'style.css', 'app.js', 'game-choice.css', 'game-choice.js', 'bridge-protocol.mjs', 'studio.css', 'studio.js', 'studio-projects.mjs', 'page-chooser.js', 'page-media.js', 'demoday.js', 'kinetic-page.js', 'kinetic-official-page.js',
   'games/survivor-616/index.html', 'games/kinetic-souls/index.html', 'games/kinetic-classic/index.html', 'games/kinetic-ks2/index.html']) {
   if (!existsSync(resolve(dist, item))) throw new Error(`Missing deploy output: ${item}`);
 }

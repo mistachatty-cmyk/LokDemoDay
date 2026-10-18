@@ -11,7 +11,7 @@ function requireFile(path) {
   }
 }
 
-for (const asset of ['index.html', 'app.js', 'style.css', 'favicon.svg', 'demoday.js', 'kinetic-official-page.js']) {
+for (const asset of ['index.html', 'app.js', 'style.css', 'game-choice.js', 'game-choice.css', 'favicon.svg', 'demoday.js', 'kinetic-official-page.js']) {
   requireFile(resolve(dist, asset));
 }
 

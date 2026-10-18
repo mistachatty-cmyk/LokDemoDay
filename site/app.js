@@ -1,4 +1,5 @@
 import { BRIDGE_VERSION, validBridgeEvent } from './bridge-protocol.mjs';
+import { mountGameChoices } from './game-choice.js';
 
 const games = {
   'survivor-616': { title: 'Survivor 616', path: '/games/survivor-616/' },
@@ -17,6 +18,7 @@ const gameTip = document.getElementById('game-tip');
 const gameMenu = document.getElementById('game-menu');
 const pageModeMenu = document.getElementById('page-mode-menu');
 const kineticVersionMenu = document.getElementById('kinetic-version-menu');
+const homePlayMenu = document.getElementById('home-play-menu');
 const settingsButton = document.getElementById('settings-button');
 const menuTitle = document.getElementById('game-menu-title');
 const menuDescription = document.getElementById('game-menu-description');
@@ -27,6 +29,7 @@ document.body.dataset.embed = String(embedded);
 let currentGame = null;
 let currentVariant = 'classic';
 let versionContext = 'page';
+let homeChoice = 'survivor-616';
 let activeRunId = null;
 let runStarted = false;
 let runCompleted = false;
@@ -134,6 +137,14 @@ function openPageModeMenu() {
   pageModeMenu.querySelector('[data-page-mode]').focus();
 }
 
+function openKineticVersion(context) {
+  versionContext = context;
+  kineticVersionMenu.querySelector('.game-menu-head p').textContent = context === 'page'
+    ? 'A spawns left, L spawns right. Both teams fight over the live website.'
+    : 'Choose the complete Classic game or the expanded KS2 alpha.';
+  kineticVersionMenu.showModal();
+}
+
 function runningPageMode() {
   if (window.Survivor616DemoDay?.isRunning()) return 'survivor-616';
   if (window.KineticSoulsOfficialPage?.isRunning()) return 'kinetic-souls';
@@ -190,7 +201,7 @@ function showGame(id, updateHistory = true, variant = 'classic') {
 
 document.querySelectorAll('[data-game]').forEach((button) => {
   button.addEventListener('click', () => {
-    if (button.dataset.game === 'kinetic-souls') { if (gameMenu.open) gameMenu.close(); versionContext = 'full'; kineticVersionMenu.showModal(); return; }
+    if (button.dataset.game === 'kinetic-souls') { if (gameMenu.open) gameMenu.close(); openKineticVersion('full'); return; }
     if (button.dataset.game === currentGame) {
       gameMenu.close();
       return;
@@ -198,6 +209,24 @@ document.querySelectorAll('[data-game]').forEach((button) => {
     showGame(button.dataset.game);
   });
 });
+document.querySelectorAll('[data-home-game]').forEach((button) => button.addEventListener('click', () => {
+  homeChoice = button.dataset.homeGame;
+  document.getElementById('home-play-title').textContent = games[homeChoice].title;
+  document.getElementById('home-play-description').textContent = `Choose how to play ${games[homeChoice].title}.`;
+  homePlayMenu.querySelector('[data-home-route="full"] .game-menu-action').textContent = homeChoice === 'kinetic-souls' ? 'CHOOSE VERSION ↗' : 'PLAY SURVIVOR ↗';
+  homePlayMenu.showModal();
+  homePlayMenu.querySelector('[data-home-route="page"]').focus();
+}));
+homePlayMenu.querySelectorAll('[data-home-route]').forEach((button) => button.addEventListener('click', () => {
+  const route = button.dataset.homeRoute;
+  homePlayMenu.close();
+  if (homeChoice === 'kinetic-souls') {
+    openKineticVersion(route === 'page' ? 'page' : 'full');
+  } else if (route === 'page') void startPageMode('survivor-616');
+  else showGame('survivor-616');
+}));
+document.getElementById('close-home-play').addEventListener('click', () => homePlayMenu.close());
+homePlayMenu.addEventListener('click', (event) => { if (event.target === homePlayMenu) homePlayMenu.close(); });
 settingsButton.addEventListener('click', () => currentGame ? openGameMenu() : openPageModeMenu());
 document.getElementById('close-game-menu').addEventListener('click', () => gameMenu.close());
 browseButton.addEventListener('click', () => gameMenu.close());
@@ -272,7 +301,7 @@ document.getElementById('page-media-file').addEventListener('change', (event) =>
 pageModeMenu.querySelectorAll('[data-page-mode]').forEach((button) => button.addEventListener('click', async () => {
   const mode = button.dataset.pageMode;
   pageModeMenu.close();
-  if (mode === 'kinetic-souls') { versionContext = 'page'; kineticVersionMenu.showModal(); return; }
+  if (mode === 'kinetic-souls') { openKineticVersion('page'); return; }
   await startPageMode(mode);
 }));
 document.getElementById('close-kinetic-version').addEventListener('click', () => kineticVersionMenu.close());
@@ -295,3 +324,4 @@ async function startPageMode(mode, variant = 'classic') {
 }
 
 showGame(new URLSearchParams(location.search).get('game'), false, new URLSearchParams(location.search).get('variant'));
+mountGameChoices();

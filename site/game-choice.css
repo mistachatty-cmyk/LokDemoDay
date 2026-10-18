@@ -1,0 +1,47 @@
+/* Lok GameChoice: glass surface around a decorative, silent canvas preview. */
+.game-grid{transition:grid-template-columns .48s cubic-bezier(.16,1,.3,1)}
+.lok-choice{--choice-accent:#f2785e;--choice-glow:#f2785e40;isolation:isolate;position:relative;overflow:hidden;border:1px solid #ffffff65;border-radius:24px;background:linear-gradient(145deg,#ffffff19,#ffffff09 42%,#111723dd);color:#f8f8fb;box-shadow:0 18px 45px #0007,inset 0 1px 2px #ffffff8a,inset 0 0 28px var(--choice-glow);backdrop-filter:blur(20px) saturate(140%);-webkit-backdrop-filter:blur(20px) saturate(140%);transition:transform .46s cubic-bezier(.16,1,.3,1),box-shadow .46s cubic-bezier(.16,1,.3,1),border-color .46s cubic-bezier(.16,1,.3,1),flex-grow .46s cubic-bezier(.16,1,.3,1)}
+.lok-choice::before{content:'';position:absolute;z-index:3;inset:1px;border-radius:inherit;border:1px solid #ffffff30;box-shadow:inset 0 2px 3px #ffffff24;pointer-events:none}
+.lok-choice:hover,.lok-choice:focus-visible{transform:translateY(-6px) scale(1.015);border-color:#ffffffc2;box-shadow:0 25px 60px #0009,inset 0 2px 4px #ffffffb0,inset 0 0 42px var(--choice-glow),0 0 24px var(--choice-glow)}
+.lok-choice:active{transform:translateY(-1px) scale(.985);transition-duration:.12s}
+.lok-choice canvas{display:block;width:100%;height:100%;pointer-events:none}
+.choice-survivor,.survivor-card{--choice-accent:#ff9777;--choice-glow:#f477584b}
+.choice-kinetic,.kinetic-card{--choice-accent:#bfa8ff;--choice-glow:#9f8afa49}
+.game-card.lok-choice{display:block;width:100%;padding:0;text-align:left;cursor:pointer}
+.game-card.lok-choice .card-topline,.game-card.lok-choice .card-content{display:flex}
+.game-card.lok-choice .card-content{flex-direction:column;align-items:stretch}
+.game-card.lok-choice .card-art{display:block;height:220px;background:#111725}
+.game-card.lok-choice .card-art::after{content:'';position:absolute;inset:0;background:linear-gradient(0deg,#111521a8,transparent 46%);pointer-events:none}
+.game-card.lok-choice .card-title{display:block;font-family:'Barlow Condensed',Impact,sans-serif;font-size:clamp(48px,5.3vw,72px);font-weight:900;line-height:1;margin:8px 0;text-transform:uppercase;letter-spacing:-.018em}
+.game-card.lok-choice .card-title span{color:var(--choice-accent)}
+.game-card.lok-choice .card-description{color:#d2d5e0;font-size:15px;line-height:1.6;min-height:48px;margin-bottom:24px}
+.game-card.lok-choice .card-action{display:flex;justify-content:space-between;align-items:center;width:100%;padding:14px 17px;border-radius:12px;background:var(--choice-accent);color:#13131b;font-family:'Barlow Condensed',Impact,sans-serif;font-size:18px;font-weight:800;letter-spacing:.04em}
+.game-card.lok-choice .card-action span{font-family:Arial,sans-serif;font-weight:400}
+.game-menu{border-radius:27px;border-color:#ffffff7a;background:linear-gradient(150deg,#252b3bdc,#101520f2 70%);backdrop-filter:blur(24px) saturate(140%);-webkit-backdrop-filter:blur(24px) saturate(140%);box-shadow:0 34px 110px #000c,inset 0 1px 2px #ffffff55}
+.game-menu-choice.lok-choice{min-height:220px;padding:19px;background:#141927;border-radius:20px}
+.game-menu-choice.lok-choice canvas{position:absolute;inset:0;z-index:0;opacity:.78;transition:opacity .3s}
+.game-menu-choice.lok-choice::after{content:'';position:absolute;z-index:1;inset:0;background:linear-gradient(0deg,#101521f5,#101521b7 56%,#10152142);pointer-events:none}
+.game-menu-choice.lok-choice:hover canvas,.game-menu-choice.lok-choice:focus-visible canvas{opacity:1}
+.game-menu-choice.lok-choice>span,.game-menu-choice.lok-choice>strong{position:relative;z-index:2}
+.game-menu-choice.lok-choice .game-menu-number,.game-menu-choice.lok-choice .game-menu-action{color:var(--choice-accent)}
+.game-menu-choice.lok-choice .game-menu-desc{color:#e1e3ec;max-width:26ch}
+.game-menu-choice.lok-choice.featured{border-color:#bfa8ff;box-shadow:inset 0 1px 3px #ffffff88,0 0 24px #bfa8ff32}
+.route-choice{border-radius:20px;border-color:#ffffff65;background:linear-gradient(145deg,#272d3a,#121725);min-height:190px}
+.route-choice:hover,.route-choice:focus-visible{border-color:#ffe0a8;box-shadow:0 16px 40px #0007,inset 0 1px 2px #ffffff55}
+.route-choice .game-menu-number,.route-choice .game-menu-action{color:#ffd8aa}
+@supports selector(:has(*)){
+  @media(hover:hover) and (min-width:761px){
+    .game-grid:has(>.lok-choice:first-child:hover),.game-grid:has(>.lok-choice:first-child:focus-visible){grid-template-columns:1.08fr .92fr}
+    .game-grid:has(>.lok-choice:last-child:hover),.game-grid:has(>.lok-choice:last-child:focus-visible){grid-template-columns:.92fr 1.08fr}
+  }
+  @media(hover:hover) and (min-width:701px){
+    .game-menu-choices:has(>.lok-choice:first-child:hover),.game-menu-choices:has(>.lok-choice:first-child:focus-visible){grid-template-columns:1.06fr .94fr}
+    .game-menu-choices:has(>.lok-choice:last-child:hover),.game-menu-choices:has(>.lok-choice:last-child:focus-visible){grid-template-columns:.94fr 1.06fr}
+  }
+}
+.game-menu-choices{transition:grid-template-columns .42s cubic-bezier(.16,1,.3,1)}
+@supports not ((backdrop-filter:blur(1px)) or (-webkit-backdrop-filter:blur(1px))){.lok-choice,.game-menu{background:#192031}}
+@media(max-width:760px){.game-grid{grid-template-columns:1fr}.game-card.lok-choice .card-art{height:190px}.game-card.lok-choice .card-description{min-height:0}}
+@media(max-width:700px){.game-menu-choice.lok-choice{min-height:170px}.game-menu-choice.lok-choice strong{font-size:34px}}
+@media(prefers-contrast:more){.lok-choice{border-color:#fff;background:#121725}.game-menu-choice.lok-choice::after{background:linear-gradient(0deg,#080d18,#080d18e8)}}
+@media(prefers-reduced-motion:reduce){.lok-choice,.game-grid,.game-menu-choices,.game-menu-choice.lok-choice canvas{transition:none!important}.lok-choice:hover,.lok-choice:focus-visible,.lok-choice:active{transform:none}}
