@@ -1,4 +1,4 @@
-import { cpSync, existsSync, mkdirSync, rmSync, writeFileSync } from 'node:fs';
+import { cpSync, existsSync, mkdirSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
 import { resolve, dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { spawnSync } from 'node:child_process';
@@ -6,6 +6,7 @@ import { spawnSync } from 'node:child_process';
 const root = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 const dist = resolve(root, 'dist');
 const pnpm = resolve(root, 'node_modules', '.bin', process.platform === 'win32' ? 'pnpm.cmd' : 'pnpm');
+const pinnedRevisions = JSON.parse(readFileSync(resolve(root, 'scripts', 'pinned-revisions.json'), 'utf8'));
 
 function run(command, args, cwd, extraEnv = {}) {
   const result = spawnSync(command, args, {
@@ -18,10 +19,15 @@ function run(command, args, cwd, extraEnv = {}) {
   if (result.status !== 0) throw new Error(`${command} ${args.join(' ')} failed in ${cwd} (${result.status})`);
 }
 
-function revision(cwd) {
+function revision(cwd, game) {
+  const pinned = pinnedRevisions[game];
+  if (!/^[0-9a-f]{40}$/.test(pinned || '')) throw new Error(`Missing pinned revision for ${game}`);
   const result = spawnSync('git', ['rev-parse', 'HEAD'], { cwd, encoding: 'utf8' });
-  if (result.status !== 0) throw new Error(`Could not read the revision in ${cwd}`);
-  return result.stdout.trim();
+  if (result.status === 0 && result.stdout.trim() !== pinned) {
+    throw new Error(`${game} checkout differs from pinned revision ${pinned}`);
+  }
+  // Vercel's source upload omits .git, while retaining submodule source files.
+  return pinned;
 }
 
 function buildGame({ name, folder, packageName, basePath, output, extraEnv = {} }) {
@@ -29,13 +35,13 @@ function buildGame({ name, folder, packageName, basePath, output, extraEnv = {} 
   if (!existsSync(resolve(cwd, 'pnpm-lock.yaml'))) {
     throw new Error(`Missing ${name} submodule. Run git submodule update --init --recursive.`);
   }
-  console.log(`\nBuilding ${name} at ${revision(cwd).slice(0, 12)}...`);
+  console.log(`\nBuilding ${name} at ${revision(cwd, folder).slice(0, 12)}...`);
   run(pnpm, ['install', '--frozen-lockfile', '--filter', `${packageName}...`], cwd);
   run(pnpm, ['--filter', packageName, 'run', 'build'], cwd, { BASE_PATH: basePath, ...extraEnv });
   const source = resolve(cwd, output);
   if (!existsSync(join(source, 'index.html'))) throw new Error(`${name} did not produce ${source}/index.html`);
   cpSync(source, resolve(dist, 'games', folder), { recursive: true });
-  return { revision: revision(cwd), output: source };
+  return { revision: revision(cwd, folder), output: source };
 }
 
 if (!existsSync(pnpm)) throw new Error('pnpm is missing. Run npm ci in the LokDemoDay root.');
@@ -75,7 +81,7 @@ if (!existsSync(resolve(officialRoot, 'classic', 'package-lock.json')) || !exist
 }
 for (const variant of ['classic', 'ks2']) {
   const cwd = resolve(officialRoot, variant);
-  console.log(`\nBuilding Kinetic ${variant} at ${revision(officialRoot).slice(0, 12)}...`);
+  console.log(`\nBuilding Kinetic ${variant} at ${revision(officialRoot, 'kinetic-official').slice(0, 12)}...`);
   run('npm', ['ci'], cwd);
   run('npm', ['run', 'build'], cwd);
   cpSync(resolve(cwd, 'dist'), resolve(dist, 'games', `kinetic-${variant}`), { recursive: true });
@@ -96,7 +102,7 @@ for (const item of ['art', 'music', 'lok-soundtrack.json', 'lok-updates.json', '
 writeFileSync(resolve(dist, 'build.json'), JSON.stringify({
   survivor616: survivor.revision,
   kineticSouls: kinetic.revision,
-  kineticOfficial: revision(officialRoot),
+  kineticOfficial: revision(officialRoot, 'kinetic-official'),
 }, null, 2));
 
 for (const item of ['index.html', 'style.css', 'app.js', 'bridge-protocol.mjs', 'studio.css', 'studio.js', 'studio-projects.mjs', 'page-chooser.js', 'page-media.js', 'demoday.js', 'kinetic-page.js', 'kinetic-official-page.js',
