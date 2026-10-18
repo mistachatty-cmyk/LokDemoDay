@@ -15,7 +15,8 @@ This is the release checklist for `demo.gsix.online` and `gsix.online/games/demo
 - [x] Starter maps, local image upload, local MP4/WebM upload, pause, timeline scrubbing, movable broken pieces, rebuild, PNG export, and short WebM recording.
 - [x] Website field opens a page for Survivor's reversible overlay and explains CSP/browser restrictions.
 - [x] YouTube URL uses the official player, separate from the destructible uploaded-video canvas.
-- [x] Both games can fight over the full live webpage. Survivor uses its established overlay; Kinetic has a new page arena with momentum movement, dash, aimed shots, enemies, and DOM targets. The editor's uploaded media is still a separate surface.
+- [x] Both games can fight over the full live webpage. Survivor uses its established overlay; Kinetic has a new page arena with momentum movement, dash, aimed shots, enemies, and DOM targets. The saved editor scenes are still a separate surface.
+- [x] Place an image or supported video on the live webpage as a movable session target before choosing either game. The file stays in this browser and can be removed. Kinetic's page arena has been browser-tested against an uploaded image.
 - [ ] Connect the page arenas and studio media through a shared target adapter so images, video, and site elements can use the same combat modes.
 - [x] Save, reopen, and delete local studio scenes in browser storage, including private uploaded media and piece positions.
 

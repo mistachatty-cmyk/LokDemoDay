@@ -108,6 +108,10 @@ button:focus-visible,a:focus-visible{outline:3px solid #f3d978;outline-offset:4p
 .game-menu-current{min-height:18px;margin:0;padding:0 32px 16px;color:#aaaebd;font-size:12px}
 .game-menu-browse{display:block;margin:0 32px 28px;padding:9px 0;border:0;border-bottom:1px solid #ffffff55;background:transparent;color:#dce0e5;font-size:13px}
 .game-menu-browse:hover{color:#f68a6d;border-color:#f68a6d}
+.page-mode-media{margin:0 32px 17px;padding:14px 16px;border:1px dashed #82dce9;background:#0d2631;color:#e9faff}
+.page-mode-media label{display:block;font-weight:800;cursor:pointer;text-transform:uppercase;letter-spacing:.05em}
+.page-mode-media input{display:block;max-width:100%;margin-top:9px;color:#e9faff}
+.page-mode-media p{margin:8px 0 0;color:#b7cbd1;font-size:12px}
 body[data-view='survivor-616'] .site-header,body[data-view='kinetic-souls'] .site-header{height:72px}
 body[data-view='survivor-616'] .brand-mark,body[data-view='kinetic-souls'] .brand-mark{font-size:31px}
 body[data-view='survivor-616'] .brand-sub,body[data-view='kinetic-souls'] .brand-sub{font-size:16px}
