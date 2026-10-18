@@ -251,6 +251,15 @@ function loadOverlay(mode) {
   return overlayLoading[mode];
 }
 document.getElementById('takeover-button').addEventListener('click', openPageModeMenu);
+document.getElementById('page-media-file').addEventListener('change', (event) => {
+  const file = event.currentTarget.files?.[0];
+  if (!file) return;
+  const result = window.LokDemoDayMedia?.addFile(file) || { ok: false, reason: 'Media tools did not load.' };
+  document.getElementById('page-media-status').textContent = result.ok
+    ? `${file.name} is on this live page. Move it, then choose Survivor 616 or Kinetic Souls.`
+    : result.reason;
+  event.currentTarget.value = '';
+});
 pageModeMenu.querySelectorAll('[data-page-mode]').forEach((button) => button.addEventListener('click', async () => {
   const mode = button.dataset.pageMode;
   pageModeMenu.close();

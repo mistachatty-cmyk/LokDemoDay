@@ -14,6 +14,7 @@ The playable Demo Day site for [Survivor 616](https://github.com/mistachatty-cmy
 The full games remain available at `/games/survivor-616/` and `/games/kinetic-souls/`. The landing page can load each full game in its own frame; switching stops the previous loop and sound. Players can also switch modes from **Settings**.
 The Destruction Studio at `/#studio` includes starter maps and local image/video shattering. The `?embed=1` view hides the site chrome for use inside GSix Hub. Studio files stay in the browser; no file contents are uploaded. Guest studio progress is stored on the current device.
 The live-page foundation is described in [docs/PAGE_SANDBOX.md](docs/PAGE_SANDBOX.md). Gate status and remaining MVP work are in [docs/MVP_TRACKER.md](docs/MVP_TRACKER.md), and the game event contract is in [docs/GAME_BRIDGE.md](docs/GAME_BRIDGE.md).
+The page selector can place a personal image or supported video directly over the live website before either game starts. That target stays in the current browser session, can be moved or removed, and is visible to each game's page scanner. The file is never uploaded.
 
 ## Local build
 
