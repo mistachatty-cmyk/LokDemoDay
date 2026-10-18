@@ -8,6 +8,7 @@
     <title>LOK Demo Day — Pick a game</title>
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <link rel="stylesheet" href="/style.css" />
+    <link rel="stylesheet" href="/game-choice.css" />
     <link rel="stylesheet" href="/studio.css" />
     <script defer src="/page-media.js"></script>
     <script type="module" src="/app.js"></script>
@@ -50,28 +51,17 @@
           </section>
           <p id="home-message" class="home-message" role="status" aria-live="polite"></p>
 
-          <div class="game-grid" aria-label="Standalone games">
-            <article class="game-card survivor-card">
-              <div class="card-topline"><span>01 / SURVIVAL</span><span class="card-status">LIVE DEMO</span></div>
-              <div class="card-art survivor-art" aria-hidden="true"><span class="art-cross">✦</span><span class="art-grid"></span><span class="art-orbit orbit-a"></span><span class="art-orbit orbit-b"></span></div>
-              <div class="card-content">
-                <div class="game-meta">SURVIVE THE SIGNAL</div>
-                <h2>Survivor <span>616</span></h2>
-                <p>Build your run, face the swarm, and stay alive one wave longer.</p>
-                <button type="button" class="play-button" data-game="survivor-616"><span>PLAY FULL SURVIVOR 616 GAME</span><span aria-hidden="true">↗</span></button>
-              </div>
-            </article>
-
-            <article class="game-card kinetic-card">
-              <div class="card-topline"><span>02 / ARENA</span><span class="card-status">LIVE DEMO</span></div>
-              <div class="card-art kinetic-art" aria-hidden="true"><span class="kinetic-core"></span><span class="kinetic-line line-a"></span><span class="kinetic-line line-b"></span><span class="kinetic-line line-c"></span></div>
-              <div class="card-content">
-                <div class="game-meta">MOTION IS EVERYTHING</div>
-                <h2>Kinetic <span>Souls</span></h2>
-                <p>Enter the arena and turn momentum into your advantage.</p>
-                <button type="button" class="play-button" data-game="kinetic-souls"><span>PLAY FULL KINETIC SOULS GAME</span><span aria-hidden="true">↗</span></button>
-              </div>
-            </article>
+          <div class="game-grid" role="group" aria-label="Choose a game">
+            <button type="button" class="game-card lok-choice survivor-card" data-home-game="survivor-616" aria-label="Survivor 616 — choose how to play">
+              <span class="card-topline"><span>01 / SURVIVAL</span><span class="card-status">LIVE PREVIEW</span></span>
+              <span class="card-art lok-choice-stage"><canvas data-lok-preview="survivor" aria-hidden="true"></canvas></span>
+              <span class="card-content"><span class="game-meta">SURVIVE THE SIGNAL</span><strong class="card-title">Survivor <span>616</span></strong><span class="card-description">Build your run, face the swarm, and stay alive one wave longer.</span><span class="card-action">CHOOSE HOW TO PLAY <span aria-hidden="true">↗</span></span></span>
+            </button>
+            <button type="button" class="game-card lok-choice kinetic-card" data-home-game="kinetic-souls" aria-label="Kinetic Souls — choose how to play">
+              <span class="card-topline"><span>02 / TEAM BATTLE</span><span class="card-status">LIVE PREVIEW</span></span>
+              <span class="card-art lok-choice-stage"><canvas data-lok-preview="classic" aria-hidden="true"></canvas></span>
+              <span class="card-content"><span class="game-meta">MOTION IS EVERYTHING</span><strong class="card-title">Kinetic <span>Souls</span></strong><span class="card-description">Spawn opposing teams. Break the battlefield between them.</span><span class="card-action">CHOOSE HOW TO PLAY <span aria-hidden="true">↗</span></span></span>
+            </button>
           </div>
 
           <section id="studio" class="studio-section" aria-labelledby="studio-title">
@@ -113,8 +103,8 @@
     <dialog id="page-mode-menu" class="game-menu" aria-labelledby="page-mode-title" aria-describedby="page-mode-description">
       <div class="game-menu-head"><div><span class="game-menu-kicker">LOK DEMO DAY / LIVE PAGE</span><h2 id="page-mode-title">Choose your game.</h2><p id="page-mode-description">The website itself is the sandbox. Select a combat mode to play on top of this page.</p></div><button id="close-page-mode-menu" class="game-menu-close" type="button" aria-label="Close page mode menu">×</button></div>
       <div class="game-menu-choices" aria-label="Page arena modes">
-        <button type="button" class="game-menu-choice choice-survivor" data-page-mode="survivor-616"><span class="game-menu-number">01 / SURVIVAL</span><strong>SURVIVOR <span>616</span></strong><span class="game-menu-desc">Outlast waves while the live page breaks around you.</span><span class="game-menu-action">WRECK THIS PAGE ↗</span></button>
-        <button type="button" class="game-menu-choice choice-kinetic" data-page-mode="kinetic-souls"><span class="game-menu-number">02 / TEAM BATTLE</span><strong>KINETIC <span>SOULS</span></strong><span class="game-menu-desc">Spawn left and right teams across the live page.</span><span class="game-menu-action">CHOOSE VERSION ↗</span></button>
+        <button type="button" class="game-menu-choice lok-choice choice-survivor" data-page-mode="survivor-616"><canvas data-lok-preview="survivor" aria-hidden="true"></canvas><span class="game-menu-number">01 / SURVIVAL</span><strong>SURVIVOR <span>616</span></strong><span class="game-menu-desc">Outlast waves while the live page breaks around you.</span><span class="game-menu-action">WRECK THIS PAGE ↗</span></button>
+        <button type="button" class="game-menu-choice lok-choice choice-kinetic" data-page-mode="kinetic-souls"><canvas data-lok-preview="classic" aria-hidden="true"></canvas><span class="game-menu-number">02 / TEAM BATTLE</span><strong>KINETIC <span>SOULS</span></strong><span class="game-menu-desc">Spawn left and right teams across the live page.</span><span class="game-menu-action">CHOOSE VERSION ↗</span></button>
       </div>
       <div class="page-mode-media"><label for="page-media-file">Add your image or video to this page</label><input id="page-media-file" type="file" accept="image/*,video/mp4,video/webm,video/ogg" /><p id="page-media-status" role="status">Your file stays on this device for this session. Position it, then choose a game.</p></div>
       <button id="browse-page-mode" class="game-menu-browse" type="button">Browse Demo Day instead</button>
@@ -122,7 +112,7 @@
     </dialog>
     <dialog id="kinetic-version-menu" class="game-menu" aria-labelledby="kinetic-version-title">
       <div class="game-menu-head"><div><span class="game-menu-kicker">KINETIC SOULS / VERSION SELECT</span><h2 id="kinetic-version-title">Choose your arena.</h2><p>A spawns left, L spawns right. Both teams fight over the live website.</p></div><button type="button" id="close-kinetic-version" class="game-menu-close" aria-label="Close">×</button></div>
-      <div class="game-menu-choices"><button type="button" class="game-menu-choice choice-kinetic featured" data-kinetic-variant="classic"><span class="game-menu-number">01 / HIGHLIGHTED</span><strong>CLASSIC (1)</strong><span class="game-menu-desc">Original team-spawning combat.</span><span class="game-menu-action">PLAY CLASSIC ↗</span></button><button type="button" class="game-menu-choice choice-kinetic" data-kinetic-variant="ks2"><span class="game-menu-number">02 / ALPHA</span><strong>KS2</strong><span class="game-menu-desc">Expanded fighters and modifiers.</span><span class="game-menu-action">PLAY KS2 ↗</span></button></div>
+      <div class="game-menu-choices"><button type="button" class="game-menu-choice lok-choice choice-kinetic featured" data-kinetic-variant="classic"><canvas data-lok-preview="classic" aria-hidden="true"></canvas><span class="game-menu-number">01 / HIGHLIGHTED</span><strong>CLASSIC (1)</strong><span class="game-menu-desc">Original team-spawning combat.</span><span class="game-menu-action">PLAY CLASSIC ↗</span></button><button type="button" class="game-menu-choice lok-choice choice-kinetic" data-kinetic-variant="ks2"><canvas data-lok-preview="ks2" aria-hidden="true"></canvas><span class="game-menu-number">02 / ALPHA</span><strong>KS2</strong><span class="game-menu-desc">Expanded fighters and modifiers.</span><span class="game-menu-action">PLAY KS2 ↗</span></button></div>
     </dialog>
     <dialog id="game-menu" class="game-menu" aria-labelledby="game-menu-title" aria-describedby="game-menu-description">
       <div class="game-menu-head">
@@ -134,17 +124,21 @@
         <button id="close-game-menu" class="game-menu-close" type="button" aria-label="Close game menu">×</button>
       </div>
       <div class="game-menu-choices" aria-label="Available games">
-        <button type="button" class="game-menu-choice choice-survivor" data-game="survivor-616">
+        <button type="button" class="game-menu-choice lok-choice choice-survivor" data-game="survivor-616"><canvas data-lok-preview="survivor" aria-hidden="true"></canvas>
           <span class="game-menu-number">01 / SURVIVAL</span><strong>SURVIVOR <span>616</span></strong>
           <span class="game-menu-desc">Build a run. Outlast the swarm.</span><span class="game-menu-action">PLAY GAME ↗</span>
         </button>
-        <button type="button" class="game-menu-choice choice-kinetic" data-game="kinetic-souls">
+        <button type="button" class="game-menu-choice lok-choice choice-kinetic" data-game="kinetic-souls"><canvas data-lok-preview="classic" aria-hidden="true"></canvas>
           <span class="game-menu-number">02 / ARENA</span><strong>KINETIC <span>SOULS</span></strong>
           <span class="game-menu-desc">Choose your match. Shape the arena.</span><span class="game-menu-action">PLAY GAME ↗</span>
         </button>
       </div>
       <p id="game-menu-current" class="game-menu-current"></p>
       <button id="browse-demo-day" class="game-menu-browse" type="button">Browse Demo Day instead</button>
+    </dialog>
+    <dialog id="home-play-menu" class="game-menu" aria-labelledby="home-play-title" aria-describedby="home-play-description">
+      <div class="game-menu-head"><div><span class="game-menu-kicker">LOK DEMO DAY / PLAY CHOICE</span><h2 id="home-play-title">Choose how to play.</h2><p id="home-play-description">Take the game across this website or open its full arena.</p></div><button type="button" id="close-home-play" class="game-menu-close" aria-label="Close play choices">×</button></div>
+      <div class="game-menu-choices"><button type="button" class="game-menu-choice route-choice" data-home-route="page"><span class="game-menu-number">01 / PAGE COMBAT</span><strong>WRECK THIS PAGE</strong><span class="game-menu-desc">Fight over the live Demo Day website.</span><span class="game-menu-action">START PAGE MODE ↗</span></button><button type="button" class="game-menu-choice route-choice" data-home-route="full"><span class="game-menu-number">02 / FULL GAME</span><strong>PLAY FULL GAME</strong><span class="game-menu-desc">Open the complete game inside Demo Day.</span><span class="game-menu-action">CHOOSE ARENA ↗</span></button></div>
     </dialog>
     <script type="module" src="/studio.js"></script>
   </body>
