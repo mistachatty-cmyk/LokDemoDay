@@ -11,4 +11,4 @@
 [submodule "games/kinetic-official"]
 	path = games/kinetic-official
 	url = https://github.com/mistachatty-cmyk/K.Souls---Classic.git
-	branch = codex/demoday-official-page-battle
+	branch = master
