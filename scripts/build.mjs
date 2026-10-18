@@ -1,4 +1,4 @@
-import { cpSync, existsSync, mkdirSync, rmSync, writeFileSync } from 'node:fs';
+import { cpSync, existsSync, mkdirSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
 import { resolve, dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { spawnSync } from 'node:child_process';
@@ -6,6 +6,7 @@ import { spawnSync } from 'node:child_process';
 const root = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 const dist = resolve(root, 'dist');
 const pnpm = resolve(root, 'node_modules', '.bin', process.platform === 'win32' ? 'pnpm.cmd' : 'pnpm');
+const pinnedRevisions = JSON.parse(readFileSync(resolve(root, 'scripts', 'pinned-revisions.json'), 'utf8'));
 
 function run(command, args, cwd, extraEnv = {}) {
   const result = spawnSync(command, args, {
@@ -18,10 +19,15 @@ function run(command, args, cwd, extraEnv = {}) {
   if (result.status !== 0) throw new Error(`${command} ${args.join(' ')} failed in ${cwd} (${result.status})`);
 }
 
-function revision(cwd) {
+function revision(cwd, game) {
+  const pinned = pinnedRevisions[game];
+  if (!/^[0-9a-f]{40}$/.test(pinned || '')) throw new Error(`Missing pinned revision for ${game}`);
   const result = spawnSync('git', ['rev-parse', 'HEAD'], { cwd, encoding: 'utf8' });
-  if (result.status !== 0) throw new Error(`Could not read the revision in ${cwd}`);
-  return result.stdout.trim();
+  if (result.status === 0 && result.stdout.trim() !== pinned) {
+    throw new Error(`${game} checkout differs from pinned revision ${pinned}`);
+  }
+  // Vercel's source upload omits .git, while retaining submodule source files.
+  return pinned;
 }
 
 function buildGame({ name, folder, packageName, basePath, output, extraEnv = {} }) {
@@ -29,13 +35,13 @@ function buildGame({ name, folder, packageName, basePath, output, extraEnv = {} 
   if (!existsSync(resolve(cwd, 'pnpm-lock.yaml'))) {
     throw new Error(`Missing ${name} submodule. Run git submodule update --init --recursive.`);
   }
-  console.log(`\nBuilding ${name} at ${revision(cwd).slice(0, 12)}...`);
+  console.log(`\nBuilding ${name} at ${revision(cwd, folder).slice(0, 12)}...`);
   run(pnpm, ['install', '--frozen-lockfile', '--filter', `${packageName}...`], cwd);
   run(pnpm, ['--filter', packageName, 'run', 'build'], cwd, { BASE_PATH: basePath, ...extraEnv });
   const source = resolve(cwd, output);
   if (!existsSync(join(source, 'index.html'))) throw new Error(`${name} did not produce ${source}/index.html`);
   cpSync(source, resolve(dist, 'games', folder), { recursive: true });
-  return { revision: revision(cwd), output: source };
+  return { revision: revision(cwd, folder), output: source };
 }
 
 if (!existsSync(pnpm)) throw new Error('pnpm is missing. Run npm ci in the LokDemoDay root.');
@@ -67,6 +73,24 @@ const kineticOverlay = resolve(kineticRoot, 'artifacts/kinetic-souls/dist/overla
 if (!existsSync(kineticOverlay)) throw new Error('Kinetic Souls did not produce its page arena bundle.');
 cpSync(kineticOverlay, resolve(dist, 'kinetic-page.js'));
 
+// The primary page battle and both original full arenas come from one reviewed
+// Classic/KS2 revision. The previous shooter remains available as Experimental.
+const officialRoot = resolve(root, 'games', 'kinetic-official');
+if (!existsSync(resolve(officialRoot, 'classic', 'package-lock.json')) || !existsSync(resolve(officialRoot, 'ks2', 'package-lock.json'))) {
+  throw new Error('Missing official Kinetic submodule. Run git submodule update --init --recursive.');
+}
+for (const variant of ['classic', 'ks2']) {
+  const cwd = resolve(officialRoot, variant);
+  console.log(`\nBuilding Kinetic ${variant} at ${revision(officialRoot, 'kinetic-official').slice(0, 12)}...`);
+  run('npm', ['ci'], cwd);
+  run('npm', ['run', 'build'], cwd);
+  cpSync(resolve(cwd, 'dist'), resolve(dist, 'games', `kinetic-${variant}`), { recursive: true });
+}
+run('npm', ['run', 'build:page'], resolve(officialRoot, 'classic'));
+const officialPage = resolve(officialRoot, 'classic', 'dist-page', 'kinetic-official-page.js');
+if (!existsSync(officialPage)) throw new Error('Official Kinetic page mode was not built.');
+cpSync(officialPage, resolve(dist, 'kinetic-official-page.js'));
+
 // The Survivor game also exposes public media and a standalone page-takeover
 // bundle at root-relative URLs. Keep these URLs working on the Demo Day domain.
 for (const item of ['art', 'music', 'lok-soundtrack.json', 'lok-updates.json', 'demoday.js']) {
@@ -78,10 +102,11 @@ for (const item of ['art', 'music', 'lok-soundtrack.json', 'lok-updates.json', '
 writeFileSync(resolve(dist, 'build.json'), JSON.stringify({
   survivor616: survivor.revision,
   kineticSouls: kinetic.revision,
+  kineticOfficial: revision(officialRoot, 'kinetic-official'),
 }, null, 2));
 
-for (const item of ['index.html', 'style.css', 'app.js', 'bridge-protocol.mjs', 'studio.css', 'studio.js', 'studio-projects.mjs', 'page-chooser.js', 'page-media.js', 'demoday.js', 'kinetic-page.js',
-  'games/survivor-616/index.html', 'games/kinetic-souls/index.html']) {
+for (const item of ['index.html', 'style.css', 'app.js', 'bridge-protocol.mjs', 'studio.css', 'studio.js', 'studio-projects.mjs', 'page-chooser.js', 'page-media.js', 'demoday.js', 'kinetic-page.js', 'kinetic-official-page.js',
+  'games/survivor-616/index.html', 'games/kinetic-souls/index.html', 'games/kinetic-classic/index.html', 'games/kinetic-ks2/index.html']) {
   if (!existsSync(resolve(dist, item))) throw new Error(`Missing deploy output: ${item}`);
 }
 
