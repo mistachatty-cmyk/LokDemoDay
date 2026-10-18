@@ -67,6 +67,24 @@ const kineticOverlay = resolve(kineticRoot, 'artifacts/kinetic-souls/dist/overla
 if (!existsSync(kineticOverlay)) throw new Error('Kinetic Souls did not produce its page arena bundle.');
 cpSync(kineticOverlay, resolve(dist, 'kinetic-page.js'));
 
+// The primary page battle and both original full arenas come from one reviewed
+// Classic/KS2 revision. The previous shooter remains available as Experimental.
+const officialRoot = resolve(root, 'games', 'kinetic-official');
+if (!existsSync(resolve(officialRoot, 'classic', 'package-lock.json')) || !existsSync(resolve(officialRoot, 'ks2', 'package-lock.json'))) {
+  throw new Error('Missing official Kinetic submodule. Run git submodule update --init --recursive.');
+}
+for (const variant of ['classic', 'ks2']) {
+  const cwd = resolve(officialRoot, variant);
+  console.log(`\nBuilding Kinetic ${variant} at ${revision(officialRoot).slice(0, 12)}...`);
+  run('npm', ['ci'], cwd);
+  run('npm', ['run', 'build'], cwd);
+  cpSync(resolve(cwd, 'dist'), resolve(dist, 'games', `kinetic-${variant}`), { recursive: true });
+}
+run('npm', ['run', 'build:page'], resolve(officialRoot, 'classic'));
+const officialPage = resolve(officialRoot, 'classic', 'dist-page', 'kinetic-official-page.js');
+if (!existsSync(officialPage)) throw new Error('Official Kinetic page mode was not built.');
+cpSync(officialPage, resolve(dist, 'kinetic-official-page.js'));
+
 // The Survivor game also exposes public media and a standalone page-takeover
 // bundle at root-relative URLs. Keep these URLs working on the Demo Day domain.
 for (const item of ['art', 'music', 'lok-soundtrack.json', 'lok-updates.json', 'demoday.js']) {
@@ -78,10 +96,11 @@ for (const item of ['art', 'music', 'lok-soundtrack.json', 'lok-updates.json', '
 writeFileSync(resolve(dist, 'build.json'), JSON.stringify({
   survivor616: survivor.revision,
   kineticSouls: kinetic.revision,
+  kineticOfficial: revision(officialRoot),
 }, null, 2));
 
-for (const item of ['index.html', 'style.css', 'app.js', 'bridge-protocol.mjs', 'studio.css', 'studio.js', 'studio-projects.mjs', 'page-chooser.js', 'page-media.js', 'demoday.js', 'kinetic-page.js',
-  'games/survivor-616/index.html', 'games/kinetic-souls/index.html']) {
+for (const item of ['index.html', 'style.css', 'app.js', 'bridge-protocol.mjs', 'studio.css', 'studio.js', 'studio-projects.mjs', 'page-chooser.js', 'page-media.js', 'demoday.js', 'kinetic-page.js', 'kinetic-official-page.js',
+  'games/survivor-616/index.html', 'games/kinetic-souls/index.html', 'games/kinetic-classic/index.html', 'games/kinetic-ks2/index.html']) {
   if (!existsSync(resolve(dist, item))) throw new Error(`Missing deploy output: ${item}`);
 }
 
