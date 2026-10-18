@@ -1,3 +1,5 @@
+import { deleteStudioProject, getStudioProject, listStudioProjects, saveStudioProject } from './studio-projects.mjs';
+
 const canvas = document.getElementById('studio-canvas');
 const ctx = canvas.getContext('2d');
 const status = document.getElementById('studio-status');
@@ -6,6 +8,8 @@ const mute = document.getElementById('studio-mute');
 const playButton = document.getElementById('studio-play');
 const progressSummary = document.getElementById('progress-summary');
 const progressBadges = document.getElementById('progress-badges');
+const projectTitle = document.getElementById('studio-project-title');
+const projectList = document.getElementById('studio-project-list');
 const STORAGE_KEY = 'lok:demoday:studio:v1';
 const BADGES = [
   { id: 'first-break', title: 'First Break', test: (p) => p.breaks >= 1 },
@@ -53,6 +57,8 @@ let sponsorState = null;
 let sponsorRun = false;
 let housePromoCap = { day: '', count: 0 };
 let sceneReward = 100;
+let currentProjectId = null;
+let currentSource = { kind: 'starter', sourceId: 'neon', blob: null, mimeType: null };
 const COLS = 12;
 const ROWS = 7;
 
@@ -127,6 +133,118 @@ function resetScene(source, message, isSponsor = false) {
   if (media instanceof HTMLVideoElement) { media.muted = mute.checked; void media.play().catch(() => { status.textContent = 'Press Play to start your video.'; }); }
   status.textContent = message;
 }
+
+function projectSummary(project) {
+  return { id: project.id, title: project.title, sourceKind: project.sourceKind,
+    metadata: { sourceId: project.sourceId || null, mimeType: project.mimeType || null,
+      size: project.blob?.size || 0, localOnly: true }, updatedAt: project.updatedAt };
+}
+
+function postProjectMessage(payload) {
+  if (window.parent === window) return;
+  for (const origin of ['https://gsix.online', 'http://localhost:3000']) window.parent.postMessage(payload, origin);
+}
+
+async function renderProjects() {
+  const projects = (await listStudioProjects())
+    .filter((project) => project && typeof project.id === 'string' && typeof project.title === 'string'
+      && typeof project.updatedAt === 'string' && ['starter', 'image', 'video'].includes(project.sourceKind))
+    .sort((a, b) => b.updatedAt.localeCompare(a.updatedAt)).slice(0, 50);
+  projectList.replaceChildren(...projects.map((project) => {
+    const row = document.createElement('div');
+    row.dataset.projectRow = project.id;
+    const label = document.createElement('span');
+    label.textContent = `${project.title} · ${project.sourceKind}`;
+    const open = document.createElement('button');
+    open.type = 'button';
+    open.textContent = 'OPEN';
+    open.addEventListener('click', () => { void openProject(project.id); });
+    const remove = document.createElement('button');
+    remove.type = 'button';
+    remove.textContent = 'DELETE';
+    remove.setAttribute('aria-label', `Delete ${project.title}`);
+    remove.addEventListener('click', async () => {
+      try {
+        await deleteStudioProject(project.id);
+        if (currentProjectId === project.id) currentProjectId = null;
+        postProjectMessage({ type: 'lok:demoday:project-delete', version: 1, id: project.id });
+        await renderProjects();
+        status.textContent = `${project.title} deleted from this device.`;
+      } catch { status.textContent = 'Could not delete the saved scene.'; }
+    });
+    row.append(label, open, remove);
+    return row;
+  }));
+  if (!projects.length) projectList.textContent = 'No saved scenes yet.';
+  postProjectMessage({ type: 'lok:demoday:projects', version: 1, projects: projects.map(projectSummary) });
+}
+
+function restorePieces(project) {
+  if (Array.isArray(project.tiles) && project.tiles.length === tiles.length) project.tiles.forEach((saved, index) => {
+    if (!saved || typeof saved !== 'object') return;
+    const tile = tiles[index];
+    for (const key of ['x', 'y', 'vx', 'vy', 'angle', 'spin']) {
+      if (Number.isFinite(saved[key]) && Math.abs(saved[key]) < 5000) tile[key] = saved[key];
+    }
+    tile.broken = saved.broken === true;
+  });
+  finished = project.finished === true;
+  running = !finished && project.running !== false;
+  playButton.textContent = running ? 'PAUSE' : 'PLAY';
+  if (!running && media instanceof HTMLVideoElement) media.pause();
+}
+
+async function openProject(id) {
+  try {
+    const project = await getStudioProject(id);
+    if (!project) { status.textContent = 'That saved scene is no longer here.'; await renderProjects(); return; }
+    if (mediaUrl) { URL.revokeObjectURL(mediaUrl); mediaUrl = null; }
+    currentProjectId = project.id;
+    projectTitle.value = project.title;
+    currentSource = { kind: project.sourceKind, sourceId: project.sourceId, blob: project.blob || null, mimeType: project.mimeType || null };
+    const apply = (source) => { resetScene(source, `${project.title} reopened from this device.`); restorePieces(project); };
+    if (project.sourceKind === 'starter') {
+      timeline.disabled = true;
+      apply(project.sourceId === 'house' ? housePromoMap() : starterMap(project.sourceId === 'paper' ? 'paper' : 'neon'));
+    } else if (project.blob instanceof Blob) {
+      mediaUrl = URL.createObjectURL(project.blob);
+      if (project.sourceKind === 'image') {
+        const image = new Image();
+        image.onload = () => { timeline.disabled = true; apply(image); };
+        image.onerror = () => { status.textContent = 'Could not reopen the saved image.'; };
+        image.src = mediaUrl;
+      } else {
+        const video = document.createElement('video');
+        video.playsInline = true;
+        video.loop = true;
+        video.muted = mute.checked;
+        video.onloadedmetadata = () => { timeline.disabled = false; apply(video); };
+        video.onerror = () => { status.textContent = 'Could not reopen the saved video.'; };
+        video.src = mediaUrl;
+      }
+    } else status.textContent = 'The uploaded media is no longer available on this device.';
+  } catch { status.textContent = 'Could not open the saved scene.'; }
+}
+
+document.getElementById('studio-save-project').addEventListener('click', async () => {
+  if (!media || sponsorState) { status.textContent = 'Choose a scene and wait for its display to finish before saving.'; return; }
+  const title = projectTitle.value.trim().slice(0, 120);
+  if (!title) { status.textContent = 'Add a scene title before saving.'; projectTitle.focus(); return; }
+  const id = currentProjectId || crypto.randomUUID();
+  const project = { id, title, sourceKind: currentSource.kind, sourceId: currentSource.sourceId || null,
+    mimeType: currentSource.mimeType || null, blob: currentSource.blob || null,
+    tiles: tiles.map((tile) => ({ x: tile.x, y: tile.y, vx: tile.vx, vy: tile.vy,
+      angle: tile.angle, spin: tile.spin, broken: tile.broken })), finished, running,
+    updatedAt: new Date().toISOString() };
+  try {
+    await saveStudioProject(project);
+    currentProjectId = id;
+    await renderProjects();
+    status.textContent = `${title} saved privately on this device.`;
+  } catch { status.textContent = 'Could not save this scene. Check your browser storage space.'; }
+});
+
+void renderProjects().catch(() => { projectList.textContent = 'Saved scenes are unavailable in this browser.'; });
 
 function destroyAt(x, y) {
   if (!media || !running) return;
@@ -314,12 +432,18 @@ mute.addEventListener('change', () => { if (media instanceof HTMLVideoElement) m
 
 document.querySelectorAll('[data-studio-map]').forEach((button) => button.addEventListener('click', () => {
   sponsorState = null;
+  currentProjectId = null;
+  currentSource = { kind: 'starter', sourceId: button.dataset.studioMap, blob: null, mimeType: null };
+  projectTitle.value = button.dataset.studioMap === 'paper' ? 'Paper World' : 'Neon City';
   if (mediaUrl) { URL.revokeObjectURL(mediaUrl); mediaUrl = null; }
   timeline.disabled = true;
   timeline.value = '0';
   resetScene(starterMap(button.dataset.studioMap), `${button.textContent} loaded. Click or drag to break it.`);
 }));
 document.getElementById('studio-pinata').addEventListener('click', () => {
+  currentProjectId = null;
+  currentSource = { kind: 'starter', sourceId: 'house', blob: null, mimeType: null };
+  projectTitle.value = 'House Piñata';
   if (media instanceof HTMLVideoElement) media.pause();
   media = null;
   tiles = [];
@@ -338,6 +462,9 @@ document.getElementById('studio-file').addEventListener('change', (event) => {
     status.textContent = 'Choose a PNG, JPG, WebP, GIF, MP4 or WebM file up to 100 MB.';
     return;
   }
+  currentProjectId = null;
+  currentSource = { kind: file.type.startsWith('image/') ? 'image' : 'video', sourceId: null, blob: file, mimeType: file.type };
+  projectTitle.value = file.name.slice(0, 120);
   if (mediaUrl) URL.revokeObjectURL(mediaUrl);
   mediaUrl = URL.createObjectURL(file);
   if (file.type.startsWith('image/')) {

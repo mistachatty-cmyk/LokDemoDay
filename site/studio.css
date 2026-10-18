@@ -20,6 +20,15 @@
 .studio-controls input[type=checkbox]{accent-color:#bda8ff}
 .studio-status{min-height:24px;color:#e3cfff;font-size:14px}
 .studio-disclosure{max-width:780px;color:#aeb2bd;font-size:12px;line-height:1.5}
+.studio-project-bar{display:flex;flex-wrap:wrap;align-items:end;gap:10px;margin:20px 0}
+.studio-project-bar label{display:grid;gap:6px;color:#dcd4ed;font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.08em}
+.studio-project-bar input{min-width:min(320px,80vw);padding:10px;border:1px solid #ffffff42;background:#10121c;color:#fff;font:14px system-ui}
+.studio-project-bar button,.studio-projects button{padding:10px 14px;border:1px solid #bda8ff8c;background:#29253b;color:#f5edff;font-family:'Barlow Condensed',Impact,sans-serif;font-weight:700;letter-spacing:.06em;cursor:pointer}
+.studio-projects{margin:0 0 24px;padding:16px;border:1px solid #ffffff2c;background:#ffffff08}
+.studio-projects h3{margin:0 0 6px;color:#f5edff;font:700 20px 'Barlow Condensed',Impact,sans-serif;text-transform:uppercase}
+.studio-projects p{margin:0 0 12px;color:#aeb2bd;font-size:12px;line-height:1.5}
+.studio-projects [data-project-row]{display:flex;flex-wrap:wrap;align-items:center;gap:8px;padding:8px 0;border-top:1px solid #ffffff1c}
+.studio-projects [data-project-row] span{flex:1;min-width:160px;color:#e7e1f2;font-size:13px}
 .studio-links{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:10px;margin-top:20px}
 .studio-links label{display:flex;align-items:center;gap:12px;color:#f4f2f5;font-family:'Barlow Condensed',Impact,sans-serif;font-size:15px;font-weight:700;white-space:nowrap}
 .studio-links input{width:100%;min-width:0;padding:10px;border:1px solid #ffffff42;background:#10121c;color:#fff;font-family:system-ui,sans-serif;font-size:14px}

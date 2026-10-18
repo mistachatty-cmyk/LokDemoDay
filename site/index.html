@@ -39,11 +39,17 @@
           <div class="hero">
             <div class="eyebrow"><span class="eyebrow-line"></span> THE ARCADE IS OPEN <span class="eyebrow-line"></span></div>
             <h1 id="hero-title">Two worlds.<br /><em>Your next move.</em></h1>
-            <p>Jump into a game, switch whenever you want, and find your favorite run.</p>
-            <div class="hero-hint"><span class="scroll-icon" aria-hidden="true">↓</span> CHOOSE YOUR GAME</div>
+            <p>This website is the sandbox. Choose a game and fight over the page itself.</p>
+            <div class="hero-hint"><span class="scroll-icon" aria-hidden="true">↓</span> WRECK THIS PAGE</div>
           </div>
 
-          <div class="game-grid" aria-label="Choose a game">
+          <section class="takeover" aria-labelledby="takeover-title">
+            <div><div class="game-meta">THE MAIN SANDBOX</div><h2 id="takeover-title">Wreck this page.</h2><p>Choose Survivor 616 or Kinetic Souls. Combat happens over this whole website; leaving restores it.</p></div>
+            <button id="takeover-button" type="button" class="outline-button">WRECK THIS PAGE <span aria-hidden="true">↗</span></button>
+          </section>
+          <p id="home-message" class="home-message" role="status" aria-live="polite"></p>
+
+          <div class="game-grid" aria-label="Standalone games">
             <article class="game-card survivor-card">
               <div class="card-topline"><span>01 / SURVIVAL</span><span class="card-status">LIVE DEMO</span></div>
               <div class="card-art survivor-art" aria-hidden="true"><span class="art-cross">✦</span><span class="art-grid"></span><span class="art-orbit orbit-a"></span><span class="art-orbit orbit-b"></span></div>
@@ -51,7 +57,7 @@
                 <div class="game-meta">SURVIVE THE SIGNAL</div>
                 <h2>Survivor <span>616</span></h2>
                 <p>Build your run, face the swarm, and stay alive one wave longer.</p>
-                <button type="button" class="play-button" data-game="survivor-616"><span>PLAY SURVIVOR 616</span><span aria-hidden="true">↗</span></button>
+                <button type="button" class="play-button" data-game="survivor-616"><span>PLAY FULL SURVIVOR 616 GAME</span><span aria-hidden="true">↗</span></button>
               </div>
             </article>
 
@@ -62,7 +68,7 @@
                 <div class="game-meta">MOTION IS EVERYTHING</div>
                 <h2>Kinetic <span>Souls</span></h2>
                 <p>Enter the arena and turn momentum into your advantage.</p>
-                <button type="button" class="play-button" data-game="kinetic-souls"><span>PLAY KINETIC SOULS</span><span aria-hidden="true">↗</span></button>
+                <button type="button" class="play-button" data-game="kinetic-souls"><span>PLAY FULL KINETIC SOULS GAME</span><span aria-hidden="true">↗</span></button>
               </div>
             </article>
           </div>
@@ -77,6 +83,8 @@
             <div class="studio-controls"><button id="studio-play" type="button">PAUSE</button><button id="studio-rebuild" type="button">REBUILD</button><button id="studio-export" type="button">EXPORT IMAGE</button><button id="studio-record" type="button">RECORD 8S CLIP</button><label>Timeline <input id="studio-timeline" type="range" min="0" max="1000" value="0" disabled /></label><label><input id="studio-mute" type="checkbox" checked /> Mute</label></div>
             <p id="studio-status" class="studio-status" role="status" aria-live="polite">Choose a starter scene or upload media to begin.</p>
             <p class="studio-disclosure">House promo piñata is a Demo Day preview. It is labeled, untouchable during display, and becomes a separate destructible scene afterward. No ad network is connected.</p>
+            <div class="studio-project-bar"><label>Scene title <input id="studio-project-title" type="text" maxlength="120" value="Neon City" /></label><button id="studio-save-project" type="button">SAVE SCENE</button></div>
+            <section class="studio-projects" aria-labelledby="studio-projects-title"><h3 id="studio-projects-title">Saved scenes on this device</h3><p>Uploaded media stays private in this browser. Your Lok account can sync scene titles and source types, but uploaded files do not leave this device.</p><div id="studio-project-list"></div></section>
             <div class="studio-links"><label>Website URL <input id="studio-url" type="url" placeholder="https://example.com" /></label><button id="studio-open-url" type="button">TRY PAGE OVERLAY ↗</button><label>YouTube URL <input id="studio-youtube" type="url" placeholder="https://youtube.com/watch?v=…" /></label><button id="studio-open-youtube" type="button">OPEN PLAYER</button></div>
             <p class="studio-note">Website play opens the page in a new tab; <a href="https://gsix.online/games/demoday#get-it" target="_blank" rel="noopener noreferrer">get the Demo Day bookmarklet</a> to start the reversible overlay there. Some sites block outside scripts. YouTube plays in its own player with controls; video shattering is for files you upload.</p>
             <div id="studio-youtube-player" class="studio-youtube-player" hidden></div>
@@ -84,11 +92,6 @@
 
           <section id="progress" class="progress-section" aria-labelledby="progress-title"><div><span class="game-meta">YOUR DEMO DAY RECORD</span><h2 id="progress-title">Progress</h2><p>Guest progress is saved on this device.</p></div><div id="progress-summary" class="progress-summary"></div><div id="progress-badges" class="progress-badges"></div></section>
 
-          <section class="takeover" aria-labelledby="takeover-title">
-            <div><div class="game-meta">ONE MORE WAY TO PLAY</div><h2 id="takeover-title">Take over this page.</h2><p>Try Survivor 616's Demo Day page takeover right here.</p></div>
-            <button id="takeover-button" type="button" class="outline-button">START PAGE TAKEOVER <span aria-hidden="true">↗</span></button>
-          </section>
-          <p id="home-message" class="home-message" role="status" aria-live="polite"></p>
         </section>
 
         <section id="player" class="player-view" aria-labelledby="player-title" hidden>
@@ -106,6 +109,14 @@
       <footer class="site-footer"><span>LOK DEMO DAY</span><span>BUILT FOR THE NEXT RUN</span></footer>
     </div>
 
+    <dialog id="page-mode-menu" class="game-menu" aria-labelledby="page-mode-title" aria-describedby="page-mode-description">
+      <div class="game-menu-head"><div><span class="game-menu-kicker">LOK DEMO DAY / LIVE PAGE</span><h2 id="page-mode-title">Choose your game.</h2><p id="page-mode-description">The website itself is the sandbox. Select a combat mode to play on top of this page.</p></div><button id="close-page-mode-menu" class="game-menu-close" type="button" aria-label="Close page mode menu">×</button></div>
+      <div class="game-menu-choices" aria-label="Page arena modes">
+        <button type="button" class="game-menu-choice choice-survivor" data-page-mode="survivor-616"><span class="game-menu-number">01 / SURVIVAL</span><strong>SURVIVOR <span>616</span></strong><span class="game-menu-desc">Outlast waves while the live page breaks around you.</span><span class="game-menu-action">WRECK THIS PAGE ↗</span></button>
+        <button type="button" class="game-menu-choice choice-kinetic" data-page-mode="kinetic-souls"><span class="game-menu-number">02 / MOMENTUM</span><strong>KINETIC <span>SOULS</span></strong><span class="game-menu-desc">Jump, dash, and fire through this site's elements.</span><span class="game-menu-action">WRECK THIS PAGE ↗</span></button>
+      </div>
+      <button id="browse-page-mode" class="game-menu-browse" type="button">Browse Demo Day instead</button>
+    </dialog>
     <dialog id="game-menu" class="game-menu" aria-labelledby="game-menu-title" aria-describedby="game-menu-description">
       <div class="game-menu-head">
         <div>
