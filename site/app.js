@@ -15,6 +15,7 @@ const newTabLink = document.getElementById('new-tab-link');
 const homeMessage = document.getElementById('home-message');
 const gameTip = document.getElementById('game-tip');
 const gameMenu = document.getElementById('game-menu');
+const pageModeMenu = document.getElementById('page-mode-menu');
 const settingsButton = document.getElementById('settings-button');
 const menuTitle = document.getElementById('game-menu-title');
 const menuDescription = document.getElementById('game-menu-description');
@@ -121,6 +122,26 @@ function openGameMenu() {
   gameMenu.querySelector('[data-game]').focus();
 }
 
+function openPageModeMenu() {
+  const active = runningPageMode();
+  document.getElementById('page-mode-title').textContent = active ? 'Switch page modes.' : 'Choose your game.';
+  pageModeMenu.querySelectorAll('[data-page-mode]').forEach((button) => { button.dataset.active = String(button.dataset.pageMode === active); });
+  if (!pageModeMenu.open) pageModeMenu.showModal();
+  settingsButton.setAttribute('aria-expanded', 'true');
+  pageModeMenu.querySelector('[data-page-mode]').focus();
+}
+
+function runningPageMode() {
+  if (window.Survivor616DemoDay?.isRunning()) return 'survivor-616';
+  if (window.KineticSoulsPage?.isRunning()) return 'kinetic-souls';
+  return null;
+}
+
+function stopPageModes() {
+  window.Survivor616DemoDay?.stop(true);
+  window.KineticSoulsPage?.stop();
+}
+
 function showGame(id, updateHistory = true) {
   const game = games[id];
   if (!game) {
@@ -133,12 +154,12 @@ function showGame(id, updateHistory = true) {
     gameTip.hidden = true;
     frame.src = 'about:blank'; // Unmount the previous game, including its sound and loop.
     if (updateHistory) history.pushState(null, '', embedded ? '/?embed=1' : '/');
-    if (!['#studio', '#progress'].includes(location.hash)) openGameMenu();
+    if (!['#studio', '#progress'].includes(location.hash)) openPageModeMenu();
     return;
   }
 
   if (gameMenu.open) gameMenu.close();
-  window.Survivor616DemoDay?.stop(true);
+  stopPageModes();
   currentGame = id;
   beginBridgeRun();
   home.hidden = true;
@@ -169,13 +190,17 @@ document.querySelectorAll('[data-game]').forEach((button) => {
     showGame(button.dataset.game);
   });
 });
-settingsButton.addEventListener('click', openGameMenu);
+settingsButton.addEventListener('click', () => currentGame ? openGameMenu() : openPageModeMenu());
 document.getElementById('close-game-menu').addEventListener('click', () => gameMenu.close());
 browseButton.addEventListener('click', () => gameMenu.close());
 gameMenu.addEventListener('click', (event) => {
   if (event.target === gameMenu) gameMenu.close();
 });
 gameMenu.addEventListener('close', () => settingsButton.setAttribute('aria-expanded', 'false'));
+document.getElementById('close-page-mode-menu').addEventListener('click', () => pageModeMenu.close());
+document.getElementById('browse-page-mode').addEventListener('click', () => pageModeMenu.close());
+pageModeMenu.addEventListener('click', (event) => { if (event.target === pageModeMenu) pageModeMenu.close(); });
+pageModeMenu.addEventListener('close', () => settingsButton.setAttribute('aria-expanded', 'false'));
 document.getElementById('back-button').addEventListener('click', () => showGame(null));
 document.getElementById('restart-button').addEventListener('click', () => {
   if (!currentGame) return;
@@ -207,32 +232,37 @@ window.addEventListener('popstate', () => {
   showGame(new URLSearchParams(location.search).get('game'), false);
 });
 
-let overlayLoading;
-function loadOverlay() {
-  if (window.Survivor616DemoDay) return Promise.resolve();
-  if (!overlayLoading) {
-    overlayLoading = new Promise((resolve, reject) => {
+const overlayLoading = {};
+function loadOverlay(mode) {
+  const api = mode === 'survivor-616' ? 'Survivor616DemoDay' : 'KineticSoulsPage';
+  if (window[api]) return Promise.resolve();
+  if (!overlayLoading[mode]) {
+    overlayLoading[mode] = new Promise((resolve, reject) => {
       const script = document.createElement('script');
-      script.src = '/demoday.js';
-      script.onload = () => window.Survivor616DemoDay ? resolve() : reject(new Error('Demo failed to initialize.'));
+      script.src = mode === 'survivor-616' ? '/demoday.js' : '/kinetic-page.js';
+      script.onload = () => window[api] ? resolve() : reject(new Error('Demo failed to initialize.'));
       script.onerror = () => reject(new Error('Demo failed to load.'));
       document.head.append(script);
     }).catch((error) => {
-      overlayLoading = null;
+      delete overlayLoading[mode];
       throw error;
     });
   }
-  return overlayLoading;
+  return overlayLoading[mode];
 }
-document.getElementById('takeover-button').addEventListener('click', async () => {
-  homeMessage.textContent = 'Starting page takeover…';
+document.getElementById('takeover-button').addEventListener('click', openPageModeMenu);
+pageModeMenu.querySelectorAll('[data-page-mode]').forEach((button) => button.addEventListener('click', async () => {
+  const mode = button.dataset.pageMode;
+  pageModeMenu.close();
+  homeMessage.textContent = `Starting ${games[mode].title} over this page…`;
   try {
-    await loadOverlay();
-    const result = window.Survivor616DemoDay.start();
+    stopPageModes();
+    await loadOverlay(mode);
+    const result = window[mode === 'survivor-616' ? 'Survivor616DemoDay' : 'KineticSoulsPage'].start();
     homeMessage.textContent = result?.reason ? `Could not start: ${result.reason}` : '';
   } catch (error) {
     homeMessage.textContent = error.message;
   }
-});
+}));
 
 showGame(new URLSearchParams(location.search).get('game'), false);

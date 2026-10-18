@@ -15,8 +15,9 @@ This is the release checklist for `demo.gsix.online` and `gsix.online/games/demo
 - [x] Starter maps, local image upload, local MP4/WebM upload, pause, timeline scrubbing, movable broken pieces, rebuild, PNG export, and short WebM recording.
 - [x] Website field opens a page for Survivor's reversible overlay and explains CSP/browser restrictions.
 - [x] YouTube URL uses the official player, separate from the destructible uploaded-video canvas.
-- [ ] Connect each game's combat to studio targets through a shared target adapter. The current studio and game loops are separate experiences.
-- [ ] Save and reopen a full local studio scene, including private uploaded media. Current uploads last only for the open page session.
+- [x] Both games can fight over the full live webpage. Survivor uses its established overlay; Kinetic has a new page arena with momentum movement, dash, aimed shots, enemies, and DOM targets. The editor's uploaded media is still a separate surface.
+- [ ] Connect the page arenas and studio media through a shared target adapter so images, video, and site elements can use the same combat modes.
+- [x] Save, reopen, and delete local studio scenes in browser storage, including private uploaded media and piece positions.
 
 ## Gate 3 — account progress
 
@@ -24,7 +25,7 @@ This is the release checklist for `demo.gsix.online` and `gsix.online/games/demo
 - [x] GSix stores guest run summaries locally and signed-in summaries in private Supabase rows with row-level rules.
 - [x] Guest run and Rift Fragment claims merge into the account on sign-in; the account claim appears in the GSix hub and embedded game inventory indicator.
 - [x] A boss defeat in either Demo Day game earns the cosmetic Rift Fragment once per run. Kinetic is pinned in production; Survivor is pending [PR #297](https://github.com/mistachatty-cmyk/Loksurvivor/pull/297).
-- [ ] Sync private project metadata and provide delete controls. The table exists; the studio does not yet write it.
+- [x] Sync private project titles, source types, and timestamps through the signed-in GSix hub; deleting a local scene removes its account metadata. Uploaded media remains on its original device.
 - [ ] Provide account progress on a standalone full-screen Demo Day visit. At present cross-device sync requires play inside signed-in GSix.
 - [ ] Add a trusted receipt before using any game event for competitive ranking or spendable rewards. Browser reports are personal records only.
 

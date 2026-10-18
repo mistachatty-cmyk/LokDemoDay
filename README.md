@@ -9,10 +9,11 @@ The playable Demo Day site for [Survivor 616](https://github.com/mistachatty-cmy
 - `games/kinetic-souls/` — pinned Kinetic Souls source (submodule).
 - `scripts/build.mjs` — builds each game in its own pnpm workspace, then assembles `dist/`.
 
-Survivor 616 is available at `/games/survivor-616/`, Kinetic Souls at `/games/kinetic-souls/`, and Survivor's page takeover bundle at `/demoday.js`. The landing page loads each game inside its own frame so switching games stops the previous game's loop and sound.
-The game selection menu opens when the landing page loads. Players can also open it from **Settings** while a game is running; selecting another game replaces the current run.
+**Wreck this page** opens a two-game selector. Survivor 616 and Kinetic Souls both play over the live webpage, with the website as the destructible arena. Their page bundles are `/demoday.js` and `/kinetic-page.js`; `/page-chooser.js` provides the same selector for a bookmarklet. Leaving either mode restores the page.
+
+The full games remain available at `/games/survivor-616/` and `/games/kinetic-souls/`. The landing page can load each full game in its own frame; switching stops the previous loop and sound. Players can also switch modes from **Settings**.
 The Destruction Studio at `/#studio` includes starter maps and local image/video shattering. The `?embed=1` view hides the site chrome for use inside GSix Hub. Studio files stay in the browser; no file contents are uploaded. Guest studio progress is stored on the current device.
-The current gate status and remaining MVP work are tracked in [docs/MVP_TRACKER.md](docs/MVP_TRACKER.md). The game event contract is in [docs/GAME_BRIDGE.md](docs/GAME_BRIDGE.md).
+The live-page foundation is described in [docs/PAGE_SANDBOX.md](docs/PAGE_SANDBOX.md). Gate status and remaining MVP work are in [docs/MVP_TRACKER.md](docs/MVP_TRACKER.md), and the game event contract is in [docs/GAME_BRIDGE.md](docs/GAME_BRIDGE.md).
 
 ## Local build
 

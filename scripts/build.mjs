@@ -61,6 +61,12 @@ const kinetic = buildGame({
   extraEnv: { PORT: '3000' },
 });
 
+const kineticRoot = resolve(root, 'games', 'kinetic-souls');
+run(pnpm, ['--filter', '@workspace/kinetic-souls', 'run', 'build:page-overlay'], kineticRoot);
+const kineticOverlay = resolve(kineticRoot, 'artifacts/kinetic-souls/dist/overlay/kinetic-page.js');
+if (!existsSync(kineticOverlay)) throw new Error('Kinetic Souls did not produce its page arena bundle.');
+cpSync(kineticOverlay, resolve(dist, 'kinetic-page.js'));
+
 // The Survivor game also exposes public media and a standalone page-takeover
 // bundle at root-relative URLs. Keep these URLs working on the Demo Day domain.
 for (const item of ['art', 'music', 'lok-soundtrack.json', 'lok-updates.json', 'demoday.js']) {
@@ -74,7 +80,7 @@ writeFileSync(resolve(dist, 'build.json'), JSON.stringify({
   kineticSouls: kinetic.revision,
 }, null, 2));
 
-for (const item of ['index.html', 'style.css', 'app.js', 'bridge-protocol.mjs', 'studio.css', 'studio.js', 'demoday.js',
+for (const item of ['index.html', 'style.css', 'app.js', 'bridge-protocol.mjs', 'studio.css', 'studio.js', 'studio-projects.mjs', 'page-chooser.js', 'demoday.js', 'kinetic-page.js',
   'games/survivor-616/index.html', 'games/kinetic-souls/index.html']) {
   if (!existsSync(resolve(dist, item))) throw new Error(`Missing deploy output: ${item}`);
 }
