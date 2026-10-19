@@ -16,6 +16,7 @@ This is the repo-owned plan for growing Demo Day into a reusable creative-game s
 - **Game hub:** Survivor 616 and Kinetic Souls choices, game-specific routes, settings switcher, and live decorative previews.
 - **Page combat:** reversible page overlay, two Kinetic versions, source fighters/Bestiary/themes, left/right team spawning, NPC opponent, match records, target destruction, and restore-page path.
 - **Target material behavior:** page-mode adapters classify media, text, panels, and creator props into glass, paper, stone, or digital profiles. Profiles tune damage, durability, and hit-stage callouts consistently in Classic and KS2.
+- **Directional impact behavior:** Kinetic page targets draw fracture branches along the incoming hit vector, clipped to the target; dynamic creator props receive capped directional recoil for fighter, projectile, chain, and boss-pulse impacts.
 - **Match setup:** Kinetic Settings offers 1/2/3/5-minute matches (2-minute default) and a next-match NPC-side selector; Player 1 spawns opposite the NPC. The chosen duration applies on rematch, Shrinking Arena follows the active timer, and validated completion records include elapsed/configured duration and physical NPC side.
 - **Creative tools:** starter scenes, local image/video targets, movement, damage, pause, rebuild, local save/open, replay scrubbing, still/short capture, and a collapsible in-match panel.
 - **Source parity guard:** `npm run verify:kinetic-parity` validates actual visible settings catalogs before the Demo Day build.
@@ -170,6 +171,18 @@ For every slice, record: source commit, feature status, code paths, test command
 - **Preview:** `https://lok-demo-r0pxmorpb-mistachatty-cmyks-projects.vercel.app` reached Ready for root commit `6efa3c20a161dfc9ad29ad9a150860bd5b0f85a0`. Authenticated `vercel curl /build.json` reports official source pin `2daf1db87665a450b4998ceea0ed7e00d60e9cbc`; the protected `kinetic-official-page.js` bundle includes the new material-stage labels. Deployment protection prevented an interactive remote browser pass, so the same integrated output received the Classic/KS2 browser playthrough locally.
 - **Known limitation:** semantic tag classification is a first profile, not a full browser-specific material engine. CSS-only backgrounds and nested element overlap can produce multiple candidates; classification tuning needs representative host pages and future telemetry-free frame checks.
 - **Next gate:** inspect the Vercel preview's built pin and page bundle; then add impact direction to cracks/knockback and fighter recoil, or refine material candidates against inspected browser pages. Preserve reduced-motion/low-effects behavior and verify both variants.
+
+### Execution record — directional target impacts (2026-10-19)
+
+- **Source evidence:** the shared page adapter already applied fighter bounce-back and dynamic prop momentum, but target crack marks were radial and prop recoil used the fighter's velocity after it had already bounced. Projectiles, chain blasts, and boss pulses did not pass an incoming vector to the damage effect.
+- **Decision:** carry a normalized incoming vector with each target hit, draw a central fracture and two branches in that direction, and apply a bounded directional impulse to dynamic user props. Read the fighter's incoming velocity before collision response. Standalone source gameplay remains unchanged.
+- **Status/source:** implemented and pushed to `codex/page-arena-destruction-physics` at `bd9344cf382390aa2aab696aa094650208ef6009`; root source pin updated in `scripts/pinned-revisions.json`.
+- **Acceptance:** cardinal and diagonal vectors remain normalized; invalid inputs use a safe fallback; prop impulse scales with force but is capped; Classic and KS2 show directional cracks and props move away along their impact vector; ordinary fighter knockback and page restore still work.
+- **Checks passed:** 14 bridge/team/material/impact tests; Kinetic parity guard; Classic page typecheck/build; integrated Demo Day build and pinned-route verification.
+- **Browser:** final local integrated build launched Classic and KS2, populated Neon Tiles/Sky Garden into each live match, confirmed combat/page-break counters advanced (Classic 1 break; KS2 6 breaks/4 chains), and restored the host page after each variant. The Creator panel remained attached to the match while targets participated in play.
+- **Preview:** inspect after the root review-branch push triggers a Vercel deployment; direct remote browser testing remains subject to preview protection.
+- **Known limitation:** impact vectors are persisted per target's latest hit; hit-stop and player fighter impulses are not added in this slice. Prop impulse is capped, and crack marks are clipped to each element to avoid covering adjacent text.
+- **Next gate:** inspect the preview artifact; then tune reduced-motion/low-effects handling and fighter recoil, followed by broader material behavior.
 
 ## Model and dependency note
 
