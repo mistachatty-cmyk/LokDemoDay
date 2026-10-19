@@ -15,7 +15,7 @@ This is the repo-owned plan for growing Demo Day into a reusable creative-game s
 
 - **Game hub:** Survivor 616 and Kinetic Souls choices, game-specific routes, settings switcher, and live decorative previews.
 - **Page combat:** reversible page overlay, two Kinetic versions, source fighters/Bestiary/themes, left/right team spawning, NPC opponent, match records, target destruction, and restore-page path.
-- **Match setup:** Kinetic Settings offers 1/2/3/5-minute matches (2-minute default); the chosen length applies on rematch, Shrinking Arena follows the active timer, and completion records include validated elapsed/configured duration.
+- **Match setup:** Kinetic Settings offers 1/2/3/5-minute matches (2-minute default) and a next-match NPC-side selector; Player 1 spawns opposite the NPC. The chosen duration applies on rematch, Shrinking Arena follows the active timer, and validated completion records include elapsed/configured duration and physical NPC side.
 - **Creative tools:** starter scenes, local image/video targets, movement, damage, pause, rebuild, local save/open, replay scrubbing, still/short capture, and a collapsible in-match panel.
 - **Source parity guard:** `npm run verify:kinetic-parity` validates actual visible settings catalogs before the Demo Day build.
 - **Docs:** [Kinetic page-mode parity](KINETIC_PAGE_PARITY.md), [page sandbox behavior](PAGE_SANDBOX.md), and the source-controlled `lok-ui` guidance document.
@@ -144,6 +144,18 @@ For every slice, record: source commit, feature status, code paths, test command
 - **Browser:** locally served production build showed all four labels and the next-match note. A two-minute Classic match completed at `00:00` with the selected one-minute setting preserved; its result offered “Rematch · 1 minute,” the rematch started at `01:00`, and switching to KS2 kept the configured one-minute duration.
 - **Preview:** `https://lok-demo-ncutnfi4x-mistachatty-cmyks-projects.vercel.app` reached Ready; authenticated `/build.json` matched pin `bdbc9e4a2cd44be4e5f9aa4b47c94d47de3ecdd1`, and `/page-run-protocol.mjs` served the duration allowlist. Direct browser navigation is protected by Vercel login, so an interactive browser session on the remote preview remains unverified; the preview build itself and the identical local build were checked.
 - **Known limitation:** this run did not wait through a second full one-minute KS2 match or test every length/Shrinking Arena combination. The shared timer and settings code is built for both versions; these longer combinations remain in the full playthrough gate.
+
+### Execution record — Kinetic NPC-side mapping (2026-10-19)
+
+- **Source evidence:** inspected the pinned Classic and KS2 source settings menus and core spawn loops. Their standalone visible settings do not provide a page-sized NPC-side option. The page adapter had an unused `npcSide` field but hard-coded NPC spawning to side 2, Player 1 to side 1, and result counts to physical left/right teams.
+- **Decision:** keep NPC-side selection as a clearly labeled Demo Day page-mode setup rule, applied on the next match. Player 1 spawns opposite the configured NPC side; the configured side runs the NPC and allows temporary Player 2 takeover for 12 seconds. Standalone games and their main loops remain unchanged.
+- **Status/source:** implemented and pushed on `codex/page-arena-destruction-physics`, source revision `a6ba2bf2928ef4003eb0ef4d78341fb32b4ec92f`; updated `scripts/pinned-revisions.json`.
+- **Code/tests:** `games/kinetic-official/page-mode/main.ts`, `page-mode/team-sides.mjs`, validated `npcSide` in `site/page-run-protocol.mjs`, and `page-mode/team-sides.test.mjs`. Run parity, bridge/run protocol and score-mapping tests, Classic page typecheck/build, then the integrated build and browser checks.
+- **Acceptance:** selecting left/right changes the next match's NPC spawn side and Player 1 side; hold/manual input on the NPC side transfers it to Player 2; results and run-record player scores remain consistent under either physical-side mapping.
+- **Checks passed:** parity guard; seven bridge, run-payload, and team-mapping tests; Classic page typecheck/build; integrated Demo Day build and static-output verification for both Kinetic versions.
+- **Browser:** in the locally served integrated build, changed the NPC side to Left and match duration to one minute while a Classic match was active; that match stayed on its original setup, ended with consistent Player 1/Player 2 totals, and offered a one-minute rematch. The rematch opened at `01:00` with NPC Left and Player 1 Right. Left-side input transferred NPC control to Player 2; after 12.5 seconds the NPC resumed. Repeated the side mapping, takeover, and handback in KS2; Restore Page removed the overlay and left the original site intact.
+- **Preview:** pending the root review-branch push for this slice.
+- **Next gate:** inspect the pinned Vercel preview artifact; continue Phase 1 score-target rules or Phase 2 damage behavior.
 - **Next slice:** finish remaining Phase 1 setup options only when each has an implemented match outcome and a validated record field; otherwise proceed to one bounded Phase 2 material/damage behavior.
 
 ## Model and dependency note

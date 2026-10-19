@@ -4,7 +4,7 @@ const RESULTS = new Set(['Player 1 wins', 'Player 2 / NPC wins', 'Draw']);
 
 export function validateKineticPageRun(run) {
   if (!run || typeof run !== 'object' || Array.isArray(run) || run.version !== 1 || run.gameKey !== 'kinetic-souls') return null;
-  if (typeof run.runId !== 'string' || !RUN_ID.test(run.runId) || !['classic', 'ks2'].includes(run.variant)) return null;
+  if (typeof run.runId !== 'string' || !RUN_ID.test(run.runId) || !['classic', 'ks2'].includes(run.variant) || ![1, 2].includes(run.npcSide)) return null;
   if (!MATCH_DURATIONS.has(run.matchDurationMs) || !Number.isFinite(run.durationMs) || run.durationMs < 0 || run.durationMs > run.matchDurationMs) return null;
   if (!Number.isInteger(run.score) || run.score < 0 || run.score > 100_000_000 ||
       !Number.isInteger(run.xp) || run.xp < 0 || run.xp > 100_000) return null;
@@ -15,6 +15,7 @@ export function validateKineticPageRun(run) {
   return {
     runId: run.runId,
     variant: run.variant,
+    npcSide: run.npcSide,
     durationMs: run.durationMs,
     matchDurationMs: run.matchDurationMs,
     score: run.score,

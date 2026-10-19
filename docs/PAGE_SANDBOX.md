@@ -28,6 +28,6 @@ Demo Day's primary play path starts on the actual webpage. `Wreck this page` off
 
 The original [`Destroy Any Website`](https://destroy.spritefusion.com/) inspired the website-sized play field. Demo Day's live-page overlay is its own implementation and uses no Sprite Fusion code or art.
 
-Kinetic matches support 1, 2, 3, or 5 minutes, defaulting to two minutes. A changed length applies on rematch, Shrinking Arena follows the active timer, and validated run details include elapsed and configured duration. The next Kinetic page-mode work is tracked in [Kinetic Souls page-mode parity](KINETIC_PAGE_PARITY.md), including the source-of-truth rule, version-specific settings, and release gates.
+Kinetic matches support 1, 2, 3, or 5 minutes, defaulting to two minutes. A changed length applies on rematch, Shrinking Arena follows the active timer, and validated run details include elapsed and configured duration. Settings can assign the NPC to either physical side for the next match; Player 1 spawns opposite it, and manual input can take over the NPC side for 12 seconds. The next Kinetic page-mode work is tracked in [Kinetic Souls page-mode parity](KINETIC_PAGE_PARITY.md), including the source-of-truth rule, version-specific settings, and release gates.
 
 The full game hub, destruction, account, creator, monetization, localization, and ecosystem roadmap is in [DEMO_DAY_ROADMAP.md](DEMO_DAY_ROADMAP.md).

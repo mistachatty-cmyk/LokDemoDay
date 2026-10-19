@@ -132,7 +132,7 @@ window.addEventListener('lok:demoday:page-run', (event) => {
   if (!run) return;
   postToHub({ type: 'lok:demoday:run', version: BRIDGE_VERSION,
     runId: run.runId, gameKey: 'kinetic-souls', score: run.score, xp: run.xp,
-    completedAt: run.completedAt, variant: run.variant, durationMs: run.durationMs, matchDurationMs: run.matchDurationMs,
+    completedAt: run.completedAt, variant: run.variant, durationMs: run.durationMs, matchDurationMs: run.matchDurationMs, npcSide: run.npcSide,
     teamScores: run.teamScores, result: run.result });
 });
 

@@ -7,6 +7,7 @@ const base = {
   gameKey: 'kinetic-souls',
   runId: '123e4567-e89b-42d3-a456-426614174000',
   variant: 'classic',
+  npcSide: 2,
   durationMs: 119_500,
   matchDurationMs: 120_000,
   teamScores: { player1: 4, player2: 3 },
@@ -34,6 +35,7 @@ test('bounds the Kinetic run identity, result, scores, and timestamp', () => {
   assert.equal(validateKineticPageRun({ ...base, version: 2 }), null);
   assert.equal(validateKineticPageRun({ ...base, runId: 'invalid' }), null);
   assert.equal(validateKineticPageRun({ ...base, variant: 'experimental' }), null);
+  assert.equal(validateKineticPageRun({ ...base, npcSide: 0 }), null);
   assert.equal(validateKineticPageRun({ ...base, result: 'Reward unlocked' }), null);
   assert.equal(validateKineticPageRun({ ...base, teamScores: { player1: -1, player2: 0 } }), null);
   assert.equal(validateKineticPageRun({ ...base, completedAt: 'yesterday' }), null);
