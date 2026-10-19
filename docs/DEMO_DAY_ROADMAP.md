@@ -13,7 +13,7 @@ This is the repo-owned plan for growing Demo Day into a reusable creative-game s
 
 ## Current foundation
 
-- **Game hub:** Survivor 616 and Kinetic Souls choices, game-specific routes, settings switcher, and live decorative previews.
+- **Game hub:** Survivor 616, Kinetic Souls, and PongFall full-game choices; the first two offer live page combat. All three use source-backed, silent live previews and retain separate full-game routes.
 - **Page combat:** reversible page overlay, two Kinetic versions, source fighters/Bestiary/themes, left/right team spawning, NPC opponent, match records, target destruction, and restore-page path.
 - **Target material behavior:** page-mode adapters classify media, text, panels, and creator props into glass, paper, stone, or digital profiles. Profiles tune damage, durability, and hit-stage callouts consistently in Classic and KS2.
 - **Directional impact behavior:** Kinetic page targets draw fracture branches along the incoming hit vector, clipped to the target; dynamic creator props receive capped directional recoil for fighter, projectile, chain, and boss-pulse impacts.
@@ -77,7 +77,7 @@ This is the repo-owned plan for growing Demo Day into a reusable creative-game s
 ### Phase 5 — Expand the game catalog
 
 1. Publish a small game-adapter contract: game ID/version, preview, launch routes, input map, mode setup, target adapter, event bridge, and source revision.
-2. Add a game only after its core loop is mapped to page targets and a separate full-game route remains available.
+2. Add a game only after its core loop is mapped to page targets and a separate full-game route remains available. **PongFall is now pinned and playable in the hub; its page arena adapter remains in development.**
 3. Use feature flags or staged catalog entries for experiments; keep failed/experimental adapters out of the default list.
 4. Reuse the `GameChoice` component and documented UI patterns where they fit the host project's interaction style.
 
@@ -187,3 +187,13 @@ For every slice, record: source commit, feature status, code paths, test command
 ## Model and dependency note
 
 The current parity catalog, source mapping, documentation, and adapter changes are well-scoped engineering work and do not require a higher-tier model. If a future slice requires reconstructing unshared game behavior across multiple repositories, designing trusted account/reward security, or evaluating Twitch/ad policy at launch, first document the question, inspected source, alternatives, and acceptance tests here. Use a higher-tier review only for that bounded decision; keep all findings in this repository so work survives a model change.
+
+### Execution record — PongFall catalog and full-game entry (2026-10-19)
+
+- **Source evidence:** PongFall is `mistachatty-cmyk/PongFall` at `a3136c66efdc1612c67fade4277c88e6ca629f24`. Its standalone site boots `src/core/createPongFall.ts`; the loop uses the deterministic `src/sim/world.ts` simulation, source AI, and the source renderer (`src/render/draw.ts`, `shaft.ts`, `eyes.ts`, `glass.ts`). Visible play includes a falling shaft, a two-sided paddle rally, breakable glass, wall eyes, and source mode/settings panels. The game's current mount assumes a dedicated viewport and draws an opaque background, so it cannot safely be represented as page combat by simply mounting the standalone canvas over a webpage.
+- **Decision:** add the pinned standalone game to Demo Day's full-game catalog and build a separate, muted attract preview from PongFall's actual simulation and renderer. Keep page combat unavailable for PongFall until its document-sized world adapter is implemented; the hub explicitly says this adaptation is in development and hides the misleading page-combat route.
+- **Status/source:** implemented in Demo Day on the current review branch; root source pin and Vercel artifact manifest identify the PongFall revision above. No gameplay source files were changed.
+- **Code:** `games/pongfall` source submodule; `previews/pongfall.ts`; `scripts/build-previews.mjs`; `scripts/build.mjs`; `site/game-choice.js`, `site/game-choice.css`, `site/style.css`, `site/index.html`, and `site/app.js`.
+- **Checks:** PongFall typecheck and 83 source tests passed; Demo Day Kinetic parity guard and 14 bridge tests passed; source-backed preview bundling passed. Integrated Vercel build and browser route/card checks are being completed for this slice.
+- **Known limitation:** PongFall is selectable for the complete game and its preview is live, but it does not yet appear in the Wreck This Page game list. Its deterministic sim and renderer must be adapted to document-space targets, scroll, cleanup, and the reversible page overlay before that entry is accurate.
+- **Next slice:** build and test the PongFall page-mode adapter from the pinned source. See [PongFall page-mode parity](PONGFALL_PAGE_PARITY.md) for source evidence, architecture options, and acceptance criteria.

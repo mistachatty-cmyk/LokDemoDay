@@ -7,6 +7,7 @@
 .lok-choice canvas{display:block;width:100%;height:100%;pointer-events:none}
 .choice-survivor,.survivor-card{--choice-accent:#ff9777;--choice-glow:#f477584b}
 .choice-kinetic,.kinetic-card{--choice-accent:#bfa8ff;--choice-glow:#9f8afa49}
+.pongfall-card{--choice-accent:#7ce6ff;--choice-glow:#43c9ec4d}
 .game-card.lok-choice{display:block;width:100%;padding:0;text-align:left;cursor:pointer}
 .game-card.lok-choice .card-topline,.game-card.lok-choice .card-content{display:flex}
 .game-card.lok-choice .card-content{flex-direction:column;align-items:stretch}
@@ -36,12 +37,14 @@
 .preview-motion-setting small{display:block;color:#aeb4c6;font-size:11px;font-weight:400}
 @supports selector(:has(*)){
   @media(hover:hover) and (min-width:761px){
-    .game-grid:has(>.lok-choice:first-child:hover),.game-grid:has(>.lok-choice:first-child:focus-visible){grid-template-columns:1.08fr .92fr}
-    .game-grid:has(>.lok-choice:last-child:hover),.game-grid:has(>.lok-choice:last-child:focus-visible){grid-template-columns:.92fr 1.08fr}
+    .game-grid:has(>.lok-choice:first-child:hover),.game-grid:has(>.lok-choice:first-child:focus-visible){grid-template-columns:1.08fr .92fr .92fr}
+    .game-grid:has(>.lok-choice:nth-child(2):hover),.game-grid:has(>.lok-choice:nth-child(2):focus-visible){grid-template-columns:.92fr 1.08fr .92fr}
+    .game-grid:has(>.lok-choice:last-child:hover),.game-grid:has(>.lok-choice:last-child:focus-visible){grid-template-columns:.92fr .92fr 1.08fr}
   }
   @media(hover:hover) and (min-width:701px){
-    .game-menu-choices:has(>.lok-choice:first-child:hover),.game-menu-choices:has(>.lok-choice:first-child:focus-visible){grid-template-columns:1.06fr .94fr}
-    .game-menu-choices:has(>.lok-choice:last-child:hover),.game-menu-choices:has(>.lok-choice:last-child:focus-visible){grid-template-columns:.94fr 1.06fr}
+    .game-menu-choices:has(>.lok-choice:first-child:hover),.game-menu-choices:has(>.lok-choice:first-child:focus-visible){grid-template-columns:1.06fr .94fr .94fr}
+    .game-menu-choices:has(>.lok-choice:nth-child(2):hover),.game-menu-choices:has(>.lok-choice:nth-child(2):focus-visible){grid-template-columns:.94fr 1.06fr .94fr}
+    .game-menu-choices:has(>.lok-choice:last-child:hover),.game-menu-choices:has(>.lok-choice:last-child:focus-visible){grid-template-columns:.94fr .94fr 1.06fr}
   }
 }
 .game-menu-choices{transition:grid-template-columns .42s cubic-bezier(.16,1,.3,1)}

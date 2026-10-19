@@ -23,6 +23,7 @@ for (const control of previewMotionControls) control.addEventListener('change', 
 const games = {
   'survivor-616': { title: 'Survivor 616', path: '/games/survivor-616/' },
   'kinetic-souls': { title: 'Kinetic Souls', path: '/games/kinetic-classic/' },
+  pongfall: { title: 'PongFall', path: '/games/pongfall/' },
 };
 
 const home = document.getElementById('home');
@@ -213,9 +214,11 @@ function showGame(id, updateHistory = true, variant = 'classic') {
   player.hidden = false;
   document.body.dataset.view = id;
   playerTitle.textContent = id === 'kinetic-souls' ? `${game.title} ${currentVariant === 'ks2' ? '2 · Alpha' : 'Classic'}` : game.title;
-  gameTip.hidden = id !== 'kinetic-souls';
+  gameTip.hidden = id !== 'kinetic-souls' && id !== 'pongfall';
   if (id === 'kinetic-souls') {
     gameTip.textContent = 'A spawns the left team · L spawns the right team. Open Settings for opponents, modifiers, and the Bestiary.';
+  } else if (id === 'pongfall') {
+    gameTip.textContent = 'Move with mouse, touch, or W/S · thrust with Space · pause with P · zoom with Z. PongFall page combat is being mapped from its source game.';
   }
   playerStatus.textContent = 'Loading game…';
   loading.textContent = 'LOADING GAME…';
@@ -242,10 +245,13 @@ document.querySelectorAll('[data-game]').forEach((button) => {
 document.querySelectorAll('[data-home-game]').forEach((button) => button.addEventListener('click', () => {
   homeChoice = button.dataset.homeGame;
   document.getElementById('home-play-title').textContent = games[homeChoice].title;
-  document.getElementById('home-play-description').textContent = `Choose how to play ${games[homeChoice].title}.`;
-  homePlayMenu.querySelector('[data-home-route="full"] .game-menu-action').textContent = homeChoice === 'kinetic-souls' ? 'CHOOSE VERSION ↗' : 'PLAY SURVIVOR ↗';
+  document.getElementById('home-play-description').textContent = homeChoice === 'pongfall'
+    ? 'Open the complete PongFall game. Its page arena adapter is still in development.'
+    : `Choose how to play ${games[homeChoice].title}.`;
+  homePlayMenu.querySelector('[data-home-route="page"]').hidden = homeChoice === 'pongfall';
+  homePlayMenu.querySelector('[data-home-route="full"] .game-menu-action').textContent = homeChoice === 'kinetic-souls' ? 'CHOOSE VERSION ↗' : homeChoice === 'pongfall' ? 'PLAY PONGFALL ↗' : 'PLAY SURVIVOR ↗';
   homePlayMenu.showModal();
-  homePlayMenu.querySelector('[data-home-route="page"]').focus();
+  homePlayMenu.querySelector(homeChoice === 'pongfall' ? '[data-home-route="full"]' : '[data-home-route="page"]').focus();
 }));
 homePlayMenu.querySelectorAll('[data-home-route]').forEach((button) => button.addEventListener('click', () => {
   const route = button.dataset.homeRoute;
@@ -253,7 +259,7 @@ homePlayMenu.querySelectorAll('[data-home-route]').forEach((button) => button.ad
   if (homeChoice === 'kinetic-souls') {
     openKineticVersion(route === 'page' ? 'page' : 'full');
   } else if (route === 'page') void startPageMode('survivor-616');
-  else showGame('survivor-616');
+  else showGame(homeChoice);
 }));
 document.getElementById('close-home-play').addEventListener('click', () => homePlayMenu.close());
 homePlayMenu.addEventListener('click', (event) => { if (event.target === homePlayMenu) homePlayMenu.close(); });
@@ -275,14 +281,16 @@ document.getElementById('restart-button').addEventListener('click', () => {
   loading.textContent = 'RESTARTING GAME…';
   loading.hidden = false;
   playerStatus.textContent = 'Restarting game…';
-  frame.src = `${currentGame === 'kinetic-souls' ? `/games/kinetic-${currentVariant}/` : games[currentGame].path}?restart=${Date.now()}`;
+  const path = currentGame === 'kinetic-souls' ? `/games/kinetic-${currentVariant}/` : games[currentGame].path;
+  frame.src = currentGame === 'pongfall' ? `${path}?menu=0&restart=${Date.now()}` : `${path}?restart=${Date.now()}`;
 });
 frame.addEventListener('load', () => {
   if (!currentGame) return;
   let loadedGame = false;
   try {
-    loadedGame = frame.contentWindow.location.pathname === (currentGame === 'kinetic-souls' ? `/games/kinetic-${currentVariant}/` : games[currentGame].path)
-      && Boolean(frame.contentDocument?.getElementById('root'));
+    const expectedPath = currentGame === 'kinetic-souls' ? `/games/kinetic-${currentVariant}/` : games[currentGame].path;
+    loadedGame = frame.contentWindow.location.pathname === expectedPath
+      && Boolean(frame.contentDocument?.getElementById('root') || frame.contentDocument?.getElementById('app'));
   } catch {
     // Browser error pages and external navigations cannot be inspected.
   }

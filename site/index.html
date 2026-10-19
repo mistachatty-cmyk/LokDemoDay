@@ -4,7 +4,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="theme-color" content="#0a0c13" />
-    <meta name="description" content="Play Survivor 616 and Kinetic Souls at LOK Demo Day." />
+    <meta name="description" content="Play Survivor 616, Kinetic Souls, and PongFall at LOK Demo Day." />
     <title>LOK Demo Day — Pick a game</title>
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <link rel="stylesheet" href="/style.css" />
@@ -61,6 +61,11 @@
               <span class="card-topline"><span>02 / TEAM BATTLE</span><span class="card-status">LIVE GAMEPLAY</span></span>
               <span class="card-art lok-choice-stage"><canvas data-lok-preview="classic" aria-hidden="true"></canvas></span>
               <span class="card-content"><span class="game-meta">MOTION IS EVERYTHING</span><strong class="card-title">Kinetic <span>Souls</span></strong><span class="card-description">Spawn opposing teams. Break the battlefield between them.</span><span class="card-action">CHOOSE HOW TO PLAY <span aria-hidden="true">↗</span></span></span>
+            </button>
+            <button type="button" class="game-card lok-choice pongfall-card" data-lok-nondestructible data-home-game="pongfall" aria-label="PongFall — open the complete game">
+              <span class="card-topline"><span>03 / FALLING PONG</span><span class="card-status">PLAYABLE NOW</span></span>
+              <span class="card-art lok-choice-stage"><canvas data-lok-preview="pongfall" aria-hidden="true"></canvas></span>
+              <span class="card-content"><span class="game-meta">HOLD THE GLASS · KEEP FALLING</span><strong class="card-title">Pong<span>Fall</span></strong><span class="card-description">Return the ball, break the glass, wake the eyes, and grow the falling arena.</span><span class="card-action">OPEN FULL GAME <span aria-hidden="true">↗</span></span></span>
             </button>
           </div>
 
@@ -132,6 +137,10 @@
         <button type="button" class="game-menu-choice lok-choice choice-kinetic" data-lok-nondestructible data-game="kinetic-souls"><canvas data-lok-preview="classic" aria-hidden="true"></canvas>
           <span class="game-menu-number">02 / ARENA</span><strong>KINETIC <span>SOULS</span></strong>
           <span class="game-menu-desc">Choose your match. Shape the arena.</span><span class="game-menu-action">PLAY GAME ↗</span>
+        </button>
+        <button type="button" class="game-menu-choice lok-choice pongfall-card" data-lok-nondestructible data-game="pongfall"><canvas data-lok-preview="pongfall" aria-hidden="true"></canvas>
+          <span class="game-menu-number">03 / FALLING PONG</span><strong>PONGFALL</strong>
+          <span class="game-menu-desc">Return the ball, protect the glass, and keep the arena from the depths.</span><span class="game-menu-action">PLAY GAME ↗</span>
         </button>
       </div>
       <label class="preview-motion-setting"><input type="checkbox" data-preview-motion /> <span>Play live previews <small>Silent · pauses when hidden</small></span></label>

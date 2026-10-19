@@ -12,3 +12,7 @@
 	path = games/kinetic-official
 	url = https://github.com/mistachatty-cmyk/K.Souls---Classic.git
 	branch = master
+[submodule "games/pongfall"]
+	path = games/pongfall
+	url = https://github.com/mistachatty-cmyk/PongFall.git
+	branch = claude/friendly-wright-vtwgcm

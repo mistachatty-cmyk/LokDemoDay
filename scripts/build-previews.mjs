@@ -16,3 +16,8 @@ await build({
   entryPoints: [resolve(root, 'previews/kinetic.ts')],
   outfile: resolve(root, 'dist/kinetic-preview.js'),
 });
+await build({
+  ...common,
+  entryPoints: [resolve(root, 'previews/pongfall.ts')],
+  outfile: resolve(root, 'dist/pongfall-preview.js'),
+});
