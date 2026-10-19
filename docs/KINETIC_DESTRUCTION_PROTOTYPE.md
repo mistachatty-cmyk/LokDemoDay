@@ -19,6 +19,18 @@ Implemented in the shared Classic/KS2 page adapter:
 
 The first implementation adds impact geometry, not a new health rule. Material damage, target durability, fighter recoil, score, and restoration behavior are unchanged.
 
+## Prototype 0.2 — glass and media fracture shards
+
+Glass and media now break into a deterministic triangle fan instead of the generic rectangular debris used by the other materials. The fan keeps the impact near its center, includes the target's full perimeter and all four corners, and tiles the media rectangle without gaps before pieces move. Each polygon launches radially from the impact, gets a fine white edge and a mode-colored refracted edge, then falls, bounces once its motion settles, and fades under the existing debris lifetime and global cap. Implemented in Kinetic source commit `6b4cac76788e64928d3d69027ec5bc5d87632f4c`.
+
+- The geometry generator accepts a target-local impact and seed, clamps output to 6–24 polygons, and returns no geometry for invalid sizes or impacts.
+- The adapter caps glass pieces using the current effects setting, routes direct and chain breaks through the same material branch, and clears debris when Rebuild is pressed.
+- Reduced Motion skips shard spawning and movement; the target still reaches the normal broken state and reveals the arena.
+- The host element and its layout are unchanged. Restore/Rebuild clears the overlay's broken-area mask so the original page content appears again.
+- Three focused tests verify deterministic geometry, in-bounds vertices, perimeter coverage, non-degenerate triangles, and invalid-input handling.
+
+Geometry tests and integrated builds pass, but the shard appearance has not yet been confirmed in an interactive browser. The local integrated build served through the current shell returned `net::ERR_EMPTY_RESPONSE` in the in-app browser, and the Vercel preview remains deployment protected. Validate the shape at desktop and phone scale as soon as an interactive authenticated browser path is available.
+
 ## Destruction pass detail checklist
 
 ### Glass and media
@@ -49,10 +61,12 @@ The first implementation adds impact geometry, not a new health rule. Material d
 
 ## Next prototype slices
 
-1. Compare screenshots from real page targets and tune the material silhouettes at 100% and mobile scale.
-2. Add distinct break animations per material: glass shards, paper strips, stone chips, and short-lived digital blocks.
-3. Add force-to-debris transfer and wall/floor collisions while keeping the current particle/shard caps.
-4. Add a readable fracture preview to the creator panel, then validate rebuild and exact page restoration after each material break.
+1. Compare the glass fan against real page images and uploaded media at 100% and mobile scale; tune pane count, line contrast, and impact placement. This visual acceptance remains open.
+2. Add a distinct paper/text break with a crease and two short-lived strips, preserving readable copy before the break.
+3. Add a distinct stone break with capped chunky chips and short deep seams.
+4. Add clipped pixel blocks and a local scanline tear for digital surfaces.
+5. After all four silhouettes read clearly, unify their collision bounds and cleanup through one bounded debris pool.
+6. Add a readable fracture preview to the creator panel, then validate replay, rebuild, and exact page restoration after each material break.
 
 ## Acceptance
 

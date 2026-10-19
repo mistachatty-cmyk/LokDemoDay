@@ -195,7 +195,7 @@ The current parity catalog, source mapping, documentation, and adapter changes a
 
 ### Merge readiness
 
-- Kinetic source PR [#10](https://github.com/mistachatty-cmyk/K.Souls---Classic/pull/10), head `c01a854232cfd7822cbd08a9a0e32436798bb221`, targets `master`. GitHub reports `mergeable=true`, `mergeable_state=clean`; the visible PR shows all four checks passing and both Classic and KS2 previews Ready.
+- Kinetic source PR [#10](https://github.com/mistachatty-cmyk/K.Souls---Classic/pull/10), current head `6b4cac76788e64928d3d69027ec5bc5d87632f4c`, targets `master`. GitHub reports `mergeable=true`, `mergeable_state=clean`; the latest source checks pass and both Classic and KS2 Vercel previews are Ready. Authenticated preview requests returned HTTP 200 for both deployment homepages.
 - Demo Day PR [#15](https://github.com/mistachatty-cmyk/LokDemoDay/pull/15), head `7acf5673668ac88315fea321783ec4436dc79e3c`, targets `main`. GitHub reports `mergeable=true`, `mergeable_state=clean`; Vercel Preview Comments and `build` checks pass.
 - Merge order is source PR #10 first, then Demo Day PR #15. Use a merge commit for the source PR so the pinned source commit remains reachable; then merge Demo Day. Merging Demo Day to `main` will trigger the repository's normal deployment workflow, as expected by the user's explicit “MERGE THEN PLAN” request.
 - **Current blocker:** both PRs remain open. The connected GitHub merge action returns “not available to the model,” while the browser session is signed out of GitHub. The authenticated API merge attempt was rejected by the execution policy before it ran. No repository state was changed by these failed attempts. Resume with an authorized GitHub merge capability; do not rewrite or force-push either branch.
@@ -218,6 +218,15 @@ The next milestone is material-specific break behavior on the existing page-size
 - Check the Vercel preview build artifact and its pinned Kinetic revision for each slice. Complete a local browser playthrough when deployment protection blocks interactive preview access; record that limitation rather than claiming a remote playthrough.
 - Test mouse, keyboard, narrow viewport, and OS Reduced Motion. Physical touch remains a separate device gate.
 - Do not merge the next destruction feature until source and Demo Day previews pass, page restoration is confirmed, and the visible break/rebuild path has been checked in both Kinetic versions.
+
+### Execution record — glass/media fracture shards (2026-10-19)
+
+- **Source comparison:** the existing adapter broke every target into small randomized rectangles. Glass/media crack marks were already target-local and deterministic, but the break burst did not resemble pane shards and changed between runs.
+- **Change:** the shared Classic/KS2 page adapter now creates deterministic triangular glass/media panes around the hit. The polygons include each target corner, tile the target before motion, launch radially, and use white plus version-colored refracted edges. Low effects caps the burst; Reduced Motion skips shard motion while the target remains broken. Rebuild clears overlay debris. Paper, stone, and digital targets keep their existing break effects for later slices.
+- **Source pin:** `games/kinetic-official` updated to `6b4cac76788e64928d3d69027ec5bc5d87632f4c` on `codex/page-arena-destruction-physics`, pushed. The root build pin and parity documentation now follow this revision.
+- **Checks:** three geometry tests cover determinism, bounds, corner coverage, target-area coverage, triangle area, and invalid inputs. All 48 bridge tests pass; Kinetic parity passes; Classic page typecheck and page bundle build pass. The integrated Demo Day build passed after adding Git for Windows `usr/bin` to `PATH`; the first attempt hit the known `sh` preinstall-hook issue. Existing Survivor source-map/chunk warnings remain.
+- **Browser:** the local integrated build returned `net::ERR_EMPTY_RESPONSE` in the in-app browser at `127.0.0.1:4173`; no match-level visual claim is made. The Classic and KS2 source previews are Ready and respond HTTP 200 through the authenticated Vercel CLI, but an interactive browser playthrough is still open. The root Demo Day preview must be checked for the new pin and page bundle before this slice is merge-ready.
+- **Next:** inspect the root Vercel preview artifact for source pin `6b4cac76788e64928d3d69027ec5bc5d87632f4c` and the updated page bundle. Then visually validate the glass fan at desktop and narrow mobile sizes when an interactive preview path is available, followed by the paper/text crease-and-strip break. Merge remains blocked by unavailable authenticated GitHub merge access, recorded above.
 
 ### Execution record — PongFall catalog and full-game entry (2026-10-19)
 
