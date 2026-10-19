@@ -119,7 +119,7 @@ writeFileSync(resolve(dist, 'build.json'), JSON.stringify({
   pongfall: revision(pongfallRoot, 'pongfall'),
 }, null, 2));
 
-for (const item of ['index.html', 'style.css', 'app.js', 'game-choice.css', 'game-choice.js', 'survivor-preview.js', 'kinetic-preview.js', 'pongfall-preview.js', 'bridge-protocol.mjs', 'page-run-protocol.mjs', 'studio.css', 'studio.js', 'studio-projects.mjs', 'page-chooser.js', 'page-media.js', 'demoday.js', 'kinetic-page.js', 'kinetic-official-page.js',
+for (const item of ['index.html', 'style.css', 'app.js', 'game-choice.css', 'game-choice.js', 'survivor-preview.js', 'kinetic-preview.js', 'pongfall-preview.js', 'bridge-protocol.mjs', 'page-run-protocol.mjs', 'pongfall-page-world.mjs', 'studio.css', 'studio.js', 'studio-projects.mjs', 'page-chooser.js', 'page-media.js', 'demoday.js', 'kinetic-page.js', 'kinetic-official-page.js',
   'games/survivor-616/index.html', 'games/kinetic-souls/index.html', 'games/kinetic-classic/index.html', 'games/kinetic-ks2/index.html', 'games/pongfall/index.html']) {
   if (!existsSync(resolve(dist, item))) throw new Error(`Missing deploy output: ${item}`);
 }
