@@ -330,3 +330,4 @@ The next milestone is material-specific break behavior on the existing page-size
 - **Release note:** production remains on `9c68fc…` until the existing Demo Day review branch is merged and deployed. The review preview will carry this fix; no production promotion was performed.
 - **Next:** inspect the preview build manifest and page-adapter response, then continue the roadmap's current Kinetic destruction and creator-tool phase.
 
+- **Preview:** `https://lok-demo-kbcylzugp-mistachatty-cmyks-projects.vercel.app` reached READY for root commit `39e6690a9add8597d9a76aaee0953c9edaff6902`. Authenticated `/build.json` reports Kinetic source pin `79bf2caaa713ee46a5b474003d49aeb69245730c`; `/kinetic-official-page.js` returned HTTP 200 (151,824 bytes). The browser tool timed out attaching to local and preview tabs, so interactive hold behavior was verified through the regression tests, not a browser playthrough.
