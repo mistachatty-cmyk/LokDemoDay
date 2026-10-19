@@ -15,6 +15,7 @@ This is the repo-owned plan for growing Demo Day into a reusable creative-game s
 
 - **Game hub:** Survivor 616 and Kinetic Souls choices, game-specific routes, settings switcher, and live decorative previews.
 - **Page combat:** reversible page overlay, two Kinetic versions, source fighters/Bestiary/themes, left/right team spawning, NPC opponent, match records, target destruction, and restore-page path.
+- **Match setup:** Kinetic Settings offers 1/2/3/5-minute matches (2-minute default); the chosen length applies on rematch, Shrinking Arena follows the active timer, and completion records include validated elapsed/configured duration.
 - **Creative tools:** starter scenes, local image/video targets, movement, damage, pause, rebuild, local save/open, replay scrubbing, still/short capture, and a collapsible in-match panel.
 - **Source parity guard:** `npm run verify:kinetic-parity` validates actual visible settings catalogs before the Demo Day build.
 - **Docs:** [Kinetic page-mode parity](KINETIC_PAGE_PARITY.md), [page sandbox behavior](PAGE_SANDBOX.md), and the source-controlled `lok-ui` guidance document.
@@ -32,7 +33,7 @@ This is the repo-owned plan for growing Demo Day into a reusable creative-game s
 
 ### Phase 1 — Complete match parity and onboarding
 
-1. Match setup: opponent mode, NPC enable/side, team control, match duration, score target, and rematch rules.
+1. Match setup: opponent mode, NPC enable/side, team control, match duration, score target, and rematch rules. **Implemented:** selectable 1/2/3/5-minute Kinetic matches, with two minutes as the default; run records carry elapsed and configured duration, and Shrinking Arena scales against that duration.
 2. Controls: consistent keyboard, touch, mouse/touch takeover, accessible focus, cancel/lost-focus handling, and a quick help panel using the real game terms.
 3. Settings: source-mapped themes, Bestiary, weapons, modifiers, environments, display/effects, and accurate page-mode labels.
 4. First-run onboarding: explain page damage, how to spawn, how to scroll, where settings live, and how to restore the page; allow dismissal and don't interrupt return players.
@@ -134,6 +135,15 @@ This is the repo-owned plan for growing Demo Day into a reusable creative-game s
 Current implementation work should follow Phases 0–3 first. Account, Twitch, and ad phases depend on a stable bridge and creator flow. Cross-page roaming and public sharing depend on privacy/ownership boundaries. The design-system work can proceed alongside gameplay, but only reusable pieces that have a tested contract should be generalized.
 
 For every slice, record: source commit, feature status, code paths, test command, preview URL, browser steps, known limitation, and the next gate. This roadmap is the durable plan; update it when product scope or a dependency changes.
+
+### Execution record — configurable Kinetic match duration (2026-10-19)
+
+- **Status:** implemented on `codex/page-arena-destruction-physics` at source revision `bdbc9e4a2cd44be4e5f9aa4b47c94d47de3ecdd1`; pinned in `scripts/pinned-revisions.json`.
+- **Code:** `games/kinetic-official/page-mode/main.ts`, `site/page-run-protocol.mjs`, `site/app.js`; duration protocol tests in `scripts/page-run-protocol.test.mjs`.
+- **Checks passed:** `npm run verify:kinetic-parity`; `npm run test:bridge` (5 tests); Classic `npm run typecheck:page` and `npm run build:page`.
+- **Known check limitation:** the Classic page bundle built locally. The full Windows workspace build is blocked by unavailable `tsc` in the source checkout and the integrated build's Unix `sh` preinstall script; Vercel's Linux preview build is the next gate.
+- **Preview/browser:** pending new preview deployment; verify Settings labels and next-match behavior, test each duration plus Shrinking Arena on Classic and KS2, and inspect the posted `matchDurationMs` record before production review.
+- **Next slice:** finish remaining Phase 1 setup options only when each has an implemented match outcome and a validated record field; otherwise proceed to one bounded Phase 2 material/damage behavior.
 
 ## Model and dependency note
 

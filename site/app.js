@@ -1,5 +1,6 @@
 import { BRIDGE_VERSION, validBridgeEvent } from './bridge-protocol.mjs';
 import { mountGameChoices } from './game-choice.js?v=gameplay-2';
+import { validateKineticPageRun } from './page-run-protocol.mjs';
 
 const previewMotionSetting = 'lok:demoday:live-previews';
 const previewMotionControls = [...document.querySelectorAll('[data-preview-motion]')];
@@ -127,18 +128,11 @@ function sendBridgeInventory() {
 // The live-page arena runs beside this page (outside the embedded game frame).
 // Relay its completed match data through the same account event channel.
 window.addEventListener('lok:demoday:page-run', (event) => {
-  const run = event.detail;
-  const runIdPattern = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-8][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
-  if (!run || run.gameKey !== 'kinetic-souls' || typeof run.runId !== 'string' ||
-      !runIdPattern.test(run.runId) || !Number.isInteger(run.score) || run.score < 0 || run.score > 100000000 ||
-      !Number.isInteger(run.xp) || run.xp < 0 || run.xp > 100000 ||
-      !Number.isFinite(run.durationMs) || !run.teamScores ||
-      !Number.isInteger(run.teamScores.player1) || !Number.isInteger(run.teamScores.player2) ||
-      !['classic', 'ks2'].includes(run.variant) ||
-      !['Player 1 wins', 'Player 2 / NPC wins', 'Draw'].includes(run.result)) return;
+  const run = validateKineticPageRun(event.detail);
+  if (!run) return;
   postToHub({ type: 'lok:demoday:run', version: BRIDGE_VERSION,
     runId: run.runId, gameKey: 'kinetic-souls', score: run.score, xp: run.xp,
-    completedAt: run.completedAt, variant: run.variant, durationMs: run.durationMs,
+    completedAt: run.completedAt, variant: run.variant, durationMs: run.durationMs, matchDurationMs: run.matchDurationMs,
     teamScores: run.teamScores, result: run.result });
 });
 

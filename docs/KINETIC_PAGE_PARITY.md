@@ -10,7 +10,9 @@ The Classic and KS2 repositories are the source of truth for the fighters, Besti
 - The modifier UI now follows each game's actual user-facing catalog. Classic has 25 themes, 9 native modifiers, 8 environments, and KS2 has 37 themes, 9 native modifiers, and 11 arena environments. Both use the source game's four selectable weapon styles and version-specific Bestiary.
 - Gravity Well, Time Distortion, and Chaos Vortex are available as clearly marked page-mode modifiers. Classic uses explicit adapter behavior; KS2 reuses its behavior system.
 - KS2 Solar Flares, Magnetic Fields, and Void Storm are adapted to the document world and labeled `PAGE MODE`. Other values that exist only in the KS2 type union are intentionally not presented as player-facing choices.
-- Page-native match rules include the two-minute timer, sides and NPC, match results, LoK Bounty, Shrinking Arena, page scanning, target damage, and reversible cleanup. The sandbox panel shares the match's targets and physics.
+- Page-native match rules include 1, 2, 3, or 5-minute matches (2 minutes by default), sides and NPC, match results, LoK Bounty, Shrinking Arena, page scanning, target damage, and reversible cleanup. Duration changes apply to the next match; Shrinking Arena follows the active match length. The sandbox panel shares the match's targets and physics.
+- Completion events include elapsed time and configured match length. The shell validates variant, run ID, duration, result, score bounds, and timestamp before forwarding the personal record.
+- Current pinned source for this feature: `bdbc9e4a2cd44be4e5f9aa4b47c94d47de3ecdd1`.
 - The HUD now uses Kinetic's compact monospace visual language, separate Classic and KS2 accents, legible team scores, match time, and page-break chain feedback.
 
 ## Drift prevention
@@ -26,7 +28,7 @@ The wider Demo Day roadmap lives in [DEMO_DAY_ROADMAP.md](DEMO_DAY_ROADMAP.md). 
 ### 1. Match setup and controls
 
 - Map the standalone game's control names and behavior into page mode while preserving the two-team spawn loop and holding-to-spray input.
-- Add an explicit match setup for Player versus NPC, local drop-in Player 2, NPC side, match length, and score target. Every option needs an outcome rule and a completion-event field before it is shown.
+- Add an explicit match setup for Player versus NPC, local drop-in Player 2, NPC side, match length, and score target. Match length (1/2/3/5 minutes, 2 by default) is implemented; every remaining option needs an outcome rule and a completion-event field before it is shown.
 - Make mouse, keyboard, touch, and assistive-technology controls share one input-state implementation. Handle pointer cancellation, lost focus, and restoration.
 - Persist a small page-mode settings profile locally only after the new control layout is stable.
 
