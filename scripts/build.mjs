@@ -79,6 +79,7 @@ const officialRoot = resolve(root, 'games', 'kinetic-official');
 if (!existsSync(resolve(officialRoot, 'classic', 'package-lock.json')) || !existsSync(resolve(officialRoot, 'ks2', 'package-lock.json'))) {
   throw new Error('Missing official Kinetic submodule. Run git submodule update --init --recursive.');
 }
+run('node', ['scripts/verify-kinetic-parity.mjs'], root);
 for (const variant of ['classic', 'ks2']) {
   const cwd = resolve(officialRoot, variant);
   console.log(`\nBuilding Kinetic ${variant} at ${revision(officialRoot, 'kinetic-official').slice(0, 12)}...`);

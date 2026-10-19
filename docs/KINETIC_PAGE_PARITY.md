@@ -1,27 +1,96 @@
-# Kinetic Souls page-mode parity plan
+# Kinetic Souls page-mode parity
 
 ## Product rule
 
-The Classic and KS2 repositories remain the source of truth for character rendering, fighter spawning, weapons, combat, modifiers, themes, and Bestiary data. Demo Day should adapt those systems to its document-sized, reversible arena; it should not present a separate shooter with Kinetic branding. Page-only rules must be labeled as page adaptations, and unsupported full-arena settings must link to the standalone game instead of pretending to work.
+The Classic and KS2 repositories are the source of truth for the fighters, Bestiary, theme choices, weapons, and match rules. Demo Day adapts those systems to a website-sized, reversible arena. It must not turn Kinetic Souls into an unrelated shooter wearing its name. A game-data option that cannot be made meaningful over a live webpage stays standalone-only or carries a visible `PAGE MODE` label.
 
-## Current slice
+## Current state
 
-- Match the real Kinetic UI language: pixel-friendly monospace labels, dark grid-compatible panels, crisp borders, orange/purple Classic accents, and the compact time/teams/KOs HUD. KS2 uses its violet/cyan identity and native fighter renderer.
-- Populate modifier controls from the actual Classic and KS2 theme catalogs. Keep full-game names legible instead of exposing enum slugs.
-- Bring the original arena hazards that map cleanly to a document world into page mode: ice, black hole, lava floor, storm drift, bouncy, wrap, and blackout inside damaged-page reveals.
-- Implement the source game's Shrinking Arena and LoK Bounty rules as bounded page-world behaviors. Bounty targets are neutral, limited by the existing fighter cap, and award no currency.
-- Keep the page's text and controls untouched. Canvas-only effects reveal the game underneath damage; `Restore page` removes the overlay and restores scrolling.
+- Page mode renders fighters, Bestiary entries, team colors, theme backgrounds, combat, and weapons from the pinned Classic/KS2 source.
+- The modifier UI now follows each game's actual user-facing catalog. Classic has 25 themes, 9 native modifiers, 8 environments, and KS2 has 37 themes, 9 native modifiers, and 11 arena environments. Both use the source game's four selectable weapon styles and version-specific Bestiary.
+- Gravity Well, Time Distortion, and Chaos Vortex are available as clearly marked page-mode modifiers. Classic uses explicit adapter behavior; KS2 reuses its behavior system.
+- KS2 Solar Flares, Magnetic Fields, and Void Storm are adapted to the document world and labeled `PAGE MODE`. Other values that exist only in the KS2 type union are intentionally not presented as player-facing choices.
+- Page-native match rules include the two-minute timer, sides and NPC, match results, LoK Bounty, Shrinking Arena, page scanning, target damage, and reversible cleanup. The sandbox panel shares the match's targets and physics.
+- The HUD now uses Kinetic's compact monospace visual language, separate Classic and KS2 accents, legible team scores, match time, and page-break chain feedback.
 
-## Next slices
+## Drift prevention
 
-1. **Parity manifest and provenance.** Maintain version-specific, typed lists of modifiers, themes, environments, fighter IDs, and weapons from each source. For every entry, record whether it is native, adapted for page mode, or standalone-only. Build fails if an option is exposed without an implementation or an explanatory fallback.
-2. **Controls and match setup.** Make player-vs-NPC, player-vs-player, NPC side, spawn cadence, and keyboard/touch controls read like the original game's settings. Keep the current two-minute page match as the default, then add score-based matches only after their win condition and completion event are defined.
-3. **Combat feel.** Reuse the original fighter, weapon, hit, and Bestiary systems first. Improve target impact, material-specific break stages, hit-stop, chain reactions, and boss attacks without changing the original page DOM. Provide a quick setting to tune effect intensity for low-power devices and reduced motion.
-4. **Creator inside play.** Make saved scene pieces show clear health/material feedback in the same match, add a fighter-safe placement preview, and let the creator pause or minimize without hiding the primary spawn controls. Keep replay data bounded and local unless the player explicitly saves a shareable project.
-5. **UX verification.** Compare Classic and KS2 side by side with their standalone menus, HUD, settings, and Bestiary. Test desktop, touch, embedded GSix, keyboard focus, reduced motion, minimum browser performance, page restoration, and a complete match before promoting any release.
+The visible option lists in the games are the reference, rather than every value in a broad TypeScript union. `npm run verify:kinetic-parity` compares page-mode lists with Classic's actual settings arrays, KS2's settings maps and environment board, and verifies shared weapon styles, native modifiers, and labeled page adaptations. The Demo Day build runs this check before building the game bundles. If a source game's visible settings change, update the page adapter and this document in the same reviewed change.
+
+The checker is intentionally a small source-catalog guard, not a claim that every option has identical semantics in a scrollable document world. New physics adaptations still need a behavior test and explicit status here.
+
+## Full roadmap
+
+The wider Demo Day roadmap lives in [DEMO_DAY_ROADMAP.md](DEMO_DAY_ROADMAP.md). Kinetic-specific work is ordered below.
+
+### 1. Match setup and controls
+
+- Map the standalone game's control names and behavior into page mode while preserving the two-team spawn loop and holding-to-spray input.
+- Add an explicit match setup for Player versus NPC, local drop-in Player 2, NPC side, match length, and score target. Every option needs an outcome rule and a completion-event field before it is shown.
+- Make mouse, keyboard, touch, and assistive-technology controls share one input-state implementation. Handle pointer cancellation, lost focus, and restoration.
+- Persist a small page-mode settings profile locally only after the new control layout is stable.
+
+**Acceptance:** changing a match option changes the actual match, both teams can be controlled, touch and keyboard have equivalent actions, and the completion event accurately describes the selected rule set.
+
+### 2. Destruction and combat
+
+- Replace generic damage thresholds with tested material responses, visible health stages, impact direction, and readable break feedback.
+- Give fighters and weapons meaningful page-target interactions, including boss telegraphs, target knockback, chain reactions, and short hit-stop that respects reduced motion.
+- Keep all edits in the overlay or its scene objects. Never mutate the host page's DOM to simulate damage.
+- Add a low-effects mode for slow devices and let users tune shake, particles, and flashes.
+
+**Acceptance:** a player can identify which fighter hit which target, see damage progress, and restore the exact original page after the run. Low-effects and reduced-motion modes remain playable.
+
+### 3. Creative tools inside the match
+
+- Add a fighter-safe placement ghost, grid/snap controls, rotation/scale, and explicit prop health/material.
+- Make rebuild, save/open, timeline, replay, and export controls show clear unsaved/saved status and errors.
+- Keep replay data bounded, scrub only while paused or replaying, and export only user-selected stills or short clips.
+- Keep uploaded media local/private by default; add project deletion and storage limits before account sync.
+
+**Acceptance:** a placed object joins the same collision and damage world as the page; it can be moved, damaged, rebuilt, saved, reopened, and removed without altering the host site.
+
+### 4. Cross-game progression
+
+- Keep guest progress locally, then merge stable run and achievement IDs when the player signs into a Lok account.
+- Add the cosmetic Rift Fragment as the first shared inventory item only after the account contract and both receiving game adapters are reviewed.
+- Keep spendable currency and balance-changing rewards outside this bridge. Treat browser-reported scores as personal records until a trusted server receipt exists.
+- Add cross-device achievements, recent runs, personal bests, and sandbox project metadata with account-level access controls.
+
+**Acceptance:** duplicate guest/account records merge idempotently; users can read and delete their own projects; the item appears consistently in Demo Day, Survivor 616, and Kinetic inventories without affecting game balance.
+
+### 5. Creator and streamer mode
+
+- Add a streamer setup with explicit channel consent, OAuth handled by a trusted backend, connection status, and an always-visible kill switch.
+- Start with bounded EventSub/chat events: sanitized display names, rate limits, allowlisted commands, capped spawns, and reconnect behavior.
+- Add local preview mode so creators can test overlays without connecting a live channel.
+- Only add bits, channel points, or paid effects after permissions, billing semantics, abuse limits, and creator-facing disclosures are implemented.
+
+**Acceptance:** the streamer can disconnect immediately; malicious or high-volume chat cannot freeze the game; no event can award spendable currency or alter another player's account.
+
+### 6. Creator monetization
+
+- Pilot clearly labeled sponsor scenes first. After an ad display ends, use a separate game object for destruction.
+- Keep ordinary gameplay available if no sponsor/ad exists. Keep ad display and combat hitboxes separate and never reward ad clicks.
+- Consider a rewarded-ad network only after its format and account are approved for the use case, with caps, disclosures, and a separate reward ledger.
+
+**Acceptance:** sponsor sessions are identifiable in run records, ad elements do not overlap controls or mislead players, and non-ad sessions remain complete.
+
+### 7. Kinetic source additions
+
+- For each new source-game release, compare its actual settings UI, controls, Bestiary, theme names, and core combat before changing page mode.
+- Use the parity checker as the first gate; then mark each new option `native`, `page adapted`, or `standalone only` and implement or explain its fallback.
+- Keep the full standalone Classic and KS2 games independently playable. Demo Day pins reviewed source revisions and records the exact revision used by previews.
+
+**Acceptance:** a source update cannot silently remove or invent visible options; page-mode behaviors have a regression path for both variants.
 
 ## Release gates
 
-- Add an option only when its behavior is implemented and version-checked. Give experimental page adaptations a clear `PAGE MODE` label.
-- Keep Demo Day and game repositories on review branches. Each source change updates the pinned revision, passes both game's builds plus bridge tests, and receives a Vercel preview playthrough.
-- Use previews for review. Production merges, promotions, and account/database writes remain separate release actions.
+1. Run `npm run verify:kinetic-parity`, both Kinetic builds, bridge tests, and the full Demo Day Vercel build.
+2. Play both variants on desktop and touch, including version switch, match completion, creator minimize/reopen, page scrolling, content added after start, and restoration.
+3. Check keyboard focus, reduced motion, contrast, embedded GSix sizing, and a browser without backdrop blur.
+4. Test guest and signed-in persistence independently before enabling cross-device sync.
+5. Test streamer and monetization pilots behind explicit opt-in flags.
+6. Review the Vercel preview and source changes before any production merge or promotion.
+
+No production promotion, live account write, external ad activation, or Twitch event subscription is implied by a successful preview build.

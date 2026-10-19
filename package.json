@@ -8,6 +8,7 @@
   "scripts": {
     "build": "node scripts/build.mjs",
     "test:bridge": "node --test scripts/bridge-protocol.test.mjs",
+    "verify:kinetic-parity": "node scripts/verify-kinetic-parity.mjs",
     "verify:output": "node scripts/verify-output.mjs"
   },
   "devDependencies": {
