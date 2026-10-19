@@ -15,6 +15,7 @@ This is the repo-owned plan for growing Demo Day into a reusable creative-game s
 
 - **Game hub:** Survivor 616 and Kinetic Souls choices, game-specific routes, settings switcher, and live decorative previews.
 - **Page combat:** reversible page overlay, two Kinetic versions, source fighters/Bestiary/themes, left/right team spawning, NPC opponent, match records, target destruction, and restore-page path.
+- **Target material behavior:** page-mode adapters classify media, text, panels, and creator props into glass, paper, stone, or digital profiles. Profiles tune damage, durability, and hit-stage callouts consistently in Classic and KS2.
 - **Match setup:** Kinetic Settings offers 1/2/3/5-minute matches (2-minute default) and a next-match NPC-side selector; Player 1 spawns opposite the NPC. The chosen duration applies on rematch, Shrinking Arena follows the active timer, and validated completion records include elapsed/configured duration and physical NPC side.
 - **Creative tools:** starter scenes, local image/video targets, movement, damage, pause, rebuild, local save/open, replay scrubbing, still/short capture, and a collapsible in-match panel.
 - **Source parity guard:** `npm run verify:kinetic-parity` validates actual visible settings catalogs before the Demo Day build.
@@ -156,7 +157,19 @@ For every slice, record: source commit, feature status, code paths, test command
 - **Browser:** in the locally served integrated build, changed the NPC side to Left and match duration to one minute while a Classic match was active; that match stayed on its original setup, ended with consistent Player 1/Player 2 totals, and offered a one-minute rematch. The rematch opened at `01:00` with NPC Left and Player 1 Right. Left-side input transferred NPC control to Player 2; after 12.5 seconds the NPC resumed. Repeated the side mapping, takeover, and handback in KS2; Restore Page removed the overlay and left the original site intact.
 - **Preview:** `https://lok-demo-dmbq8mbve-mistachatty-cmyks-projects.vercel.app` is Ready. Authenticated `/build.json` reports `kineticOfficial` as `a6ba2bf2928ef4003eb0ef4d78341fb32b4ec92f`, and `/page-run-protocol.mjs` contains the configured-duration and NPC-side allowlists. Direct browser access is behind Vercel login; the same integrated build was interactively tested locally.
 - **Next gate:** inspect the pinned Vercel preview artifact; continue Phase 1 score-target rules or Phase 2 damage behavior.
-- **Next slice:** finish remaining Phase 1 setup options only when each has an implemented match outcome and a validated record field; otherwise proceed to one bounded Phase 2 material/damage behavior.
+- **Next slice at that checkpoint:** proceed to a bounded Phase 2 damage behavior; the material-profile slice is recorded below.
+
+### Execution record — material-aware target damage (2026-10-19)
+
+- **Source evidence:** inspected the page adapter's scan, `damageTarget`, chain blast, and target rendering paths. Every element previously used one area-derived durability threshold and generic `CRACKED / BREAKING / UNSTABLE` stage labels; the pinned source games' combat is reused for fighters but has no document-material damage system.
+- **Decision:** add a Demo Day page-world material contract, shared by Classic and KS2: images/video/SVG/canvas use fragile glass; paragraph and heading content uses paper; article/section/aside/nav use sturdy stone; other page and user-created targets use digital. Keep these rules in the adapter; don't alter standalone combat.
+- **Status/source:** implemented and pushed to `codex/page-arena-destruction-physics` at `2daf1db87665a450b4998ceea0ed7e00d60e9cbc`; root pin updated in `scripts/pinned-revisions.json`.
+- **Behavior:** material changes damage applied per hit, target durability, chain-blast transfer, and stage callouts. Boss durability still applies its existing multiplier after material classification.
+- **Checks passed:** `npm run verify:kinetic-parity`; `npm run test:bridge` (11 tests, including material profiles); integrated `node scripts/build.mjs`, including Classic page adapter bundling and output verification for all pinned routes/assets. The first build attempt exposed the Windows shell-path requirement; rerunning with Git for Windows `usr/bin` available succeeded. Existing Survivor Vite sourcemap and large-chunk warnings remain.
+- **Browser:** integrated local Demo Day build started Classic and KS2 page matches with their source fighters over the live page. Classic recorded 7 page breaks and 2 chains; KS2 recorded 11 page breaks and 5 chains. Both variants restored the original website view after overlay exit.
+- **Preview:** root review-branch push will trigger the Vercel preview; record its URL/build pin and access result after deployment completes.
+- **Known limitation:** semantic tag classification is a first profile, not a full browser-specific material engine. CSS-only backgrounds and nested element overlap can produce multiple candidates; classification tuning needs representative host pages and future telemetry-free frame checks.
+- **Next gate:** inspect the Vercel preview's built pin and page bundle; then add impact direction to cracks/knockback and fighter recoil, or refine material candidates against inspected browser pages. Preserve reduced-motion/low-effects behavior and verify both variants.
 
 ## Model and dependency note
 

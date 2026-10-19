@@ -13,8 +13,9 @@ The Classic and KS2 repositories are the source of truth for the fighters, Besti
 - Page-native match rules include 1, 2, 3, or 5-minute matches (2 minutes by default), sides and NPC, match results, LoK Bounty, Shrinking Arena, page scanning, target damage, and reversible cleanup. Duration changes apply to the next match; Shrinking Arena follows the active match length. The sandbox panel shares the match's targets and physics.
 - Completion events include elapsed time and configured match length. The shell validates variant, run ID, duration, result, score bounds, and timestamp before forwarding the personal record.
 - The page-mode setup adds a next-match NPC-side selector. Player 1 starts opposite the selected NPC; controls, temporary Player 2 takeover, HUD counts, result totals, and run records all use the selected physical-side mapping. Standalone Classic and KS2 do not expose NPC-side selection; it is a page-world adapter rule.
-- Current pinned source for page-mode setup: `a6ba2bf2928ef4003eb0ef4d78341fb32b4ec92f`.
+- Current pinned source for page-mode setup and material behavior: `2daf1db87665a450b4998ceea0ed7e00d60e9cbc`.
 - The HUD now uses Kinetic's compact monospace visual language, separate Classic and KS2 accents, legible team scores, match time, and page-break chain feedback.
+- Page targets use an explicit, shared material profile in Classic and KS2: media is fragile glass, text is paper, semantic panels are sturdy stone, and other page/creator objects are digital. Each profile changes effective impact damage, durability, and its three readable damage-stage labels; boss health still scales on top of the material rule.
 
 ## Drift prevention
 
@@ -37,7 +38,8 @@ The wider Demo Day roadmap lives in [DEMO_DAY_ROADMAP.md](DEMO_DAY_ROADMAP.md). 
 
 ### 2. Destruction and combat
 
-- Replace generic damage thresholds with tested material responses, visible health stages, impact direction, and readable break feedback.
+- Material-specific durability, impact response, and readable three-stage feedback now cover glass media, paper text, stone panels, and digital creator/page objects. Further test and tune against more real host pages before widening the classifications.
+- Add impact direction to target cracks/knockback and fighter recoil; existing target hit stages and break feedback remain in place.
 - Give fighters and weapons meaningful page-target interactions, including boss telegraphs, target knockback, chain reactions, and short hit-stop that respects reduced motion.
 - Keep all edits in the overlay or its scene objects. Never mutate the host page's DOM to simulate damage.
 - Add a low-effects mode for slow devices and let users tune shake, particles, and flashes.

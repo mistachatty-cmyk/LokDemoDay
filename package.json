@@ -7,7 +7,7 @@
   },
   "scripts": {
     "build": "node scripts/build.mjs",
-    "test:bridge": "node --test scripts/bridge-protocol.test.mjs scripts/page-run-protocol.test.mjs games/kinetic-official/page-mode/team-sides.test.mjs",
+    "test:bridge": "node --test scripts/bridge-protocol.test.mjs scripts/page-run-protocol.test.mjs games/kinetic-official/page-mode/team-sides.test.mjs games/kinetic-official/page-mode/materials.test.mjs",
     "verify:kinetic-parity": "node scripts/verify-kinetic-parity.mjs",
     "verify:output": "node scripts/verify-output.mjs"
   },
