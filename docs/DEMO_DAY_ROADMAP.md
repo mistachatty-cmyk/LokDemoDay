@@ -140,9 +140,10 @@ For every slice, record: source commit, feature status, code paths, test command
 
 - **Status:** implemented on `codex/page-arena-destruction-physics` at source revision `bdbc9e4a2cd44be4e5f9aa4b47c94d47de3ecdd1`; pinned in `scripts/pinned-revisions.json`.
 - **Code:** `games/kinetic-official/page-mode/main.ts`, `site/page-run-protocol.mjs`, `site/app.js`; duration protocol tests in `scripts/page-run-protocol.test.mjs`.
-- **Checks passed:** `npm run verify:kinetic-parity`; `npm run test:bridge` (5 tests); Classic `npm run typecheck:page` and `npm run build:page`.
-- **Known check limitation:** the Classic page bundle built locally. The full Windows workspace build is blocked by unavailable `tsc` in the source checkout and the integrated build's Unix `sh` preinstall script; Vercel's Linux preview build is the next gate.
-- **Preview/browser:** pending new preview deployment; verify Settings labels and next-match behavior, test each duration plus Shrinking Arena on Classic and KS2, and inspect the posted `matchDurationMs` record before production review.
+- **Checks passed:** `npm run verify:kinetic-parity`; `npm run test:bridge` (5 tests); Classic `npm run typecheck:page` and `npm run build:page`; integrated `node scripts/build.mjs`; output verification for all pinned game routes/assets.
+- **Browser:** locally served production build showed all four labels and the next-match note. A two-minute Classic match completed at `00:00` with the selected one-minute setting preserved; its result offered “Rematch · 1 minute,” the rematch started at `01:00`, and switching to KS2 kept the configured one-minute duration.
+- **Preview:** `https://lok-demo-ncutnfi4x-mistachatty-cmyks-projects.vercel.app` reached Ready; authenticated `/build.json` matched pin `bdbc9e4a2cd44be4e5f9aa4b47c94d47de3ecdd1`, and `/page-run-protocol.mjs` served the duration allowlist. Direct browser navigation is protected by Vercel login, so an interactive browser session on the remote preview remains unverified; the preview build itself and the identical local build were checked.
+- **Known limitation:** this run did not wait through a second full one-minute KS2 match or test every length/Shrinking Arena combination. The shared timer and settings code is built for both versions; these longer combinations remain in the full playthrough gate.
 - **Next slice:** finish remaining Phase 1 setup options only when each has an implemented match outcome and a validated record field; otherwise proceed to one bounded Phase 2 material/damage behavior.
 
 ## Model and dependency note
