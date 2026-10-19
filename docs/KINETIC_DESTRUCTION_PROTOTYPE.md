@@ -43,9 +43,10 @@ Geometry tests and integrated builds pass, but the shard appearance has not yet 
 
 ### Paper and text
 
-- Crease line precedes a split; small forks end in tapered, low contrast strokes.
-- Upper and lower halves should shear in opposite directions on break.
-- Keep copy legible at low damage and respect page restoration.
+- **Prototype 0.3 implemented:** a clipped, low-contrast crease with two small forks appears on paper targets before break. At break, a seeded seam splits the target into two complementary strips that shear in opposite directions and fade quickly.
+- The strips contain only a paper-colored surface; they do not capture or duplicate the text. The original page node remains intact underneath the reversible damage overlay.
+- Tests verify deterministic seam geometry, shared edges, complete area coverage, bounds, and invalid-input handling. The interactive appearance and exact restore path still need the browser gate below.
+- Implemented in Kinetic source commit `ea0527bfa8f324668413e939ea3b2dde82623493`.
 
 ### Stone and structural panels
 
@@ -61,12 +62,11 @@ Geometry tests and integrated builds pass, but the shard appearance has not yet 
 
 ## Next prototype slices
 
-1. Compare the glass fan against real page images and uploaded media at 100% and mobile scale; tune pane count, line contrast, and impact placement. This visual acceptance remains open.
-2. Add a distinct paper/text break with a crease and two short-lived strips, preserving readable copy before the break.
-3. Add a distinct stone break with capped chunky chips and short deep seams.
-4. Add clipped pixel blocks and a local scanline tear for digital surfaces.
-5. After all four silhouettes read clearly, unify their collision bounds and cleanup through one bounded debris pool.
-6. Add a readable fracture preview to the creator panel, then validate replay, rebuild, and exact page restoration after each material break.
+1. Compare the glass fan and paper strips against real page images and uploaded media at desktop and mobile scale; tune visibility, lifetimes, and impact placement. This visual acceptance remains open.
+2. Add a distinct stone break with capped chunky chips and short deep seams.
+3. Add clipped pixel blocks and a local scanline tear for digital surfaces.
+4. After all four silhouettes read clearly, unify their collision bounds and cleanup through one bounded debris pool.
+5. Add a readable fracture preview to the creator panel, then validate replay, rebuild, and exact page restoration after each material break.
 
 ## Acceptance
 
