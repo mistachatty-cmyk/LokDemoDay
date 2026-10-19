@@ -1,5 +1,23 @@
 import { BRIDGE_VERSION, validBridgeEvent } from './bridge-protocol.mjs';
-import { mountGameChoices } from './game-choice.js';
+import { mountGameChoices } from './game-choice.js?v=gameplay-2';
+
+const previewMotionSetting = 'lok:demoday:live-previews';
+const previewMotionControls = [...document.querySelectorAll('[data-preview-motion]')];
+function livePreviewsEnabled() {
+  try {
+    const setting = localStorage.getItem(previewMotionSetting);
+    return setting === 'on' || (setting !== 'off' && !matchMedia('(prefers-reduced-motion: reduce)').matches);
+  } catch { return !matchMedia('(prefers-reduced-motion: reduce)').matches; }
+}
+function syncPreviewMotionControls() {
+  for (const control of previewMotionControls) control.checked = livePreviewsEnabled();
+}
+syncPreviewMotionControls();
+for (const control of previewMotionControls) control.addEventListener('change', () => {
+  try { localStorage.setItem(previewMotionSetting, control.checked ? 'on' : 'off'); } catch {}
+  syncPreviewMotionControls();
+  window.dispatchEvent(new Event('lok:preview-motion-change'));
+});
 
 const games = {
   'survivor-616': { title: 'Survivor 616', path: '/games/survivor-616/' },
