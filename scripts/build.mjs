@@ -67,6 +67,15 @@ const kinetic = buildGame({
   extraEnv: { PORT: '3000' },
 });
 
+const pongfallRoot = resolve(root, 'games', 'pongfall');
+console.log(`\nBuilding PongFall at ${revision(pongfallRoot, 'pongfall').slice(0, 12)}...`);
+run(pnpm, ['install', '--frozen-lockfile'], pongfallRoot);
+run(pnpm, ['run', 'typecheck'], pongfallRoot);
+run(pnpm, ['exec', 'vite', 'build', '--base=/games/pongfall/'], pongfallRoot);
+const pongfallOutput = resolve(pongfallRoot, 'dist');
+if (!existsSync(join(pongfallOutput, 'index.html'))) throw new Error('PongFall did not produce games/pongfall/index.html');
+cpSync(pongfallOutput, resolve(dist, 'games', 'pongfall'), { recursive: true });
+
 const kineticRoot = resolve(root, 'games', 'kinetic-souls');
 run(pnpm, ['--filter', '@workspace/kinetic-souls', 'run', 'build:page-overlay'], kineticRoot);
 const kineticOverlay = resolve(kineticRoot, 'artifacts/kinetic-souls/dist/overlay/kinetic-page.js');
@@ -79,6 +88,7 @@ const officialRoot = resolve(root, 'games', 'kinetic-official');
 if (!existsSync(resolve(officialRoot, 'classic', 'package-lock.json')) || !existsSync(resolve(officialRoot, 'ks2', 'package-lock.json'))) {
   throw new Error('Missing official Kinetic submodule. Run git submodule update --init --recursive.');
 }
+run('node', ['scripts/verify-kinetic-parity.mjs'], root);
 for (const variant of ['classic', 'ks2']) {
   const cwd = resolve(officialRoot, variant);
   console.log(`\nBuilding Kinetic ${variant} at ${revision(officialRoot, 'kinetic-official').slice(0, 12)}...`);
@@ -106,10 +116,11 @@ writeFileSync(resolve(dist, 'build.json'), JSON.stringify({
   survivor616: survivor.revision,
   kineticSouls: kinetic.revision,
   kineticOfficial: revision(officialRoot, 'kinetic-official'),
+  pongfall: revision(pongfallRoot, 'pongfall'),
 }, null, 2));
 
-for (const item of ['index.html', 'style.css', 'app.js', 'game-choice.css', 'game-choice.js', 'survivor-preview.js', 'kinetic-preview.js', 'bridge-protocol.mjs', 'studio.css', 'studio.js', 'studio-projects.mjs', 'page-chooser.js', 'page-media.js', 'demoday.js', 'kinetic-page.js', 'kinetic-official-page.js',
-  'games/survivor-616/index.html', 'games/kinetic-souls/index.html', 'games/kinetic-classic/index.html', 'games/kinetic-ks2/index.html']) {
+for (const item of ['index.html', 'style.css', 'app.js', 'game-choice.css', 'game-choice.js', 'survivor-preview.js', 'kinetic-preview.js', 'pongfall-preview.js', 'bridge-protocol.mjs', 'page-run-protocol.mjs', 'pongfall-page-world.mjs', 'pongfall-page-compositor.mjs', 'studio.css', 'studio.js', 'studio-projects.mjs', 'page-chooser.js', 'page-media.js', 'demoday.js', 'kinetic-page.js', 'kinetic-official-page.js',
+  'games/survivor-616/index.html', 'games/kinetic-souls/index.html', 'games/kinetic-classic/index.html', 'games/kinetic-ks2/index.html', 'games/pongfall/index.html']) {
   if (!existsSync(resolve(dist, item))) throw new Error(`Missing deploy output: ${item}`);
 }
 

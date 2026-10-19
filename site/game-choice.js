@@ -4,11 +4,12 @@ const sources = {
   survivor: () => import('/survivor-preview.js?v=gameplay-2'),
   classic: () => import('/kinetic-preview.js?v=gameplay-2'),
   ks2: () => import('/kinetic-preview.js?v=gameplay-2'),
+  pongfall: () => import('/pongfall-preview.js?v=gameplay-1'),
 };
 const pending = new Map();
 
 function sourceFor(type) {
-  const key = type === 'survivor' ? 'survivor' : 'kinetic';
+  const key = type === 'survivor' ? 'survivor' : type === 'pongfall' ? 'pongfall' : 'kinetic';
   if (!pending.has(key)) pending.set(key, sources[type]());
   return pending.get(key);
 }
@@ -36,7 +37,7 @@ export function mountGameChoices(root = document) {
     const { ctx, width, height } = item;
     if (!width || !height) return;
     if (!item.scene) {
-      ctx.fillStyle = item.type === 'survivor' ? '#131722' : '#171421';
+      ctx.fillStyle = item.type === 'survivor' ? '#131722' : item.type === 'pongfall' ? '#0b0e14' : '#171421';
       ctx.fillRect(0, 0, item.canvas.width, item.canvas.height);
       return;
     }
@@ -47,7 +48,7 @@ export function mountGameChoices(root = document) {
     item.loading = true;
     sourceFor(item.type).then(module => {
       if (stopped) return;
-      item.scene = module.createPreview(item.type === 'survivor' ? undefined : item.type);
+      item.scene = module.createPreview(item.type === 'survivor' || item.type === 'pongfall' ? undefined : item.type);
       paint(item, FRAME_MS, !motionEnabled());
       schedule();
     }).catch(error => {

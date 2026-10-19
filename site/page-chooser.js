@@ -8,6 +8,7 @@
   const bundles = {
     'survivor-616': { url: 'https://survivor.gsix.online/demoday.js', api: 'Survivor616DemoDay' },
     'kinetic-souls': { url: `${bundleOrigin}/kinetic-official-page.js`, api: 'KineticSoulsOfficialPage' },
+    pongfall: { url: `${bundleOrigin}/pongfall-page.js`, api: 'PongFallPageMode' },
     'experimental-shooter': { url: `${bundleOrigin}/kinetic-page.js`, api: 'KineticSoulsPage' },
   };
   let menu = null;
@@ -30,6 +31,7 @@
   }
   function active() {
     if (hostWindow.Survivor616DemoDay?.isRunning()) return 'survivor-616';
+    if (hostWindow.PongFallPageMode?.isRunning()) return 'pongfall';
     if (hostWindow.KineticSoulsOfficialPage?.isRunning()) return 'kinetic-souls';
     if (hostWindow.KineticSoulsPage?.isRunning()) return 'kinetic-souls';
     return null;
@@ -37,6 +39,7 @@
   function close() { menu?.remove(); menu = null; }
   function stop() {
     hostWindow.Survivor616DemoDay?.stop(true);
+    hostWindow.PongFallPageMode?.stop();
     hostWindow.KineticSoulsOfficialPage?.stop();
     hostWindow.KineticSoulsPage?.stop();
   }
@@ -75,7 +78,9 @@
       .choices{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}.choice{min-height:170px;padding:20px;text-align:left;border:1px solid #ffffff43;background:#172032;color:#fff;cursor:pointer}
       .choice:hover,.choice:focus-visible{border-color:#f09a79;outline:none}.choice[data-mode="kinetic-souls"]:hover,.choice[data-mode="kinetic-souls"]:focus-visible{border-color:#7be6ff}
       .choice[data-variant="classic"]{border-color:#7be6ff;box-shadow:inset 0 0 0 1px #7be6ff66}
+      .choice[data-mode="pongfall"]:hover,.choice[data-mode="pongfall"]:focus-visible{border-color:#ffb45f}
       .choice small{display:block;font:700 11px ui-monospace,monospace;letter-spacing:.12em;color:#f09a79}.choice[data-mode="kinetic-souls"] small{color:#7be6ff}
+      .choice[data-mode="pongfall"] small{color:#ffb45f}
       .choice strong{display:block;margin:14px 0;font:900 32px Impact,system-ui,sans-serif;text-transform:uppercase}.choice span{color:#c3c7d1;line-height:1.4}
       .close{border:1px solid #ffffff55;background:#ffffff12;color:#fff;padding:6px 10px;font-size:20px;cursor:pointer}
       .media{margin-top:14px;padding:13px;border:1px dashed #7be6ff;background:#102638}.media label{display:block;font-weight:800;cursor:pointer}.media input{display:block;margin-top:8px;max-width:100%;color:#fff}.media p{font-size:12px;margin:7px 0 0}
@@ -85,6 +90,7 @@
       <p>Play over this whole website. Leaving restores it.</p><div class="choices">
         <button class="choice" data-mode="survivor-616" type="button"><small>01 / SURVIVAL</small><strong>Survivor 616</strong><span>Outlast waves and break page elements.</span></button>
         <button class="choice" data-mode="kinetic-souls" type="button"><small>02 / TEAM BATTLE</small><strong>Kinetic Souls</strong><span>Spawn left and right teams to battle across this page.</span></button>
+        <button class="choice" data-mode="pongfall" type="button"><small>03 / PAGE PINBALL</small><strong>PongFall</strong><span>Return the source game's ball and break this page to reveal its arena.</span></button>
       </div><details class="media"><summary>Experimental</summary><button type="button" data-mode="experimental-shooter">Page shooter experiment</button></details><div class="media"><label for="lok-page-media-file">Add your image or video to this page</label><input id="lok-page-media-file" type="file" accept="image/*,video/mp4,video/webm,video/ogg"><p role="status">Private to this browser session. Move it, then choose a game.</p></div></div></div>`;
     shadow.querySelector('.close').addEventListener('click', close);
     shadow.querySelector('.shade').addEventListener('click', (event) => { if (event.target.classList.contains('shade')) close(); });

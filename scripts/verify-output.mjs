@@ -3,7 +3,7 @@ import { dirname, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 const dist = resolve(dirname(fileURLToPath(import.meta.url)), '..', 'dist');
-const games = ['survivor-616', 'kinetic-souls', 'kinetic-classic', 'kinetic-ks2'];
+const games = ['survivor-616', 'kinetic-souls', 'kinetic-classic', 'kinetic-ks2', 'pongfall'];
 
 function requireFile(path) {
   if (!existsSync(path) || !statSync(path).isFile() || statSync(path).size === 0) {
@@ -11,7 +11,7 @@ function requireFile(path) {
   }
 }
 
-for (const asset of ['index.html', 'app.js', 'style.css', 'game-choice.js', 'game-choice.css', 'survivor-preview.js', 'kinetic-preview.js', 'favicon.svg', 'demoday.js', 'kinetic-official-page.js']) {
+for (const asset of ['index.html', 'app.js', 'style.css', 'game-choice.js', 'game-choice.css', 'survivor-preview.js', 'kinetic-preview.js', 'pongfall-preview.js', 'pongfall-page.js', 'pongfall-page-world.mjs', 'pongfall-page-input.mjs', 'pongfall-page-compositor.mjs', 'pongfall-page-targets.mjs', 'favicon.svg', 'demoday.js', 'kinetic-official-page.js']) {
   requireFile(resolve(dist, asset));
 }
 
@@ -32,7 +32,7 @@ for (const game of games) {
 }
 
 const revisions = JSON.parse(readFileSync(resolve(dist, 'build.json'), 'utf8'));
-for (const revision of [revisions.survivor616, revisions.kineticSouls, revisions.kineticOfficial]) {
+for (const revision of [revisions.survivor616, revisions.kineticSouls, revisions.kineticOfficial, revisions.pongfall]) {
   if (!/^[0-9a-f]{40}$/.test(revision)) throw new Error('Invalid game revision in build.json');
 }
 

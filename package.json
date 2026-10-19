@@ -7,7 +7,8 @@
   },
   "scripts": {
     "build": "node scripts/build.mjs",
-    "test:bridge": "node --test scripts/bridge-protocol.test.mjs",
+    "test:bridge": "node --test scripts/bridge-protocol.test.mjs scripts/page-run-protocol.test.mjs scripts/pongfall-page-world.test.mjs scripts/pongfall-page-input.test.mjs scripts/pongfall-page-compositor.test.mjs scripts/pongfall-page-targets.test.mjs games/kinetic-official/page-mode/team-sides.test.mjs games/kinetic-official/page-mode/materials.test.mjs games/kinetic-official/page-mode/impact-physics.test.mjs games/kinetic-official/page-mode/fracture.test.mjs games/kinetic-official/page-mode/glass-shards.test.mjs games/kinetic-official/page-mode/hold-repeat.test.mjs games/kinetic-official/page-mode/effects.test.mjs",
+    "verify:kinetic-parity": "node scripts/verify-kinetic-parity.mjs",
     "verify:output": "node scripts/verify-output.mjs"
   },
   "devDependencies": {
