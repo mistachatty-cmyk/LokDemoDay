@@ -320,3 +320,13 @@ The next milestone is material-specific break behavior on the existing page-size
 - **Browser:** the local build rendered the game-choice surface, but browser clicks did not open its game launch dialog, blocking a match-level visual check. The preview is deployment-protected. Visible crack growth at normal scale/mobile and the Reduced Motion render gate still need interactive browser verification.
 - **Preview:** `https://lok-demo-j51ri210u-mistachatty-cmyks-projects.vercel.app` reached Ready for Demo Day commit `9f087c707927e101ccfb66a690254caecb7979e5`. Authenticated `/build.json` reports Kinetic source pin `c01a854232cfd7822cbd08a9a0e32436798bb221`; `/kinetic-official-page.js` returned HTTP 200 (149,436 bytes).
 - **Next:** verify fracture marks visually on page targets for both versions; then implement one distinct break silhouette, starting with glass/media shards.
+
+### Execution record — Kinetic held-key repeat regression (2026-10-19)
+
+- **Production evidence:** `https://demo.gsix.online/build.json` reports Kinetic page adapter revision `9c68fcdb457131cba582307bf35fdf58a202d06b`. That revision returns early for `event.repeat`, so holding A or L only spawns once. The existing review branch had the intended held-key loop, but no direct regression test for its cadence.
+- **Change:** extracted the hold lifecycle into a testable scheduler. The initial keydown spawns immediately; repeated browser keydown events do not reset its clock; A and L then repeat independently every 150 ms until keyup. Long frame stalls do not create catch-up bursts. Pointer holds use the same scheduler.
+- **Source pin:** Kinetic source branch `codex/page-arena-destruction-physics`, commit `79bf2caaa713ee46a5b474003d49aeb69245730c`, pushed. Demo Day build pin updated; remaining source pins unchanged.
+- **Checks:** regression tests cover initial/OS-repeat keydowns, 150 ms cadence, independent sides, and stopping on keyup. All 50 bridge/page-mode tests and the Kinetic parity guard passed; Classic typecheck, standalone build, and page adapter bundle build passed. Full integrated build and output verification passed, including Classic and KS2 standalone builds and the shared page adapter. Vercel preview verification is pending the updated root branch deployment.
+- **Release note:** production remains on `9c68fc…` until the existing Demo Day review branch is merged and deployed. The review preview will carry this fix; no production promotion was performed.
+- **Next:** inspect the preview build manifest and page-adapter response, then continue the roadmap's current Kinetic destruction and creator-tool phase.
+

@@ -105,3 +105,7 @@ The wider Demo Day roadmap lives in [DEMO_DAY_ROADMAP.md](DEMO_DAY_ROADMAP.md). 
 6. Review the Vercel preview and source changes before any production merge or promotion.
 
 No production promotion, live account write, external ad activation, or Twitch event subscription is implied by a successful preview build.
+
+### Held spawn input regression (2026-10-19)
+
+Production `build.json` was pinned to source revision `9c68fcdb457131cba582307bf35fdf58a202d06b`, where the A/L keydown handler discarded all `event.repeat` events. The reviewed source now tracks each physical key from initial keydown to keyup and repeats the selected team spawn every 150 ms. A and L can run simultaneously; keyup, blur, pause, match completion, and page restoration clear held state. Pointer and keyboard holds share the tested interval scheduler. Regression tests cover repeated browser events, interval timing, both sides, and release. Standalone Kinetic controls are unaffected.
