@@ -178,6 +178,7 @@ function openKineticVersion(context) {
 
 function runningPageMode() {
   if (window.Survivor616DemoDay?.isRunning()) return 'survivor-616';
+  if (window.PongFallPageMode?.isRunning()) return 'pongfall';
   if (window.KineticSoulsOfficialPage?.isRunning()) return 'kinetic-souls';
   if (window.KineticSoulsPage?.isRunning()) return 'kinetic-souls';
   return null;
@@ -185,6 +186,7 @@ function runningPageMode() {
 
 function stopPageModes() {
   window.Survivor616DemoDay?.stop(true);
+  window.PongFallPageMode?.stop();
   window.KineticSoulsOfficialPage?.stop();
   window.KineticSoulsPage?.stop();
 }
@@ -218,7 +220,7 @@ function showGame(id, updateHistory = true, variant = 'classic') {
   if (id === 'kinetic-souls') {
     gameTip.textContent = 'A spawns the left team · L spawns the right team. Open Settings for opponents, modifiers, and the Bestiary.';
   } else if (id === 'pongfall') {
-    gameTip.textContent = 'Move with mouse, touch, or W/S · thrust with Space · pause with P · zoom with Z. PongFall page combat is being mapped from its source game.';
+    gameTip.textContent = 'Move with mouse, touch, or W/S · thrust with Space · pause with P · zoom with Z.';
   }
   playerStatus.textContent = 'Loading game…';
   loading.textContent = 'LOADING GAME…';
@@ -310,12 +312,12 @@ window.addEventListener('popstate', () => {
 
 const overlayLoading = {};
 function loadOverlay(mode) {
-  const api = mode === 'survivor-616' ? 'Survivor616DemoDay' : mode === 'experimental-shooter' ? 'KineticSoulsPage' : 'KineticSoulsOfficialPage';
+  const api = mode === 'survivor-616' ? 'Survivor616DemoDay' : mode === 'pongfall' ? 'PongFallPageMode' : mode === 'experimental-shooter' ? 'KineticSoulsPage' : 'KineticSoulsOfficialPage';
   if (window[api]) return Promise.resolve();
   if (!overlayLoading[mode]) {
     overlayLoading[mode] = new Promise((resolve, reject) => {
       const script = document.createElement('script');
-      script.src = mode === 'survivor-616' ? '/demoday.js' : mode === 'experimental-shooter' ? '/kinetic-page.js' : '/kinetic-official-page.js';
+      script.src = mode === 'survivor-616' ? '/demoday.js' : mode === 'pongfall' ? '/pongfall-page.js' : mode === 'experimental-shooter' ? '/kinetic-page.js' : '/kinetic-official-page.js';
       script.onload = () => window[api] ? resolve() : reject(new Error('Demo failed to initialize.'));
       script.onerror = () => reject(new Error('Demo failed to load.'));
       document.head.append(script);
@@ -350,11 +352,13 @@ kineticVersionMenu.querySelectorAll('[data-kinetic-variant]').forEach((button) =
   else void startPageMode('kinetic-souls', variant);
 }));
 async function startPageMode(mode, variant = 'classic') {
-  homeMessage.textContent = `Starting ${mode === 'survivor-616' ? 'Survivor 616' : mode === 'experimental-shooter' ? 'Experimental shooter' : `Kinetic Souls ${variant}`} over this page…`;
+  const title = mode === 'survivor-616' ? 'Survivor 616' : mode === 'pongfall' ? 'PongFall' : mode === 'experimental-shooter' ? 'Experimental shooter' : `Kinetic Souls ${variant}`;
+  homeMessage.textContent = `Starting ${title} over this page…`;
   try {
     stopPageModes();
     await loadOverlay(mode);
-    const result = window[mode === 'survivor-616' ? 'Survivor616DemoDay' : mode === 'experimental-shooter' ? 'KineticSoulsPage' : 'KineticSoulsOfficialPage'].start({ variant });
+    const api = mode === 'survivor-616' ? 'Survivor616DemoDay' : mode === 'pongfall' ? 'PongFallPageMode' : mode === 'experimental-shooter' ? 'KineticSoulsPage' : 'KineticSoulsOfficialPage';
+    const result = window[api].start({ variant });
     homeMessage.textContent = result?.reason ? `Could not start: ${result.reason}` : '';
   } catch (error) {
     homeMessage.textContent = error.message;

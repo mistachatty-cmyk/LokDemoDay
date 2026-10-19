@@ -217,3 +217,13 @@ The current parity catalog, source mapping, documentation, and adapter changes a
 - **Verification:** parity guard passed; integrated build produced all game routes and outputs; local browser confirms PongFall remains standalone-only pending page adapter.
 - **Next:** safe, bounded page-target discovery, stable document rectangles, scroll/resize behavior and reversible teardown. Continue to keep PongFall out of the page mode picker until source matches can damage host targets and restore the page.
 - **Preview:** `https://lok-demo-phyqrq6r5-mistachatty-cmyks-projects.vercel.app` reached Ready for root commit `d9cefa975e69a6727a54c0bd94c4fc4862ba8610`. Authenticated `/build.json` retained the PongFall source pin; the compositor module and full-game route returned HTTP 200. The protected preview's equivalent local build was opened in the browser.
+
+### Execution record — PongFall page mode launch (2026-10-19)
+
+- **Phase:** PongFall catalog parity, live page play adapter.
+- **Change:** added a standalone Demo Day page adapter around the pinned PongFall Classic simulation, AI, effects and renderer. It maps pointer/touch movement and page targets through document coordinates, scans a bounded set of visible page targets, damages them from source ball contacts, and reveals the source arena through clipped apertures. The native Wreck menu and bookmarklet now offer PongFall alongside Survivor 616 and Kinetic Souls. The standalone PongFall game is still a separate launch path.
+- **Source pin:** unchanged at `a3136c66efdc1612c67fade4277c88e6ca629f24`; only Demo Day changed.
+- **Checks:** 27 bridge/page-mode tests passed; Kinetic parity guard passed; integrated `node scripts/build.mjs` built all source pins and verified `pongfall-page.js` and target helper output; app and bookmarklet syntax checks and `git diff --check` passed.
+- **Browser:** local production build exposed all three page choices. PongFall ran with the source NPC; depth advanced and a page target was destroyed/revealed. Restore removed the overlay while leaving the Demo Day document intact. Browser testing covered desktop layout; touch device behavior remains to be checked.
+- **Limit:** page target contacts add visual damage without changing PongFall scoring or ball physics. The overlay shows end-of-match results but does not send account records. No database writes, rewards, ads, or Twitch integrations.
+- **Next:** push to the existing review branch and inspect its Vercel preview. Continue bounded parity work on touch/scroll behavior and page-target feedback, then resume improvements for Survivor and Kinetic in their planned phases.

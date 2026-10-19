@@ -21,3 +21,8 @@ await build({
   entryPoints: [resolve(root, 'previews/pongfall.ts')],
   outfile: resolve(root, 'dist/pongfall-preview.js'),
 });
+await build({
+  ...common,
+  entryPoints: [resolve(root, 'previews/pongfall-page.ts')],
+  outfile: resolve(root, 'dist/pongfall-page.js'),
+});

@@ -7,7 +7,7 @@
 .lok-choice canvas{display:block;width:100%;height:100%;pointer-events:none}
 .choice-survivor,.survivor-card{--choice-accent:#ff9777;--choice-glow:#f477584b}
 .choice-kinetic,.kinetic-card{--choice-accent:#bfa8ff;--choice-glow:#9f8afa49}
-.pongfall-card{--choice-accent:#7ce6ff;--choice-glow:#43c9ec4d}
+.pongfall-card,.choice-pongfall{--choice-accent:#7ce6ff;--choice-glow:#43c9ec4d}
 .game-card.lok-choice{display:block;width:100%;padding:0;text-align:left;cursor:pointer}
 .game-card.lok-choice .card-topline,.game-card.lok-choice .card-content{display:flex}
 .game-card.lok-choice .card-content{flex-direction:column;align-items:stretch}
