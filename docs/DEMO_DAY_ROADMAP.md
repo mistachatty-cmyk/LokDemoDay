@@ -209,3 +209,11 @@ The current parity catalog, source mapping, documentation, and adapter changes a
 - **Limit:** coordinate contract is not yet connected to a visible mode. Page rendering still needs a damage aperture compositor that can use original PongFall arena art without covering healthy website content; do not expose the page mode until then.
 - **Next:** prove a bounded rendering/composition seam (or document that an upstream rendering layer API is required), then connect source ball impacts to reversible target damage and page restoration.
 - **Preview:** `https://lok-demo-g7rdaatb9-mistachatty-cmyks-projects.vercel.app` reached Ready for root commit `0a0c8f5b9adaa9f5922842c12486ae02779fb7d6`. Authenticated `/build.json` retained the pinned PongFall source revision; the new module and full-game route both returned HTTP 200. Vercel browser authentication prevented an interactive remote pass, so the equivalent local integrated build received the browser check.
+
+### Execution record — PongFall damaged-page compositor (2026-10-19)
+
+- **Implementation:** added a bounded clipping helper that projects damaged document rectangles into viewport apertures and calls the pinned PongFall renderer only within their union. Partial reveal expands from each target center; fully destroyed targets open their full rectangle. Added 5 focused tests; bridge suite now passes 23 tests. Added the module to required deployment output.
+- **Source pin:** unchanged at PongFall `a3136c66efdc1612c67fade4277c88e6ca629f24`; no standalone renderer modifications.
+- **Verification:** parity guard passed; integrated build produced all game routes and outputs; local browser confirms PongFall remains standalone-only pending page adapter.
+- **Next:** safe, bounded page-target discovery, stable document rectangles, scroll/resize behavior and reversible teardown. Continue to keep PongFall out of the page mode picker until source matches can damage host targets and restore the page.
+- **Preview:** pending deployment inspection.
