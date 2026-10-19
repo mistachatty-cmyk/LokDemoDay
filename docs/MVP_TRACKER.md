@@ -15,7 +15,9 @@ This is the release checklist for `demo.gsix.online` and `gsix.online/games/demo
 - [x] Starter maps, local image upload, local MP4/WebM upload, pause, timeline scrubbing, movable broken pieces, rebuild, PNG export, and short WebM recording.
 - [x] Website field opens a page for Survivor's reversible overlay and explains CSP/browser restrictions.
 - [x] YouTube URL uses the official player, separate from the destructible uploaded-video canvas.
-- [x] Both games can fight over the full live webpage. Survivor uses its established overlay; Kinetic has a new page arena with momentum movement, dash, aimed shots, enemies, and DOM targets. The saved editor scenes are still a separate surface.
+- [x] Both games can fight over the full live webpage. Survivor uses its established overlay; Kinetic page mode runs the selected Classic/KS2 team match over DOM targets. Its in-match sandbox targets share the Kinetic physics and destruction path.
+- [x] Kinetic Classic and KS2 page modes use a two-minute match with Player 1 versus a toggleable right-side NPC, timed Player 2 takeover, KO scoring, result screen, and rematch. Creator props/media use the same Kinetic target collision and damage path. Preview cards are excluded from both games' page scanners.
+- [x] The Kinetic in-match Creative Sandbox has starter prop scenes, local image/video targets, object movement and physics, pause, video and match replay scrubbing, rebuild, local save/open, still export, and supported-browser WebM capture. The panel minimizes while combat continues.
 - [x] Place an image or supported video on the live webpage as a movable session target before choosing either game. The file stays in this browser and can be removed. Kinetic's page arena has been browser-tested against an uploaded image.
 - [ ] Connect the page arenas and studio media through a shared target adapter so images, video, and site elements can use the same combat modes.
 - [x] Save, reopen, and delete local studio scenes in browser storage, including private uploaded media and piece positions.
