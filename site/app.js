@@ -248,9 +248,9 @@ document.querySelectorAll('[data-home-game]').forEach((button) => button.addEven
   homeChoice = button.dataset.homeGame;
   document.getElementById('home-play-title').textContent = games[homeChoice].title;
   document.getElementById('home-play-description').textContent = homeChoice === 'pongfall'
-    ? 'Open the complete PongFall game. Its page arena adapter is still in development.'
+    ? 'Play over this live page with PongFall, or open its complete standalone game.'
     : `Choose how to play ${games[homeChoice].title}.`;
-  homePlayMenu.querySelector('[data-home-route="page"]').hidden = homeChoice === 'pongfall';
+  homePlayMenu.querySelector('[data-home-route="page"]').hidden = false;
   homePlayMenu.querySelector('[data-home-route="full"] .game-menu-action').textContent = homeChoice === 'kinetic-souls' ? 'CHOOSE VERSION ↗' : homeChoice === 'pongfall' ? 'PLAY PONGFALL ↗' : 'PLAY SURVIVOR ↗';
   homePlayMenu.showModal();
   homePlayMenu.querySelector(homeChoice === 'pongfall' ? '[data-home-route="full"]' : '[data-home-route="page"]').focus();
@@ -260,7 +260,7 @@ homePlayMenu.querySelectorAll('[data-home-route]').forEach((button) => button.ad
   homePlayMenu.close();
   if (homeChoice === 'kinetic-souls') {
     openKineticVersion(route === 'page' ? 'page' : 'full');
-  } else if (route === 'page') void startPageMode('survivor-616');
+  } else if (route === 'page') void startPageMode(homeChoice === 'pongfall' ? 'pongfall' : 'survivor-616');
   else showGame(homeChoice);
 }));
 document.getElementById('close-home-play').addEventListener('click', () => homePlayMenu.close());
