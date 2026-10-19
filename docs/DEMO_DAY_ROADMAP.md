@@ -191,6 +191,34 @@ For every slice, record: source commit, feature status, code paths, test command
 
 The current parity catalog, source mapping, documentation, and adapter changes are well-scoped engineering work and do not require a higher-tier model. If a future slice requires reconstructing unshared game behavior across multiple repositories, designing trusted account/reward security, or evaluating Twitch/ad policy at launch, first document the question, inspected source, alternatives, and acceptance tests here. Use a higher-tier review only for that bounded decision; keep all findings in this repository so work survives a model change.
 
+## Merge checkpoint and next destruction plan (2026-10-19)
+
+### Merge readiness
+
+- Kinetic source PR [#10](https://github.com/mistachatty-cmyk/K.Souls---Classic/pull/10), head `c01a854232cfd7822cbd08a9a0e32436798bb221`, targets `master`. GitHub reports `mergeable=true`, `mergeable_state=clean`; the visible PR shows all four checks passing and both Classic and KS2 previews Ready.
+- Demo Day PR [#15](https://github.com/mistachatty-cmyk/LokDemoDay/pull/15), head `7acf5673668ac88315fea321783ec4436dc79e3c`, targets `main`. GitHub reports `mergeable=true`, `mergeable_state=clean`; Vercel Preview Comments and `build` checks pass.
+- Merge order is source PR #10 first, then Demo Day PR #15. Use a merge commit for the source PR so the pinned source commit remains reachable; then merge Demo Day. Merging Demo Day to `main` will trigger the repository's normal deployment workflow, as expected by the user's explicit “MERGE THEN PLAN” request.
+- **Current blocker:** both PRs remain open. The connected GitHub merge action returns “not available to the model,” while the browser session is signed out of GitHub. The authenticated API merge attempt was rejected by the execution policy before it ran. No repository state was changed by these failed attempts. Resume with an authorized GitHub merge capability; do not rewrite or force-push either branch.
+
+### Destruction work plan
+
+The next milestone is material-specific break behavior on the existing page-sized Kinetic world. Keep the overlay reversible, retain source game combat unchanged, and build on the deterministic bounded fracture maps in `docs/KINETIC_DESTRUCTION_PROTOTYPE.md`.
+
+1. **Visual baseline and crack legibility.** Capture the integrated local build at desktop and narrow mobile sizes with ordinary text, images, uploaded media, and all four target materials. Run the same short scripted impacts in Classic and KS2. Tune line contrast, clamp behavior, overlap, and Reduced Motion presentation against those captures. Acceptance: every fracture remains inside its target, readable text stays legible before the break threshold, and Classic/KS2 have equivalent damage geometry while retaining their own palette.
+2. **Glass and media break slice.** On break, turn a glass/media target into a small deterministic set of clipped polygon shards from the existing fracture map. Give shards outward velocity from the impact point with a capped count/lifetime; reveal the arena through the removed target area. Keep the original page node untouched for Restore/Rebuild. Acceptance: repeated seeds produce the same shard layout; shard coordinates remain target-local; destruction and restoration work for image, video poster, SVG, and canvas candidates; reduced motion skips shard travel while preserving the final broken state.
+3. **Paper/text slice.** Add a crease-to-split transition and two opposed paper strips only after glass is stable. Preserve text selection/readability until break and avoid duplicating accessible text into the overlay. Acceptance: headings/paragraphs use paper behavior, text itself is never captured into long-lived debris, and Restore returns the original DOM and scroll position.
+4. **Stone/structure slice.** Add a few chunky chips and short deep seams for section-like structures, with the current sturdy profile controlling the break threshold. Acceptance: chip count and impulse are capped; larger targets do not produce unbounded canvas work; low effects reduces decorative pieces without altering durability or score.
+5. **Digital surface slice.** Add clipped pixel blocks and a brief local scanline offset for digital targets. Keep displacement inside the target and disable the offset under Reduced Motion. Acceptance: no flash covers the entire page, no page layout is mutated, and effects are stable at high device pixel ratio.
+6. **Shared debris and physics budget.** After material-specific shapes have distinct silhouettes, route them through one bounded debris pool with target-local collision bounds, lifetime cleanup, and a global per-frame budget. Acceptance: particles cannot collide with protected Demo Day controls; caps hold with at least 30 simultaneous targets; returning to the page removes all overlay-owned bodies and listeners.
+7. **Creator and replay integration.** Let the existing creator pause, scrub, rebuild, and export the material break sequence using deterministic seeds. Acceptance: replay produces the same final geometry; scrubbing cannot advance a live match; rebuilding restores both the overlay target state and host page view.
+
+### Release gates for this plan
+
+- Each slice has deterministic geometry/physics tests, `npm run verify:kinetic-parity`, relevant Classic and KS2 builds, and the full integrated build.
+- Check the Vercel preview build artifact and its pinned Kinetic revision for each slice. Complete a local browser playthrough when deployment protection blocks interactive preview access; record that limitation rather than claiming a remote playthrough.
+- Test mouse, keyboard, narrow viewport, and OS Reduced Motion. Physical touch remains a separate device gate.
+- Do not merge the next destruction feature until source and Demo Day previews pass, page restoration is confirmed, and the visible break/rebuild path has been checked in both Kinetic versions.
+
 ### Execution record — PongFall catalog and full-game entry (2026-10-19)
 
 - **Source evidence:** PongFall is `mistachatty-cmyk/PongFall` at `a3136c66efdc1612c67fade4277c88e6ca629f24`. Its standalone site boots `src/core/createPongFall.ts`; the loop uses the deterministic `src/sim/world.ts` simulation, source AI, and the source renderer (`src/render/draw.ts`, `shaft.ts`, `eyes.ts`, `glass.ts`). Visible play includes a falling shaft, a two-sided paddle rally, breakable glass, wall eyes, and source mode/settings panels. The game's current mount assumes a dedicated viewport and draws an opaque background, so it cannot safely be represented as page combat by simply mounting the standalone canvas over a webpage.
