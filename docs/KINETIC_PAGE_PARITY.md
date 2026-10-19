@@ -13,10 +13,11 @@ The Classic and KS2 repositories are the source of truth for the fighters, Besti
 - Page-native match rules include 1, 2, 3, or 5-minute matches (2 minutes by default), sides and NPC, match results, LoK Bounty, Shrinking Arena, page scanning, target damage, and reversible cleanup. Duration changes apply to the next match; Shrinking Arena follows the active match length. The sandbox panel shares the match's targets and physics.
 - Completion events include elapsed time and configured match length. The shell validates variant, run ID, duration, result, score bounds, and timestamp before forwarding the personal record.
 - The page-mode setup adds a next-match NPC-side selector. Player 1 starts opposite the selected NPC; controls, temporary Player 2 takeover, HUD counts, result totals, and run records all use the selected physical-side mapping. Standalone Classic and KS2 do not expose NPC-side selection; it is a page-world adapter rule.
-- Current pinned source for page-mode setup, material, and directional impact behavior: `bd9344cf382390aa2aab696aa094650208ef6009`.
+- Current pinned source for page-mode setup, material, directional impact, and low-effects behavior: `2ab8dc111f6e58cf7fd81c49af152b9608b2286b`.
 - The HUD now uses Kinetic's compact monospace visual language, separate Classic and KS2 accents, legible team scores, match time, and page-break chain feedback.
 - Page targets use an explicit, shared material profile in Classic and KS2: media is fragile glass, text is paper, semantic panels are sturdy stone, and other page/creator objects are digital. Each profile changes effective impact damage, durability, and its three readable damage-stage labels; boss health still scales on top of the material rule.
 - Hit cracks follow the incoming vector from fighter collisions, projectiles, chain blasts, and the boss pulse, and are clipped to the struck target's bounds. Dynamic creator props receive a bounded directional impulse; collision recoil uses the fighter's pre-bounce velocity.
+- Settings offers Full and Low visual effects. Low reduces particle and shard counts to 30% and screen shake to 20% without changing damage, movement, or scoring. System Reduced Motion takes precedence: it disables shake, fighter flashes, moving debris, and shockwaves while keeping a static themed arena and readable damage marks.
 
 ## Drift prevention
 
@@ -40,10 +41,10 @@ The wider Demo Day roadmap lives in [DEMO_DAY_ROADMAP.md](DEMO_DAY_ROADMAP.md). 
 ### 2. Destruction and combat
 
 - Material-specific durability, impact response, and readable three-stage feedback now cover glass media, paper text, stone panels, and digital creator/page objects. Further test and tune against more real host pages before widening the classifications.
-- Tune fighter recoil and directional crack branches with slow-motion/reduced-effects checks; target cracks and creator-prop knockback now use the incoming vector.
+- Tune fighter recoil and directional crack branches with slow-motion/reduced-effects checks; target cracks and creator-prop knockback now use the incoming vector. Full/Low visual intensity and Reduced Motion behavior are implemented; broader fighter-recoil tuning remains open.
 - Give fighters and weapons meaningful page-target interactions, including boss telegraphs, target knockback, chain reactions, and short hit-stop that respects reduced motion.
 - Keep all edits in the overlay or its scene objects. Never mutate the host page's DOM to simulate damage.
-- Add a low-effects mode for slow devices and let users tune shake, particles, and flashes.
+- Add broader low-effects tuning for slow devices, including per-effect shake, particles, flashes, and mobile performance controls.
 
 **Acceptance:** a player can identify which fighter hit which target, see damage progress, and restore the exact original page after the run. Low-effects and reduced-motion modes remain playable.
 
