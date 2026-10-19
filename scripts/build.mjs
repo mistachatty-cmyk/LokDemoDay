@@ -91,6 +91,9 @@ const officialPage = resolve(officialRoot, 'classic', 'dist-page', 'kinetic-offi
 if (!existsSync(officialPage)) throw new Error('Official Kinetic page mode was not built.');
 cpSync(officialPage, resolve(dist, 'kinetic-official-page.js'));
 
+// Compile the selector simulations from the same pinned game source as the full builds.
+run('node', ['scripts/build-previews.mjs'], root);
+
 // The Survivor game also exposes public media and a standalone page-takeover
 // bundle at root-relative URLs. Keep these URLs working on the Demo Day domain.
 for (const item of ['art', 'music', 'lok-soundtrack.json', 'lok-updates.json', 'demoday.js']) {
@@ -105,7 +108,7 @@ writeFileSync(resolve(dist, 'build.json'), JSON.stringify({
   kineticOfficial: revision(officialRoot, 'kinetic-official'),
 }, null, 2));
 
-for (const item of ['index.html', 'style.css', 'app.js', 'game-choice.css', 'game-choice.js', 'bridge-protocol.mjs', 'studio.css', 'studio.js', 'studio-projects.mjs', 'page-chooser.js', 'page-media.js', 'demoday.js', 'kinetic-page.js', 'kinetic-official-page.js',
+for (const item of ['index.html', 'style.css', 'app.js', 'game-choice.css', 'game-choice.js', 'survivor-preview.js', 'kinetic-preview.js', 'bridge-protocol.mjs', 'studio.css', 'studio.js', 'studio-projects.mjs', 'page-chooser.js', 'page-media.js', 'demoday.js', 'kinetic-page.js', 'kinetic-official-page.js',
   'games/survivor-616/index.html', 'games/kinetic-souls/index.html', 'games/kinetic-classic/index.html', 'games/kinetic-ks2/index.html']) {
   if (!existsSync(resolve(dist, item))) throw new Error(`Missing deploy output: ${item}`);
 }
