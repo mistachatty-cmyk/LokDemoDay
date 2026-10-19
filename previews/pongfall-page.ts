@@ -4,6 +4,7 @@ import { createFx, feedFx } from '../games/pongfall/src/render/eyes';
 import { newCamera, renderWorld, stepCamera } from '../games/pongfall/src/render/draw';
 import type { GameResult } from '../games/pongfall/src/sim/result';
 import { createPageWorldTransform } from '../site/pongfall-page-world.mjs';
+import { createPageTouchActions } from '../site/pongfall-page-input.mjs';
 import { drawThroughPageApertures, getPageDamageApertures } from '../site/pongfall-page-compositor.mjs';
 import { canPlayPage, scanPageTargetRects } from '../site/pongfall-page-targets.mjs';
 
@@ -25,6 +26,7 @@ class PongFallPage {
   observer: MutationObserver;
   resizeObserver: ResizeObserver;
   world: World;
+  touchActions: ReturnType<typeof createPageTouchActions>;
   camera = newCamera();
   fx = createFx(matchMedia('(prefers-reduced-motion: reduce)').matches);
   running = true;
@@ -52,6 +54,10 @@ class PongFallPage {
     this.originX = scrollX + innerWidth / 2;
     this.originY = scrollY + innerHeight / 2;
     this.world = createWorld({ mode: 'classic', difficulty: 'chill', arenas: 0 }, Date.now() >>> 0);
+    this.touchActions = createPageTouchActions({
+      onThrust: () => { if (this.running && !this.paused) issue(this.world, { k: 'thrust', side: 0 }); },
+      onPower: () => { if (this.running && !this.paused) issue(this.world, { k: 'power', side: 0 }); },
+    });
     this.fx.fogMode = 'low';
     this.host = document.createElement('div');
     this.host.id = 'lok-pongfall-page';
@@ -68,7 +74,7 @@ class PongFallPage {
       @media(max-width:640px){.hud{flex-direction:column;align-items:stretch}.card{max-width:none}.actions{justify-content:flex-start;flex-wrap:wrap}.status{bottom:78px}}
       @media(prefers-reduced-motion:reduce){*,*:before,*:after{scroll-behavior:auto!important;transition:none!important}}
     </style><canvas class="canvas" aria-hidden="true"></canvas>
-      <div class="hud"><div class="card"><div class="brand">PONGFALL // LIVE PAGE ARENA</div><div class="score" data-score>0 : 0</div><div class="meta">W/S or move pointer · Space thrust · E pinball · P pause</div><div class="meta" data-depth>DEPTH 0 M · TARGETS 0</div></div>
+      <div class="hud"><div class="card"><div class="brand">PONGFALL // LIVE PAGE ARENA</div><div class="score" data-score>0 : 0</div><div class="meta">W/S or move pointer · double-tap thrust · two-finger tap pinball · P pause</div><div class="meta" data-depth>DEPTH 0 M · TARGETS 0</div></div>
       <div class="actions"><button type="button" data-pause>P PAUSE</button><button type="button" data-reset>NEW RUN</button><button type="button" data-exit>RESTORE PAGE</button></div></div>
       <div class="status" data-status role="status">Move the pointer or press W/S. Source game art appears through damaged page targets.</div>`;
     this.canvas = this.root.querySelector('canvas')!;
@@ -89,7 +95,10 @@ class PongFallPage {
     this.root.querySelector('[data-pause]')!.addEventListener('click', () => this.togglePause());
     this.root.querySelector('[data-reset]')!.addEventListener('click', () => this.reset());
     this.root.querySelector('[data-exit]')!.addEventListener('click', () => this.stop());
+    window.addEventListener('pointerdown', this.onPointerDown, { passive: true });
     window.addEventListener('pointermove', this.onPointerMove, { passive: true });
+    window.addEventListener('pointerup', this.onPointerUp, { passive: true });
+    window.addEventListener('pointercancel', this.onPointerCancel, { passive: true });
     window.addEventListener('keydown', this.onKeyDown);
     window.addEventListener('keyup', this.onKeyUp);
     window.addEventListener('blur', this.releaseKeys);
@@ -125,8 +134,26 @@ class PongFallPage {
 
   transform() { return createPageWorldTransform({ originX: this.originX, originY: this.originY, scale: this.scale }); }
 
+  isInteractivePointer(event: PointerEvent) {
+    return event.composedPath().some(node => node instanceof Element
+      && (node.matches('a,button,input,textarea,select,label,summary,iframe,video,audio,[contenteditable="true"],[role="button"],[role="link"]')
+        || Boolean(node.closest('[data-lok-nondestructible],[data-lok-page-ui]'))));
+  }
+
+  onPointerDown = (event: PointerEvent) => {
+    if (this.isInteractivePointer(event)) return;
+    this.touchActions.pointerDown({ pointerId: event.pointerId, pointerType: event.pointerType, x: event.clientX, y: event.clientY });
+  };
+
+  onPointerUp = (event: PointerEvent) => { this.touchActions.pointerUp({ pointerId: event.pointerId, pointerType: event.pointerType }); };
+  onPointerCancel = (event: PointerEvent) => { this.touchActions.pointerCancel(event.pointerId); };
+
   onPointerMove = (event: PointerEvent) => {
     if (this.paused || !this.running) return;
+    if (event.pointerType === 'touch') {
+      this.touchActions.pointerMove({ pointerId: event.pointerId, x: event.clientX, y: event.clientY });
+      if (!event.isPrimary || this.isInteractivePointer(event)) return;
+    }
     const worldPoint = this.transform().toWorld({ x: scrollX + event.clientX, y: scrollY + event.clientY }, this.world.scroll);
     if (!worldPoint || Math.abs(worldPoint.y - this.lastMoveY) < 1) return;
     this.lastMoveY = worldPoint.y;
@@ -145,8 +172,11 @@ class PongFallPage {
   };
 
   onKeyUp = (event: KeyboardEvent) => { this.keys.delete(event.key.toLowerCase()); };
-  releaseKeys = () => this.keys.clear();
-  onVisibility = () => { this.previous = performance.now(); this.accumulator = 0; };
+  releaseKeys = () => { this.keys.clear(); this.touchActions.reset(); };
+  onVisibility = () => {
+    this.previous = performance.now(); this.accumulator = 0;
+    if (document.hidden) this.releaseKeys();
+  };
 
   togglePause() {
     if (!this.running || this.world.status !== 'play') return;
@@ -241,7 +271,9 @@ class PongFallPage {
     if (!this.running) return;
     this.running = false; cancelAnimationFrame(this.frameId);
     this.observer.disconnect(); this.resizeObserver.disconnect(); this.keys.clear();
-    window.removeEventListener('pointermove', this.onPointerMove); window.removeEventListener('keydown', this.onKeyDown);
+    window.removeEventListener('pointerdown', this.onPointerDown); window.removeEventListener('pointermove', this.onPointerMove);
+    window.removeEventListener('pointerup', this.onPointerUp); window.removeEventListener('pointercancel', this.onPointerCancel);
+    window.removeEventListener('keydown', this.onKeyDown);
     window.removeEventListener('keyup', this.onKeyUp); window.removeEventListener('blur', this.releaseKeys);
     document.removeEventListener('visibilitychange', this.onVisibility);
     this.host.remove();

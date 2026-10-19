@@ -37,6 +37,7 @@ The renderer inspection found that omitting `renderWorld`'s initial full-canvas 
 - [x] The adapter uses document coordinates for target identity and rescans after page mutations; resize/scroll mapping and `data-lok-nondestructible` exclusion are implemented.
 - [x] A single reversible overlay owns game canvas and controls. Restore removes it and its observers/listeners without changing the original DOM or styles.
 - The target/object budget, frame pacing, reduced-motion and low-effects behavior are bounded and tested on desktop and touch layouts.
+- [x] The page adapter exposes PongFall touch thrust and pinball gestures while retaining normal document scrolling; control taps, drags, mouse events, and cancelled pointers do not trigger them.
 - [ ] Run results are visible in the overlay; account/game bridge persistence remains a separate integration requiring a PongFall-specific validated result protocol.
 - Existing PongFall source tests remain green; page adapter helper tests cover coordinate conversion, safe target geometry, sensitive-page exclusions, and bounded compositor apertures. Full browser checks cover start, source-render reveal, live page targeting, and restore.
 
@@ -77,3 +78,12 @@ The renderer inspection found that omitting `renderWorld`'s initial full-canvas 
 - **Record boundary:** the overlay shows the final source score and target destruction count, but does not emit an account or game-bridge record yet. Keep account sync deferred until a PongFall-specific validated result contract and receiving-side support are designed and tested; no account/database writes or rewards were added.
 - **Preview:** `https://lok-demo-g0olwbf4i-mistachatty-cmyks-projects.vercel.app` reached Ready for root commit `dc00e60a82902a51a553d0bfb09ad8d8f8e076dd`. Authenticated `vercel curl` confirmed all four source pins unchanged, the homepage returned HTTP 200, and `pongfall-page.js` returned HTTP 200 at 68,192 bytes. Direct browser access redirects to Vercel login; the matching local production build completed the interactive home-card and page-restoration checks.
 - **Next:** continue PongFall parity with target break feedback/physical interaction and mobile controls, while prioritizing the roadmap's remaining Survivor and Kinetic improvements independently.
+
+### Execution record — page-mode touch gestures (2026-10-19)
+
+- **Source:** `src/core/createPongFall.ts` double-tap thrusts within 300 ms / 90 CSS pixels and uses a concurrent second touch for pinball. Its canvas blocks browser touch gestures; page mode cannot do that because players need to scroll the site.
+- **Adapter:** Demo Day now recognizes those gestures without cancelling default page input. Native interactive controls and the overlay's own buttons are excluded. Focused tests cover taps, double taps, distance/time limits, chords, movement, cancellation, ignored controls, reset, and mouse input.
+- **Pin:** gameplay source still matches `a3136c66efdc1612c67fade4277c88e6ca629f24`; documentation-only PongFall review-branch head `65699c19c2a464e2c21d659984da93a985424fd3` records this integration work.
+- **Browser:** the local 390 × 844 viewport showed the updated control help; scrolling reached `scrollY=866` with the HUD fixed and targets rescanned, then Restore Page removed the overlay. This was pointer input on a mobile viewport, not a physical touch device.
+- **Checks:** 6 focused gesture tests, all 42 integrated bridge tests, Kinetic parity guard, and full build passed.
+- **Next:** add clearer hit-stage and break feedback to page targets; verify the gestures on a physical touch device before release.
