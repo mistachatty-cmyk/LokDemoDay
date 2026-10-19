@@ -216,4 +216,4 @@ The current parity catalog, source mapping, documentation, and adapter changes a
 - **Source pin:** unchanged at PongFall `a3136c66efdc1612c67fade4277c88e6ca629f24`; no standalone renderer modifications.
 - **Verification:** parity guard passed; integrated build produced all game routes and outputs; local browser confirms PongFall remains standalone-only pending page adapter.
 - **Next:** safe, bounded page-target discovery, stable document rectangles, scroll/resize behavior and reversible teardown. Continue to keep PongFall out of the page mode picker until source matches can damage host targets and restore the page.
-- **Preview:** pending deployment inspection.
+- **Preview:** `https://lok-demo-phyqrq6r5-mistachatty-cmyks-projects.vercel.app` reached Ready for root commit `d9cefa975e69a6727a54c0bd94c4fc4862ba8610`. Authenticated `/build.json` retained the PongFall source pin; the compositor module and full-game route returned HTTP 200. The protected preview's equivalent local build was opened in the browser.
