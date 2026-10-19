@@ -262,3 +262,12 @@ The current parity catalog, source mapping, documentation, and adapter changes a
 - **Browser:** local 390×844 viewport launched PongFall, scrolled the host document to `scrollY=866` while the fixed HUD stayed at `top=12`, and restored the original document. The screen showed the updated gesture help. Pointer interaction at a mobile viewport is not a physical touch test; touch mechanics are unit tested, and hardware testing remains open.
 - **Preview:** `https://lok-demo-jdtt0by37-mistachatty-cmyks-projects.vercel.app` reached Ready for root commit `f11c2424a012177d29d5bb856b61716bc72d8d76`. Authenticated `/build.json` reports PongFall pin `65699c19c2a464e2c21d659984da93a985424fd3`; `/pongfall-page.js` returned HTTP 200 at 70,880 bytes.
 - **Next:** improve page-target hit and break feedback as an independent code slice. Test the touch gestures on a physical device during the broader mobile release gate.
+
+### Execution record — Kinetic page-target combat flash (2026-10-19)
+
+- **Source comparison:** Classic and KS2 both assign a three-frame fighter flash on combat hits. Demo Day already applied that feedback for projectile hits but omitted it when fighters struck destructible page targets.
+- **Change:** the shared Classic/KS2 page adapter now triggers the same brief fighter flash when an entering fighter collides with a page target. The existing Reduced Motion render gate still suppresses animated flashes.
+- **Source pin:** Kinetic source branch `codex/page-arena-destruction-physics`, commit `07c238790469f235af9217fef16d66d33bd222f7`, pushed. Demo Day pin updated; other game pins unchanged.
+- **Checks:** all 42 bridge/page-mode tests passed, the Kinetic catalog parity guard passed, the full integrated build produced all four game entry points and the page adapter, and `git diff --check` passed.
+- **Browser:** the local integrated build loaded and exposed the Kinetic choice card, but browser clicks did not open the launch dialog, so the specific hit-flash cue was not visually confirmed this run. Both variants use the same tested adapter path; interactive browser verification remains open.
+- **Next:** continue Phase 2 with bounded target feedback improvements, then run actual Reduced Motion and physical touch device checks during the release gate.
