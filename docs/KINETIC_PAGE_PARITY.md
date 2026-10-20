@@ -1,5 +1,7 @@
 # Kinetic Souls page-mode parity
 
+> Segmented destruction prototype (2026-10-20): the shared Classic/KS2 adapter now uses sparse local holes and bounded physical chunks without changing either game's fighter or combat source. Adaptive/Deep pacing is page-only. Source pin: `2ed1764c447ea54c071acaa2ca0116ba41d7ba18`. Nested page layers, replay geometry, and mobile burst performance remain open; see `DESTRUCTION_PHYSICS_ARCHITECTURE.md`.
+
 ## Product rule
 
 The Classic and KS2 repositories are the source of truth for the fighters, Bestiary, theme choices, weapons, and match rules. Demo Day adapts those systems to a website-sized, reversible arena. It must not turn Kinetic Souls into an unrelated shooter wearing its name. A game-data option that cannot be made meaningful over a live webpage stays standalone-only or carries a visible `PAGE MODE` label.

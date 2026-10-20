@@ -2,7 +2,15 @@
 
 ## Status and scope
 
-**Proposed architecture, 2026-10-20.** The current Kinetic page adapter has four material profiles, six retained impact maps per target, material-shaped visual debris, and a reversible arena reveal. This document defines the next physical layer for Classic and KS2 page matches and a target contract that Survivor 616 and PongFall can use later. The source games keep their own combat loops.
+**Prototype in progress, 2026-10-20.** The shared Classic/KS2 page adapter now has a bounded sparse cell field, matching local collision holes, material-biased stress spread, physical chunks, and Adaptive/Deep pacing. The source games keep their own combat loops. This document records the remaining gates before sharing the contract with Survivor 616 and PongFall.
+
+### Implemented prototype and remaining gates
+
+- `page-mode/segment-field.mjs` defines version 1 of the validated target-local `applyImpact` geometry boundary. Fields allocate on first hit, cap at 192 cells per target, and the adapter caps active fields at 16. Returned cells become openings in both canvas reveal and collision. A fast whole-rectangle contact path remains until the first cell opens.
+- Connected newly removed cells form at most four moving chunks per impact and 48 active chunks in the match. Chunks use area-based mass, carry team ownership, push fighters, deal at most 3 HP once per fighter, and can strike another target once. Their geometry continues to simulate in Low and Reduced Motion; Reduced Motion omits their moving visual.
+- Glass spreads stress broadly, paper favors a horizontal fiber, stone spreads very little, and digital remains square. The existing 180-debris and 350-particle caps remain. Adaptive preserves quick breaks on small targets and extends larger targets; Deep extends every target on the next match. Results and browser completion details name the active tempo.
+- The live scanner now excludes links, buttons, form controls, editable content, marked protected nodes, and any container holding one of them. The browser check found and fixed a navigation-link case that the first scanner pass missed.
+- **Still required:** exact nested-layer reveal and matching frontmost collision; detached *surviving* islands rather than just connected removed cells; faithful live media texture on owned uploads; replay snapshots for openings/chunks; burst benchmarks at desktop/mobile; narrow and Reduced Motion browser gates; Survivor/PongFall adapters; opt-in voxel scene. These are not represented as complete by this prototype.
 
 The goal is to make each hit change what the combat world *is*, not only how it looks. A fighter should be able to break a small hole, send a connected chunk flying, strike that chunk again, and pass through the resulting opening. The host page must remain readable and restorable.
 
