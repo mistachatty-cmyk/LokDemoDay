@@ -57,16 +57,15 @@ Geometry tests and integrated builds pass, but the shard appearance has not yet 
 
 ### Digital surfaces
 
-- Brief pixel offset at impact, thin scanline tear, then persistent fragmented contour.
-- Keep glitch displacement inside the target's clipped bounds.
-- Avoid flashing large regions; honor Reduced Motion and Low effects.
+- **Prototype 0.5 implemented:** a small seeded cluster of mode-colored pixel bars persists near the latest impact. A thin scanline offset appears briefly after a hit, clipped to the target; it never captures or shifts the host page content.
+- Low effects reduces the bar count. Reduced Motion keeps the static pixel marks and removes the animated offset. Geometry tests cover deterministic placement, local bounds, compact reach, requested-count caps, and invalid inputs.
+- Implemented in Kinetic source commit `0d26c004f798e65983937932995e86d2d25c4951`.
 
 ## Next prototype slices
 
-1. Compare glass, paper, and stone silhouettes against real page content at desktop and mobile scale; tune visibility, lifetimes, and impact placement. Visual acceptance remains open.
-2. Add clipped pixel blocks and a local scanline tear for digital surfaces.
-3. After all four silhouettes read clearly, unify their collision bounds and cleanup through one bounded debris pool.
-4. Add a readable fracture preview to the creator panel, then validate replay, rebuild, and exact page restoration after each material break.
+1. Compare glass, paper, stone, and digital silhouettes against real page content at desktop and mobile scale; tune visibility, lifetimes, and impact placement. Visual acceptance remains open.
+2. Unify their collision bounds and cleanup through one bounded debris pool after confirming all four silhouettes read clearly.
+3. Add a readable fracture preview to the creator panel, then validate replay, rebuild, and exact page restoration after each material break.
 
 ## Acceptance
 
