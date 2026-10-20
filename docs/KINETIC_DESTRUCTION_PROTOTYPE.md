@@ -64,8 +64,9 @@ Geometry tests and integrated builds pass, but the shard appearance has not yet 
 ## Next prototype slices
 
 1. Compare glass, paper, stone, and digital silhouettes against real page content at desktop and mobile scale; tune visibility, lifetimes, and impact placement. Visual acceptance remains open.
-2. Unify their collision bounds and cleanup through one bounded debris pool after confirming all four silhouettes read clearly.
-3. Add a readable fracture preview to the creator panel, then validate replay, rebuild, and exact page restoration after each material break.
+2. Prototype the local segment field on starter and creator props: repeated hits remove cells, the arena shows through the same opening, and fighter/projectile collision agrees with it. The staged design and performance gates are in [DESTRUCTION_PHYSICS_ARCHITECTURE.md](DESTRUCTION_PHYSICS_ARCHITECTURE.md).
+3. Give a capped set of detached segments physical contact with fighters and the arena, then consolidate decorative debris cleanup under the existing pool limits.
+4. Add a readable fracture preview to the creator panel, then validate replay, rebuild, and exact page restoration after each material break.
 
 ## Acceptance
 

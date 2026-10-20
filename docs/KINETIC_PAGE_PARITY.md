@@ -49,6 +49,7 @@ The wider Demo Day roadmap lives in [DEMO_DAY_ROADMAP.md](DEMO_DAY_ROADMAP.md). 
 - Glass/media breaks now use deterministic triangle fans that tile the target perimeter before launch, reveal the arena through the broken area, and stay under the shared 180-shard cap. Reduced Motion skips shard travel while preserving the broken target state.
 - Paper/text targets show a subtle clipped crease before break, then split into two deterministic complementary strips that shear apart. The pieces contain no captured copy; the page text remains in the original DOM for exact restoration. Reduced Motion skips debris motion as for other materials.
 - Destruction prototype detail and material-by-material follow-up slices are tracked in [KINETIC_DESTRUCTION_PROTOTYPE.md](KINETIC_DESTRUCTION_PROTOTYPE.md).
+- The proposed next physical layer is specified in [DESTRUCTION_PHYSICS_ARCHITECTURE.md](DESTRUCTION_PHYSICS_ARCHITECTURE.md): local solid cells, connected physical segments, optional 2.5D depth, and pooled pixel detail. It is not implemented yet; first prove a traversable local opening on starter/creator props before applying it to arbitrary page targets.
 - Give fighters and weapons meaningful page-target interactions, including boss telegraphs, target knockback, chain reactions, and short hit-stop that respects reduced motion.
 - Keep all edits in the overlay or its scene objects. Never mutate the host page's DOM to simulate damage.
 - Add broader low-effects tuning for slow devices, including per-effect shake, particles, flashes, and mobile performance controls.

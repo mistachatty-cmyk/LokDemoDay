@@ -50,7 +50,7 @@ This is the repo-owned plan for growing Demo Day into a reusable creative-game s
 
 1. Target stages by material: paper/text, image, card/panel, and user prop. Keep a readable damage indicator and target health.
 2. Use the selected game's real effects and theme rendering under broken regions. Preserve original page content in healthy areas.
-3. Improve force transfer: impact direction, target recoil, fighter recoil, shatter clusters, debris lifetime, chain reactions, boss telegraphs, and recovery.
+3. Improve force transfer: impact direction, target recoil, fighter recoil, shatter clusters, debris lifetime, chain reactions, boss telegraphs, and recovery. The [segmented destruction architecture](DESTRUCTION_PHYSICS_ARCHITECTURE.md) defines the next gates: local holes with matching collision, a capped physical chunk pool, media pixels, and optional 2.5D depth.
 4. Add bounded levels of visual intensity and reduced-motion behavior. Avoid effects that hide text, controls, or page context.
 5. Treat long pages as a document world: targets and fighters use document coordinates; new or lazy-loaded content joins safely; page restoration returns scroll and styles.
 
