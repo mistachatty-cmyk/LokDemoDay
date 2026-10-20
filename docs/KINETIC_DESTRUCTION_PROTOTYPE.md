@@ -50,9 +50,10 @@ Geometry tests and integrated builds pass, but the shard appearance has not yet 
 
 ### Stone and structural panels
 
-- Short, heavy chips around the contact point; cracks travel less distance than glass.
-- Damage grows with visible chips and deeper seams before the panel collapses.
-- High durability stays legible without relying on repeated screen shake.
+- **Prototype 0.4 implemented:** the damage stages add a short, dark seam aligned to the incoming impact, with a fine raised edge. A break produces 3–5 compact, deterministic polygons clustered near the impact. They travel more slowly and fade sooner than glass.
+- Chip polygons clamp to the target rectangle and use the existing 180-piece debris cap. Low effects reduces the burst; Reduced Motion retains the static seam and skips moving debris.
+- Geometry tests cover repeatability, count limits, compact reach, bounds, non-degenerate area, and invalid inputs. Interactive appearance and exact restoration remain part of the browser gate.
+- Implemented in Kinetic source commit `2a335cd6c7dd3df491d1ac39adff117261cbb8d9`.
 
 ### Digital surfaces
 
@@ -62,11 +63,10 @@ Geometry tests and integrated builds pass, but the shard appearance has not yet 
 
 ## Next prototype slices
 
-1. Compare the glass fan and paper strips against real page images and uploaded media at desktop and mobile scale; tune visibility, lifetimes, and impact placement. This visual acceptance remains open.
-2. Add a distinct stone break with capped chunky chips and short deep seams.
-3. Add clipped pixel blocks and a local scanline tear for digital surfaces.
-4. After all four silhouettes read clearly, unify their collision bounds and cleanup through one bounded debris pool.
-5. Add a readable fracture preview to the creator panel, then validate replay, rebuild, and exact page restoration after each material break.
+1. Compare glass, paper, and stone silhouettes against real page content at desktop and mobile scale; tune visibility, lifetimes, and impact placement. Visual acceptance remains open.
+2. Add clipped pixel blocks and a local scanline tear for digital surfaces.
+3. After all four silhouettes read clearly, unify their collision bounds and cleanup through one bounded debris pool.
+4. Add a readable fracture preview to the creator panel, then validate replay, rebuild, and exact page restoration after each material break.
 
 ## Acceptance
 
