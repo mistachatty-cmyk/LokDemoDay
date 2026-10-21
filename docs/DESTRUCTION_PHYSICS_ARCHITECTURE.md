@@ -2,7 +2,7 @@
 
 ## Status and scope
 
-**Prototype in progress, 2026-10-20.** The shared Classic/KS2 page adapter now has a bounded sparse cell field, matching local collision holes, material-biased stress spread, physical chunks, and Adaptive/Deep pacing. The source games keep their own combat loops. This document records the remaining gates before sharing the contract with Survivor 616 and PongFall.
+**Prototype in progress, 2026-10-21.** The shared Classic/KS2 page adapter now has a bounded sparse cell field, matching local collision holes, material-biased stress spread, physical chunks, owned-media fragments, and Adaptive/Deep pacing. The source games keep their own combat loops. This document records the remaining gates before sharing the contract with Survivor 616 and PongFall.
 
 ### Implemented prototype and remaining gates
 
@@ -13,12 +13,13 @@
 - **Nested layer slice:** page descendants now resolve collision before their ancestors, one contact per fighter per frame. A child opening shows a procedural surface color from the nearest surviving ancestor, and a parent opening shows the arena. This preserves the host DOM. It is an approximate parent surface rather than a pixel-perfect reconstruction of that ancestor's text or imagery.
 - **Replay slice:** up to one sample per second retains removed-cell keys, broken areas, and physical chunk positions as copied data. The creator timeline draws openings and chunks from its selected sample; the initial sample hides future damage. Source fighter IDs avoid showing later spawns in earlier frames. Removed fighters cannot currently be reconstructed as full sprites after they leave the active source array.
 - **Enclosed island slice:** after a local cut, a bounded flood fill walks solid cells connected to a target edge. A surviving component isolated from every edge detaches into the same capped chunk pool if its cells fit the per-target budget. The field rejects more than 4,096 potential cells before allocating the flood fill and never stores more than 192 active cells. This is a 2D structural approximation; material-specific internal anchors and bond strengths remain future tuning.
+- **Owned-media slice:** local image/video uploads and creator props use the same removed-cell field for their visible mask and collision. The canvas draws solid parts in document coordinates, while a detached media chunk samples the allowed source image or current video frame with the object's `contain` placement. Replay copies only source IDs and offsets, never media bytes. Whole-target breaks hide the temporary media element; Rebuild removes its mask and Restore removes the temporary object. This does not sample cross-origin page pixels or YouTube frames.
 - **Geometry burst:** `node games/kinetic-official/page-mode/segment-burst.bench.mjs` simulates 2,400 impacts over 600 sampled geometry frames, 16 fields, and the 48-chunk budget. On the development machine the p50 was 0.041 ms, p95 1.146 ms, max 3.256 ms for the geometry portion only. These values are machine-dependent and exclude fighter rendering, DOM scan, canvas draw, and device GPU work.
-- **Still required:** texture sampling on user-owned media fragments; full desktop/mobile frame-time and memory profiles; narrow and Reduced Motion browser gates; Survivor/PongFall adapters; opt-in voxel scene. These are not represented as complete by this prototype.
+- **Still required:** full desktop/mobile frame-time and memory profiles; narrow and Reduced Motion browser gates; an authored nested/island visual fixture; live-video frame and replay behavior under scrubbing; Survivor/PongFall adapters; opt-in voxel scene. These are not represented as complete by this prototype.
 
 The goal is to make each hit change what the combat world *is*, not only how it looks. A fighter should be able to break a small hole, send a connected chunk flying, strike that chunk again, and pass through the resulting opening. The host page must remain readable and restorable.
 
-## What the code does today
+## Baseline before the segmented prototype
 
 | Scale | Current behavior | Missing behavior |
 | --- | --- | --- |
