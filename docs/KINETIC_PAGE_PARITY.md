@@ -1,6 +1,6 @@
 # Kinetic Souls page-mode parity
 
-> Segmented destruction prototype (2026-10-21): the shared Classic/KS2 adapter now uses sparse local holes, bounded physical chunks, frontmost nested page layers, and bounded replay geometry without changing either game's fighter or combat source. Adaptive/Deep pacing is page-only. Source pin: `b719f3865d683d088dcdf2d7363dd3b1eb7b5c3a`. Mobile burst performance remains open; see `DESTRUCTION_PHYSICS_ARCHITECTURE.md`.
+> Segmented destruction prototype (2026-10-21): the shared Classic/KS2 adapter now uses sparse local holes, bounded physical chunks, detachable enclosed islands, frontmost nested page layers, and bounded replay geometry without changing either game's fighter or combat source. Adaptive/Deep pacing is page-only. Source pin: `b000403d12894765fb603f8bb4ea0752e478f978`. Mobile frame-time profiling remains open; see `DESTRUCTION_PHYSICS_ARCHITECTURE.md`.
 
 ## Product rule
 
