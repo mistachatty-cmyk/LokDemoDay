@@ -1,0 +1,49 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Kinetic page layers · Demo Day fixture</title>
+  <style>
+    * { box-sizing: border-box; }
+    body { margin: 0; background: #101521; color: #edf4ff; font: 16px/1.4 system-ui, sans-serif; }
+    header { position: sticky; top: 0; z-index: 3; display: flex; flex-wrap: wrap; align-items: center; gap: 12px;
+      padding: 14px 20px; background: #101521ee; border-bottom: 1px solid #556579; }
+    header strong { margin-right: auto; }
+    button { border: 1px solid #91b3e4; border-radius: 8px; padding: 8px 12px; background: #233852; color: white; font: inherit; cursor: pointer; }
+    button:focus-visible { outline: 3px solid #f9cb63; outline-offset: 3px; }
+    main { min-height: 165vh; padding: 60px 7vw 30vh; }
+    .instructions { max-width: 56rem; margin: 0 0 28px; color: #aebed0; }
+    .outer { width: min(540px, 82vw); height: 310px; margin: 24px auto; padding: 42px; background: #96545c;
+      border: 6px solid #d49391; border-radius: 18px; box-shadow: 0 18px 50px #0009; }
+    .middle { width: 100%; height: 100%; padding: 34px; background: #46739a; border: 5px solid #9dd1ec; border-radius: 12px; }
+    .inner { width: 100%; height: 100%; display: grid; place-items: center; background: #ceb781;
+      border: 4px solid #f9e3ac; border-radius: 8px; color: #182334; font-weight: 800; text-align: center; }
+    .loose { width: min(230px, 70vw); height: 100px; display: grid; place-items: center; margin: 80px 12vw;
+      background: #677d73; border: 3px solid #b9d6ba; border-radius: 8px; font-weight: 700; }
+    #added { min-height: 80px; }
+    @media (max-width: 620px) { main { padding: 25px 12px 25vh; } .outer { height: 280px; padding: 22px; } .middle { padding: 18px; } }
+  </style>
+  <script defer src="/kinetic-official-page.js"></script>
+  <script defer src="/fixtures/kinetic-layers.js"></script>
+</head>
+<body>
+  <header data-lok-nondestructible>
+    <strong>Kinetic layer lab</strong>
+    <button type="button" data-variant="classic">Play Classic</button>
+    <button type="button" data-variant="ks2">Play KS2</button>
+    <button type="button" id="add-panel">Add page piece (N)</button>
+    <button type="button" id="restore">Restore page</button>
+  </header>
+  <main>
+    <p class="instructions" data-lok-nondestructible>Fight across this page. The gold child must remain visible when only the red or blue parent breaks. Carve the child and parent at the same point to reveal the arena. Press N to add a new page piece during a match.</p>
+    <section class="outer" id="outer">
+      <div class="middle" id="middle">
+        <div class="inner" id="inner">SOLID CHILD</div>
+      </div>
+    </section>
+    <div class="loose">SEPARATE PAGE PIECE</div>
+    <section id="added"></section>
+  </main>
+</body>
+</html>
