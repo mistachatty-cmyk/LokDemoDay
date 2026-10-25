@@ -14,21 +14,24 @@
     button:focus-visible, a:focus-visible { outline: 3px solid #ffcd63; outline-offset: 3px; }
     main { min-height: 125vh; padding: 24px 18px; background-image: linear-gradient(#9ec8ee0b 1px, transparent 1px), linear-gradient(90deg, #9ec8ee0b 1px, transparent 1px); background-size: 32px 32px; }
     p { max-width: 720px; margin: 0; color: #d0e3f7; }
+    #sample-frames { display: block; margin: 118px 0 12px; }
+    #frame-result { display: block; max-width: 760px; overflow-wrap: anywhere; }
     @media (max-width: 600px) { header strong { flex-basis: 100%; } main { padding: 16px; } }
   </style>
   <script defer src="/kinetic-official-page.js"></script>
-  <script defer src="/fixtures/kinetic-media.js"></script>
+  <script type="module" src="/fixtures/kinetic-media.js"></script>
 </head>
 <body>
   <header data-lok-nondestructible>
     <strong>Owned-media fragment lab</strong>
     <button type="button" data-variant="classic">Play Classic</button>
     <button type="button" data-variant="ks2">Play KS2</button>
-    <button type="button" id="restore">Restore page</button>
     <a href="/fixtures/kinetic-motion.webm" download>Get synthetic WebM</a>
   </header>
   <main data-lok-nondestructible>
-    <p>Pause the match, disable the NPC in Settings, and add the synthetic WebM in Creative Sandbox. Burst latest prop while paused, minimize the panel, then Resume and Pause to inspect the moving fragment against this quiet stage. Restore must remove the video and overlay.</p>
+    <p>Pause the match, disable the NPC in Settings, and add the synthetic WebM in Creative Sandbox. Burst latest prop while paused, minimize the panel, then Resume and Pause to inspect the moving fragment against this quiet stage. The in-game Restore Page control must remove the video and overlay.</p>
+    <button type="button" id="sample-frames">Sample 120 frames</button>
+    <output id="frame-result" aria-live="polite">Start a match, then sample frames while it runs. The report uses requestAnimationFrame intervals and includes viewport, motion preference, and chunk count. Intervals include browser scheduling; they do not isolate game CPU time.</output>
   </main>
 </body>
 </html>

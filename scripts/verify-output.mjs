@@ -11,7 +11,7 @@ function requireFile(path) {
   }
 }
 
-for (const asset of ['index.html', 'app.js', 'style.css', 'game-choice.js', 'game-choice.css', 'survivor-preview.js', 'kinetic-preview.js', 'pongfall-preview.js', 'pongfall-page.js', 'pongfall-page-world.mjs', 'pongfall-page-input.mjs', 'pongfall-page-compositor.mjs', 'pongfall-page-targets.mjs', 'favicon.svg', 'demoday.js', 'kinetic-official-page.js', 'fixtures/kinetic-layers.html', 'fixtures/kinetic-layers.js', 'fixtures/kinetic-media.html', 'fixtures/kinetic-media.js', 'fixtures/kinetic-motion.webm']) {
+for (const asset of ['index.html', 'app.js', 'style.css', 'game-choice.js', 'game-choice.css', 'survivor-preview.js', 'kinetic-preview.js', 'pongfall-preview.js', 'pongfall-page.js', 'pongfall-page-world.mjs', 'pongfall-page-input.mjs', 'pongfall-page-compositor.mjs', 'pongfall-page-targets.mjs', 'favicon.svg', 'demoday.js', 'kinetic-official-page.js', 'fixtures/kinetic-layers.html', 'fixtures/kinetic-layers.js', 'fixtures/kinetic-media.html', 'fixtures/kinetic-media.js', 'fixtures/kinetic-frame-stats.mjs', 'fixtures/kinetic-motion.webm']) {
   requireFile(resolve(dist, asset));
 }
 
