@@ -1,6 +1,6 @@
 # Kinetic Souls page-mode parity
 
-> Segmented destruction prototype (2026-10-25): the shared Classic/KS2 adapter uses sparse local holes, bounded physical chunks with cell silhouettes and shape-aware fighter/secondary page contact, detachable enclosed islands, frontmost nested page layers, and bounded replay geometry without changing either game's fighter or combat source. Adaptive/Deep pacing is page-only. Current source pin: `97359bb4a37b45c431f573906d6c135834c4ae7a`. The owned-media fixture now samples browser frame intervals; a session-wide 60-to-30 Hz scheduling shift means it cannot yet establish game update/draw cost or the mobile frame-time gate. See `DESTRUCTION_PHYSICS_ARCHITECTURE.md` and the latest roadmap execution record.
+> Segmented destruction prototype (2026-10-25): the shared Classic/KS2 adapter uses sparse local holes, bounded physical chunks with cell silhouettes and shape-aware fighter/secondary page contact, detachable enclosed islands, frontmost nested page layers, and bounded replay geometry without changing either game's fighter or combat source. Adaptive/Deep pacing is page-only. Current source pin: `ee081951561bc3e5687967a4a645290948860ae8`. The owned-media fixture opts into page-adapter update/draw timing and active destruction counts alongside browser frame intervals; a controlled foreground/mobile frame-time gate remains open. See `DESTRUCTION_PHYSICS_ARCHITECTURE.md` and the latest roadmap execution record.
 
 ## Product rule
 

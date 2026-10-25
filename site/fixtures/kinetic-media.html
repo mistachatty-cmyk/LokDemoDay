@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en">
+<html lang="en" data-lok-profile-kinetic>
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -16,6 +16,7 @@
     p { max-width: 720px; margin: 0; color: #d0e3f7; }
     #sample-frames { display: block; margin: 118px 0 12px; }
     #frame-result { display: block; max-width: 760px; overflow-wrap: anywhere; }
+    #sample-target { min-height: 260px; margin: 32px 18px; padding: 28px; border: 6px solid #7793b4; background: #4c6078; color: #fff; }
     @media (max-width: 600px) { header strong { flex-basis: 100%; } main { padding: 16px; } }
   </style>
   <script defer src="/kinetic-official-page.js"></script>
@@ -31,7 +32,8 @@
   <main data-lok-nondestructible>
     <p>Pause the match, disable the NPC in Settings, and add the synthetic WebM in Creative Sandbox. Burst latest prop while paused, minimize the panel, then Resume and Pause to inspect the moving fragment against this quiet stage. The in-game Restore Page control must remove the video and overlay.</p>
     <button type="button" id="sample-frames">Sample 120 frames</button>
-    <output id="frame-result" aria-live="polite">Start a match, then sample frames while it runs. The report uses requestAnimationFrame intervals and includes viewport, motion preference, and chunk count. Intervals include browser scheduling; they do not isolate game CPU time.</output>
+    <output id="frame-result" aria-live="polite">Start a match, then sample frames while it runs. The report includes browser frame intervals, opted-in game update/draw time, viewport, motion preference, and active destruction counts. Frame intervals also include browser scheduling.</output>
   </main>
+  <section id="sample-target"><h2>Breakable test panel</h2><p>Scroll here to profile live page targets. This panel is separate from the protected fixture controls.</p></section>
 </body>
 </html>
