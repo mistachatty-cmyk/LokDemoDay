@@ -12,6 +12,6 @@
     "verify:output": "node scripts/verify-output.mjs"
   },
   "devDependencies": {
-    "pnpm": "10.34.6"
+    "pnpm": "10.34.8"
   }
 }
